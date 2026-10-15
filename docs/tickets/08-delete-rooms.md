@@ -7,15 +7,15 @@ ticket built a delete button.
 
 **Blocked by:** 05, 06
 
-**Status:** todo
+**Status:** done
 
-- [ ] Every room on the owner home page has a "Delete this room" control
+- [x] Every room on the owner home page has a "Delete this room" control
       that asks for confirmation before deleting.
-- [ ] An owner can delete their own room whatever its status, and the
+- [x] An owner can delete their own room whatever its status, and the
       room disappears from the student page.
-- [ ] An owner cannot delete another owner's room.
-- [ ] The team page lists rooms that are already approved or rejected,
+- [x] An owner cannot delete another owner's room.
+- [x] The team page lists rooms that are already approved or rejected,
       each with a confirmed delete, so spam and test rooms can be removed.
-- [ ] A room's private permit check is deleted with the room.
-- [ ] A logged-out visitor cannot delete anything.
-- [ ] Works on the live URL
+- [x] A room's private permit check is deleted with the room.
+- [x] A logged-out visitor cannot delete anything.
+- [x] Works on the live URL

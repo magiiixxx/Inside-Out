@@ -7,16 +7,16 @@ phone. Looks only: no behaviour or database changes.
 
 **Blocked by:** 03, 09
 
-**Status:** todo
+**Status:** done
 
-- [ ] The browser tab shows "BahayFind — rooms near PHINMA UI" and a
+- [x] The browser tab shows "BahayFind — rooms near PHINMA UI" and a
       house icon, not the template's title.
-- [ ] Every page has the same top bar with the logo, which leads home.
-- [ ] The first screen has a clear headline and the three promises
+- [x] Every page has the same top bar with the logo, which leads home.
+- [x] The first screen has a clear headline and the three promises
       (approved by our team, hidden after 7 days, call the owner).
-- [ ] Each room card shows the price first, an available/occupied label,
+- [x] Each room card shows the price first, an available/occupied label,
       distance, last updated, and a Call button.
-- [ ] Rooms show in two columns on a wide screen and one column on a
+- [x] Rooms show in two columns on a wide screen and one column on a
       phone, with no sideways scrolling at 390 px wide.
-- [ ] Text is readable in both light and dark mode.
-- [ ] Works on the live URL
+- [x] Text is readable in both light and dark mode.
+- [x] Works on the live URL

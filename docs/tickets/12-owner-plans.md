@@ -8,23 +8,23 @@ payments, and students are never charged.
 
 **Blocked by:** 05, 09
 
-**Status:** todo
+**Status:** done
 
-- [ ] Every owner account has a plan. New owners start on Free, and owners
+- [x] Every owner account has a plan. New owners start on Free, and owners
       who existed before plans became Premium so nobody is blocked.
-- [ ] A Free owner who already has a room cannot post another, and the
+- [x] A Free owner who already has a room cannot post another, and the
       database refuses it even if the form is tampered with.
-- [ ] Premium and Property Manager owners, and admins, can post several
+- [x] Premium and Property Manager owners, and admins, can post several
       rooms.
-- [ ] A Free owner can delete their room and post a new one.
-- [ ] The owner home page shows the owner's plan and how many rooms they
+- [x] A Free owner can delete their room and post a new one.
+- [x] The owner home page shows the owner's plan and how many rooms they
       have used, and offers an upgrade instead of "Add a room" when the
       Free limit is reached.
-- [ ] A public Plans page shows Free, Premium Owner and Property Manager
+- [x] A public Plans page shows Free, Premium Owner and Property Manager
       with their prices. Each feature is marked "Available now" or
       "Coming soon", and only built features are marked available.
-- [ ] The Plans page says payment is arranged with the team and that the
+- [x] The Plans page says payment is arranged with the team and that the
       website takes no payments.
-- [ ] Nobody can change a plan through the website. Only the team can, in
+- [x] Nobody can change a plan through the website. Only the team can, in
       the database.
-- [ ] Works on the live URL
+- [x] Works on the live URL
