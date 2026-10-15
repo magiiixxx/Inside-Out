@@ -44,5 +44,5 @@ export async function proxy(request: NextRequest) {
 
 // Only pages that involve login. The public Browse page needs no session.
 export const config = {
-  matcher: ["/owner/:path*", "/login", "/signup", "/admin/:path*"],
+  matcher: ["/owner/:path*", "/login", "/signup", "/review-desk"],
 };

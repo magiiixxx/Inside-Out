@@ -6,19 +6,19 @@ status badge. Students cannot see it yet.
 
 **Blocked by:** 04
 
-**Status:** todo
+**Status:** done
 
-- [ ] The form asks for description, price per month, distance from
+- [x] The form asks for description, price per month, distance from
       PHINMA UI, contact phone, permit number, and the three validation
       questions.
-- [ ] The form has a tick box "I understand my phone number will be
+- [x] The form has a tick box "I understand my phone number will be
       public", which must be ticked to submit.
-- [ ] The room is saved for the logged-in owner only, always with status
+- [x] The room is saved for the logged-in owner only, always with status
       pending.
-- [ ] The listing_checks table exists with Row Level Security ON. Only
+- [x] The listing_checks table exists with Row Level Security ON. Only
       the room's owner and admins can read or write it. A logged-out
       visitor cannot read it.
-- [ ] The owner home page lists the owner's rooms with a status badge
+- [x] The owner home page lists the owner's rooms with a status badge
       (pending, approved or rejected).
-- [ ] A pending room does not appear on the student Browse screen.
-- [ ] Works on the live URL
+- [x] A pending room does not appear on the student Browse screen.
+- [x] Works on the live URL
