@@ -1,43 +1,50 @@
 @import "tailwindcss";
 
 /* Design tokens. Change these to re-skin the whole app at once —
-   every component below reads from them. */
+   every component below reads from them.
+
+   BahayFind palette: a trustworthy blue as the brand colour, soft
+   blue-grey surfaces, and white cards. Status colours (green = available,
+   amber = pending, red = problem) are used on purpose and not brand-tinted,
+   so they always mean the same thing. */
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+  --background: #f6f8fb;
+  --foreground: #0f172a;
   --card: #ffffff;
-  --card-foreground: #0a0a0a;
-  --primary: #1a1a1a;
-  --primary-foreground: #fafafa;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #1a1a1a;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --card-foreground: #0f172a;
+  --primary: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --secondary: #e8eef7;
+  --secondary-foreground: #1e293b;
+  --muted: #eef2f7;
+  --muted-foreground: #5b6779;
+  --accent-soft: #e7efff;
   --destructive: #dc2626;
-  --destructive-foreground: #fafafa;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #0a0a0a;
-  --radius: 0.625rem;
+  --destructive-foreground: #ffffff;
+  --border: #dbe3ee;
+  --input: #cbd5e1;
+  --ring: #1d4ed8;
+  --radius: 0.75rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #fafafa;
-    --card: #141414;
-    --card-foreground: #fafafa;
-    --primary: #fafafa;
-    --primary-foreground: #1a1a1a;
-    --secondary: #27272a;
-    --secondary-foreground: #fafafa;
-    --muted: #27272a;
-    --muted-foreground: #a1a1aa;
-    --destructive: #ef4444;
-    --destructive-foreground: #fafafa;
-    --border: #27272a;
-    --input: #3f3f46;
-    --ring: #d4d4d8;
+    --background: #0b1220;
+    --foreground: #e8eefc;
+    --card: #111a2e;
+    --card-foreground: #e8eefc;
+    --primary: #6ea8ff;
+    --primary-foreground: #0b1220;
+    --secondary: #1b2740;
+    --secondary-foreground: #e8eefc;
+    --muted: #16213a;
+    --muted-foreground: #9fb0c8;
+    --accent-soft: #12213f;
+    --destructive: #f87171;
+    --destructive-foreground: #0b1220;
+    --border: #22304d;
+    --input: #2b3b5c;
+    --ring: #6ea8ff;
   }
 }
 
@@ -52,6 +59,7 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-accent-soft: var(--accent-soft);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);

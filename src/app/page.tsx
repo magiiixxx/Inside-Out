@@ -4,6 +4,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CheckIcon } from "@/components/icons";
 import { RoomCard, type RoomCardData } from "@/components/room-card";
 import { SaveRoomButton } from "@/components/save-room-button";
 import { getUserAndRole } from "@/lib/auth";
@@ -35,6 +36,9 @@ type SortOrder = "nearest" | "recent";
 
 // What students see if something goes wrong. Never show them system messages.
 const LOAD_ERROR = "We could not load the rooms right now. Please try again in a moment.";
+
+// The promises BahayFind makes, shown under the headline.
+const PROMISES = ["Approved by our team", "Hidden if not updated in 7 days", "Call the owner directly"];
 
 async function getListings(
   maxPrice: number | null,
@@ -109,27 +113,40 @@ export default async function Home({
   const back = backParams.size > 0 ? `/?${backParams.toString()}` : "/";
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
-      <header className="flex flex-col gap-3">
+    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
+      <header className="flex flex-col gap-4 rounded-2xl border border-border bg-accent-soft p-5 sm:p-8">
         <div className="flex items-center justify-between gap-3">
-          <span className="inline-flex w-fit items-center rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
+          <span className="inline-flex w-fit items-center rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
             Near PHINMA UI
           </span>
           <Link
             href={user ? (isStudent ? "/saved" : "/owner") : "/login"}
-            className="text-sm text-muted-foreground underline underline-offset-4"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
           >
             {!user ? "Log in" : isStudent ? "Saved rooms" : "Owner home"}
           </Link>
         </div>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          BahayFind
+
+        <h1 className="max-w-xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+          Find a room that is really available.
         </h1>
-        <p className="text-base text-muted-foreground">
-          Boarding house rooms that owners confirm are available. Every room is
-          approved by our team, and rooms nobody has updated for 7 days are
-          hidden.
+        <p className="max-w-xl text-base text-muted-foreground">
+          Boarding house owners confirm their rooms, so you don&apos;t travel to
+          a room that is already taken.
         </p>
+
+        <ul className="flex flex-wrap gap-2">
+          {PROMISES.map((promise) => (
+            <li
+              key={promise}
+              className="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1 text-xs font-medium"
+            >
+              <CheckIcon className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              {promise}
+            </li>
+          ))}
+        </ul>
+
         {!user && (
           <p className="text-sm text-muted-foreground">
             Browsing is open to everyone.{" "}
@@ -141,8 +158,11 @@ export default async function Home({
         )}
       </header>
 
-      <form method="get" className="flex flex-wrap items-end gap-3">
-        <div className="flex min-w-[9rem] flex-1 flex-col gap-1.5">
+      <form
+        method="get"
+        className="flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-4"
+      >
+        <div className="flex min-w-[11rem] flex-1 flex-col gap-1.5">
           <Label htmlFor="max">Max price per month (₱)</Label>
           <Input
             id="max"
@@ -155,7 +175,7 @@ export default async function Home({
             defaultValue={maxPrice ?? ""}
           />
         </div>
-        <div className="flex min-w-[9rem] flex-1 flex-col gap-1.5">
+        <div className="flex min-w-[11rem] flex-1 flex-col gap-1.5">
           <Label htmlFor="sort">Sort by</Label>
           <select
             id="sort"
@@ -208,21 +228,23 @@ export default async function Home({
         </Card>
       ) : (
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-muted-foreground">
-            {rooms.length} {rooms.length === 1 ? "room" : "rooms"}
+          <p className="text-sm font-medium text-muted-foreground">
+            {rooms.length} {rooms.length === 1 ? "room" : "rooms"} near PHINMA UI
           </p>
-          {rooms.map((room) => (
-            <RoomCard key={room.id} room={room}>
-              {isStudent && (
-                <SaveRoomButton
-                  action={setSaved}
-                  listingId={room.id}
-                  saved={savedIds.has(room.id)}
-                  back={back}
-                />
-              )}
-            </RoomCard>
-          ))}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {rooms.map((room) => (
+              <RoomCard key={room.id} room={room}>
+                {isStudent && (
+                  <SaveRoomButton
+                    action={setSaved}
+                    listingId={room.id}
+                    saved={savedIds.has(room.id)}
+                    back={back}
+                  />
+                )}
+              </RoomCard>
+            ))}
+          </div>
         </div>
       )}
     </main>

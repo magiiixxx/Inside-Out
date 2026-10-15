@@ -51,7 +51,7 @@ export default async function SavedRooms({
   );
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
+    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
           <span className="text-sm text-muted-foreground">Saved rooms</span>
@@ -90,7 +90,7 @@ export default async function SavedRooms({
           </CardContent>
         </Card>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           {rooms.map((room) => (
             <RoomCard key={room.id} room={room}>
               <SaveRoomButton action={setSaved} listingId={room.id} saved back="/saved" />
