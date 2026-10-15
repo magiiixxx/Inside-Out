@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Room photos (up to 2 MB) are uploaded through a server action, and the
+  // default limit for those is 1 MB.
+  experimental: {
+    serverActions: { bodySizeLimit: "3mb" },
+  },
+
   // Cache Components and Partial Prefetching are deliberately OFF.
   //
   // With them on, any page that reads from the database (or uses

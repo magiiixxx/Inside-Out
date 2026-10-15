@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/site-header";
 import { DeleteRoomButton } from "@/components/delete-room-button";
 import { errorText, noticeText } from "@/lib/messages";
+import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 import { initials } from "@/lib/utils";
 
@@ -27,6 +28,7 @@ type PendingCheck = {
     distance_km: number;
     contact_phone: string;
     address: string | null;
+    photo_path: string | null;
     created_at: string;
   };
 };
@@ -72,7 +74,7 @@ export default async function ReviewDesk({
   const { data: pending, error: loadError } = await supabase
     .from("listing_checks")
     .select(
-      "permit_number, owner_or_caretaker, open_beds, listings!inner(id, owner_id, description, price_per_month, distance_km, contact_phone, address, created_at)",
+      "permit_number, owner_or_caretaker, open_beds, listings!inner(id, owner_id, description, price_per_month, distance_km, contact_phone, address, photo_path, created_at)",
     )
     .eq("listings.approval_status", "pending")
     .order("created_at", { ascending: true });
@@ -178,6 +180,15 @@ export default async function ReviewDesk({
                     </p>
                   </CardHeader>
                   <CardContent className="flex flex-col gap-5">
+                    {photoUrl(room.photo_path) && (
+                      // eslint-disable-next-line @next/next/no-img-element -- stored in Supabase Storage
+                      <img
+                        src={photoUrl(room.photo_path) ?? ""}
+                        alt="Photo uploaded by the owner"
+                        loading="lazy"
+                        className="h-56 w-full rounded-xl object-cover"
+                      />
+                    )}
                     <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 rounded-xl bg-surface p-4 text-sm">
                       <dt className="text-muted-foreground">Posted by</dt>
                       <dd className="font-semibold">{ownerName.get(room.owner_id) || "(no name)"}</dd>

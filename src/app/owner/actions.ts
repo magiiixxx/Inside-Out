@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { removePhoto, uploadPhoto } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 
 // Server actions for the owner's pages. Everything is checked here on the
@@ -53,6 +54,11 @@ export async function postRoom(formData: FormData) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  // The photo is optional. It is uploaded first (into this owner's own
+  // folder), and its path is saved with the room.
+  const photo = await uploadPhoto(supabase, user.id, formData.get("photo"));
+  if (!photo.ok) backToForm(photo.code);
+
   const { error } = await supabase.rpc("post_room", {
     p_description: description,
     p_price_per_month: price,
@@ -65,9 +71,12 @@ export async function postRoom(formData: FormData) {
     p_phone_public: phonePublic,
     p_address: address,
     p_address_public: addressPublic,
+    p_photo_path: photo.path,
   });
 
   if (error) {
+    // The room was not saved, so do not leave its photo behind.
+    await removePhoto(supabase, photo.path);
     // The Free plan's room limit gets its own message; any other problem
     // gets the general one (never the raw database text).
     if (error.message.includes("Free plan")) redirect("/owner?error=plan_limit");
@@ -85,7 +94,7 @@ export async function editRoom(formData: FormData) {
   const listingId = text(formData, "listing_id");
   if (!UUID.test(listingId)) redirect("/owner?error=invalid_request");
 
-  const backToEdit = (code: string): never =>
+  const backToEdit: (code: string) => never = (code) =>
     redirect(`/owner/rooms/${listingId}/edit?error=${code}`);
 
   const description = text(formData, "description");
@@ -108,6 +117,19 @@ export async function editRoom(formData: FormData) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  // The current photo, so a replaced one can be cleaned up afterwards. Only
+  // our own room can be read (Row Level Security).
+  const { data: current } = await supabase
+    .from("listings")
+    .select("photo_path")
+    .eq("id", listingId)
+    .eq("owner_id", user.id)
+    .maybeSingle();
+
+  // A new photo is optional. No file chosen means "keep the current photo".
+  const photo = await uploadPhoto(supabase, user.id, formData.get("photo"));
+  if (!photo.ok) backToEdit(photo.code);
+
   const { data, error } = await supabase.rpc("update_room", {
     p_listing_id: listingId,
     p_description: description,
@@ -116,9 +138,16 @@ export async function editRoom(formData: FormData) {
     p_contact_phone: contactPhone,
     p_address: address,
     p_address_public: addressPublic,
+    p_photo_path: photo.path,
   });
 
-  if (error) backToEdit("edit_failed");
+  if (error) {
+    await removePhoto(supabase, photo.path);
+    backToEdit("edit_failed");
+  }
+
+  // Saved: the old photo is no longer used.
+  if (photo.path) await removePhoto(supabase, current?.photo_path);
 
   redirect(data === "pending" ? "/owner?notice=edited_review" : "/owner?notice=edited_live");
 }
@@ -152,9 +181,17 @@ export async function deleteRoom(formData: FormData) {
   if (!UUID.test(listingId)) redirect("/owner?error=invalid_request");
 
   const supabase = await createClient();
+  const { data: room } = await supabase
+    .from("listings")
+    .select("photo_path")
+    .eq("id", listingId)
+    .maybeSingle();
+
   const { error } = await supabase.rpc("delete_room", { p_listing_id: listingId });
 
   if (error) redirect("/owner?error=delete_failed");
+
+  await removePhoto(supabase, room?.photo_path);
 
   redirect("/owner?notice=deleted");
 }

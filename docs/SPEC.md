@@ -94,7 +94,11 @@ Row Level Security (RLS) is ON for every table.
   `occupied`), approval status (`pending`, `approved` or `rejected`),
   last updated, created at.
 - Anyone, including logged-out visitors, may read rows that are
-  `approved` **and** updated within the last 7 days. This rule is what
+  `approved` **and** updated within the last 7 days. Each room may have one
+  photo (`photo_path`), kept in a Storage bucket; it is JPG, PNG or WebP, up
+  to 2 MB, and its random file name is only visible with the room.
+  Only owner and admin accounts can upload, and only into a folder named
+  after their own user id. This rule is what
   hides stale rooms, so no scheduled job is needed.
 - An owner may read all of their own rows, and create rows only for
   themselves with status `pending`.
@@ -102,7 +106,7 @@ Row Level Security (RLS) is ON for every table.
   (which sets last updated to now), edit it, and delete it. An owner can
   never change the approval status directly. **Editing rule:** changing
   only the price goes live straight away; changing the description,
-  distance, address or phone number sends an approved room back to
+  distance, address, phone number or photo sends an approved room back to
   `pending` for the team to check again, and a rejected room goes back to
   `pending` so the owner can fix it. The address is shown to students, and
   the owner agrees to that when posting.
@@ -158,7 +162,7 @@ If time runs short, cut in this order: the price filter, then the
 approves, and a student sees it.
 
 ## Out of scope
-- Photos
+- More than one photo per room (one photo is in scope, see ticket 15)
 - Reviews or ratings
 - Email notifications (the banner on the owner home is the notice)
 - Stronger owner verification (ID, permit photos, house visits)

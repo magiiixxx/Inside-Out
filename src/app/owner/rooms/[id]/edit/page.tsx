@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RoomDetailsFields } from "@/components/room-details-fields";
 import { getUserAndRole } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
+import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 
 // Edit one of the owner's own rooms.
@@ -33,7 +34,7 @@ export default async function EditRoomPage({
   if (!UUID.test(id)) notFound();
   const { data: room } = await supabase
     .from("listings")
-    .select("id, description, price_per_month, distance_km, contact_phone, address, approval_status")
+    .select("id, description, price_per_month, distance_km, contact_phone, address, photo_path, approval_status")
     .eq("id", id)
     .eq("owner_id", user.id)
     .maybeSingle();
@@ -50,8 +51,8 @@ export default async function EditRoomPage({
           <CardTitle>Edit your room</CardTitle>
           <p className="text-sm text-muted-foreground">
             Changing only the <strong>price</strong> takes effect straight
-            away. Changing the description, distance, address or phone number
-            sends the room back to our team to check again, and students
+            away. Changing the description, distance, address, phone number or
+            photo sends the room back to our team to check again, and students
             will not see it until it is approved.
           </p>
         </CardHeader>
@@ -71,7 +72,7 @@ export default async function EditRoomPage({
               </p>
             )}
 
-            <RoomDetailsFields defaults={room} />
+            <RoomDetailsFields defaults={room} currentPhotoUrl={photoUrl(room.photo_path)} />
 
             <Button type="submit" size="lg">
               Save changes

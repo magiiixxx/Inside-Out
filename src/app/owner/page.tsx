@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HIDE_AFTER_DAYS } from "@/lib/listings";
 import { errorText, noticeText } from "@/lib/messages";
 import { FREE_ROOM_LIMIT, isAtRoomLimit, PLAN_NAMES, type Plan } from "@/lib/plans";
+import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 
 // The owner's home page: their rooms, each with a status badge, and the
@@ -20,6 +21,7 @@ type Room = {
   availability: "available" | "occupied";
   approval_status: "pending" | "approved" | "rejected";
   last_updated_at: string;
+  photo_path: string | null;
 };
 
 const STATUS: Record<Room["approval_status"], { label: string; className: string }> = {
@@ -92,7 +94,7 @@ export default async function OwnerHome({
   const { data: rooms } = await supabase
     .from("listings")
     .select(
-      "id, description, price_per_month, distance_km, availability, approval_status, last_updated_at",
+      "id, description, price_per_month, distance_km, availability, approval_status, last_updated_at, photo_path",
     )
     .eq("owner_id", user.id)
     .order("created_at", { ascending: false });
@@ -207,6 +209,15 @@ export default async function OwnerHome({
                   </span>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
+                  {photoUrl(room.photo_path) && (
+                    // eslint-disable-next-line @next/next/no-img-element -- stored in Supabase Storage
+                    <img
+                      src={photoUrl(room.photo_path) ?? ""}
+                      alt="Photo of this room"
+                      loading="lazy"
+                      className="h-44 w-full rounded-xl object-cover"
+                    />
+                  )}
                   <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground">
                     <span className="font-medium text-foreground">
                       ₱{Number(room.price_per_month).toLocaleString()} / month

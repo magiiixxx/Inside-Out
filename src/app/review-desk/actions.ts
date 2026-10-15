@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { removePhoto } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 
 // Approve or reject a room. The real protection is inside the database:
@@ -39,9 +40,17 @@ export async function deleteAnyRoom(formData: FormData) {
   if (!UUID.test(listingId)) redirect("/review-desk?error=invalid_request");
 
   const supabase = await createClient();
+  const { data: room } = await supabase
+    .from("listings")
+    .select("photo_path")
+    .eq("id", listingId)
+    .maybeSingle();
+
   const { error } = await supabase.rpc("delete_room", { p_listing_id: listingId });
 
   if (error) redirect("/review-desk?error=delete_failed");
+
+  await removePhoto(supabase, room?.photo_path);
 
   redirect("/review-desk?notice=deleted");
 }

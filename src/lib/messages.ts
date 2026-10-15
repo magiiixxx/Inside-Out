@@ -31,6 +31,8 @@ const ERRORS: Record<string, string> = {
   need_phone_ok: "Please confirm that you understand your phone number will be public.",
   bad_address: "Please enter the room's address (5 to 200 characters).",
   need_address_ok: "Please confirm that you understand the address will be public.",
+  bad_photo: "The photo must be a JPG, PNG or WebP picture, up to 2 MB.",
+  photo_failed: "We could not upload the photo. Please try again.",
   edit_failed: "We could not save your changes. Please check the form and try again.",
   post_failed: "We could not save your room. Please check the form and try again.",
   plan_limit:

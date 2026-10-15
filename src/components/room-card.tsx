@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { ClockIcon, HouseIcon, PhoneIcon, PinIcon } from "@/components/icons";
 import { updatedLabel } from "@/lib/listings";
+import { photoUrl } from "@/lib/photos";
 
 // One room as a student sees it. Used by the Browse page and the Saved
 // rooms page, so a room always looks the same. Anything passed as
@@ -9,7 +10,7 @@ import { updatedLabel } from "@/lib/listings";
 //
 // What a student decides on comes first: whether it is available (the badge
 // on the picture), then the price. The Call button is the main action.
-// Rooms have no photo yet, so the picture is a simple drawing of a house.
+// A room without a photo gets a simple drawing of a house instead.
 
 export type RoomCardData = {
   id: string;
@@ -18,6 +19,7 @@ export type RoomCardData = {
   distance_km: number;
   contact_phone: string;
   address: string | null; // rooms posted before addresses existed have none
+  photo_path: string | null; // optional; without one we draw a house
   availability: "available" | "occupied";
   last_updated_at: string;
 };
@@ -38,6 +40,7 @@ export function RoomCard({
 }) {
   const isAvailable = room.availability === "available";
   const tint = TINTS[room.id.charCodeAt(0) % TINTS.length];
+  const src = photoUrl(room.photo_path);
   return (
     <article className="card lift flex h-full flex-col overflow-hidden">
       <div
@@ -47,13 +50,18 @@ export function RoomCard({
         <span className={`absolute left-3.5 top-3.5 ${isAvailable ? "badge-available" : "badge-full"}`}>
           {isAvailable ? "Available" : "Occupied"}
         </span>
-        <svg width="150" height="110" viewBox="0 0 220 150" aria-hidden="true">
-          <rect x="30" y="30" width="160" height="120" fill={tint.wall} />
-          <rect x="50" y="48" width="26" height="24" fill={tint.bg} />
-          <rect x="97" y="48" width="26" height="24" fill={tint.bg} />
-          <rect x="144" y="48" width="26" height="24" fill={tint.bg} />
-          <rect x="95" y="100" width="30" height="50" fill="#0f2d52" />
-        </svg>
+        {src ? (
+          // eslint-disable-next-line @next/next/no-img-element -- the photo is stored in Supabase Storage
+          <img src={src} alt="Photo of the room" loading="lazy" className="h-full w-full object-cover" />
+        ) : (
+          <svg width="150" height="110" viewBox="0 0 220 150" aria-hidden="true">
+            <rect x="30" y="30" width="160" height="120" fill={tint.wall} />
+            <rect x="50" y="48" width="26" height="24" fill={tint.bg} />
+            <rect x="97" y="48" width="26" height="24" fill={tint.bg} />
+            <rect x="144" y="48" width="26" height="24" fill={tint.bg} />
+            <rect x="95" y="100" width="30" height="50" fill="#0f2d52" />
+          </svg>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-5">
