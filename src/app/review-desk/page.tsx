@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
-import { reviewRoom } from "@/app/review-desk/actions";
+import { deleteAnyRoom, reviewRoom } from "@/app/review-desk/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DeleteRoomButton } from "@/components/delete-room-button";
 import { errorText, noticeText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
 
@@ -24,6 +25,15 @@ type PendingCheck = {
     contact_phone: string;
     created_at: string;
   };
+};
+
+type OtherRoom = {
+  id: string;
+  owner_id: string | null;
+  description: string;
+  price_per_month: number;
+  contact_phone: string;
+  approval_status: "approved" | "rejected";
 };
 
 export default async function ReviewDesk({
@@ -65,8 +75,24 @@ export default async function ReviewDesk({
 
   const rows = (pending ?? []) as unknown as PendingCheck[];
 
-  // Owner names (admins may read all profiles).
-  const ownerIds = [...new Set(rows.map((r) => r.listings.owner_id))];
+  // The newest 50 rooms that are already decided, so the team can remove
+  // spam, mistakes or leftover test rooms. Admins may read every room.
+  const { data: others } = await supabase
+    .from("listings")
+    .select("id, owner_id, description, price_per_month, contact_phone, approval_status")
+    .neq("approval_status", "pending")
+    .order("created_at", { ascending: false })
+    .limit(50);
+  const otherRooms = (others ?? []) as OtherRoom[];
+
+  // Owner names (admins may read all profiles). Sample rooms have no owner.
+  const ownerIds = [
+    ...new Set(
+      [...rows.map((r) => r.listings.owner_id), ...otherRooms.map((r) => r.owner_id)].filter(
+        (id): id is string => id !== null,
+      ),
+    ),
+  ];
   const { data: owners } = ownerIds.length
     ? await supabase.from("profiles").select("id, full_name").in("id", ownerIds)
     : { data: [] as { id: string; full_name: string }[] };
@@ -145,6 +171,44 @@ export default async function ReviewDesk({
           );
         })
       )}
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-lg font-medium">Other rooms</h2>
+        <p className="text-sm text-muted-foreground">
+          Rooms already approved or rejected. Delete spam, mistakes and test
+          rooms here.
+        </p>
+        {otherRooms.length === 0 ? (
+          <Card>
+            <CardContent className="pt-6 text-sm text-muted-foreground">
+              No other rooms.
+            </CardContent>
+          </Card>
+        ) : (
+          otherRooms.map((room) => (
+            <Card key={room.id}>
+              <CardHeader className="flex flex-row items-start justify-between gap-3">
+                <CardTitle className="text-base leading-snug">{room.description}</CardTitle>
+                <span className="shrink-0 rounded-full border border-border px-2.5 py-0.5 text-xs font-medium capitalize text-muted-foreground">
+                  {room.approval_status}
+                </span>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-3">
+                <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">
+                    ₱{Number(room.price_per_month).toLocaleString()} / month
+                  </span>
+                  <span>{room.contact_phone}</span>
+                  <span>
+                    {room.owner_id ? ownerName.get(room.owner_id) || "(no name)" : "(no owner)"}
+                  </span>
+                </div>
+                <DeleteRoomButton action={deleteAnyRoom} listingId={room.id} />
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </section>
     </main>
   );
 }

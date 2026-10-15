@@ -35,6 +35,7 @@ const ERRORS: Record<string, string> = {
   invalid_request: "That request was not valid.",
   update_failed: "We could not update that room. Please try again.",
   review_failed: "We could not review that room. It may already have been reviewed.",
+  delete_failed: "We could not delete that room. It may already be gone.",
 };
 
 const NOTICES: Record<string, string> = {
@@ -45,6 +46,7 @@ const NOTICES: Record<string, string> = {
   renewed: "Room renewed. Students can see it again.",
   approved: "Room approved. Students can now see it.",
   rejected: "Room rejected.",
+  deleted: "Room deleted.",
 };
 
 function lookup(list: Record<string, string>, code: string | undefined) {

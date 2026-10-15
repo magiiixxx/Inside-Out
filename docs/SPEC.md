@@ -78,8 +78,9 @@ Row Level Security (RLS) is ON for every table.
 - An owner may change only the availability of their own row, and renew
   it (which sets last updated to now). An owner can never change the
   approval status. To change price or description they delete the room
-  and post it again.
-- An admin may read all rows and change the approval status.
+  and post it again. An owner may delete their own rooms.
+- An admin may read all rows, change the approval status, and delete any
+  room (to remove spam or leftover test rooms).
 
 **listing_checks**
 - Columns: listing, permit number (typed in), answers to the validation

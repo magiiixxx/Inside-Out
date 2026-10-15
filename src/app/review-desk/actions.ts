@@ -30,3 +30,18 @@ export async function reviewRoom(formData: FormData) {
 
   redirect(`/review-desk?notice=${decision}`);
 }
+
+// Delete any room (spam, a mistake, or a leftover test room). The database
+// function allows this only for the room's owner or an admin.
+export async function deleteAnyRoom(formData: FormData) {
+  const listingId = String(formData.get("listing_id") ?? "");
+
+  if (!UUID.test(listingId)) redirect("/review-desk?error=invalid_request");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("delete_room", { p_listing_id: listingId });
+
+  if (error) redirect("/review-desk?error=delete_failed");
+
+  redirect("/review-desk?notice=deleted");
+}

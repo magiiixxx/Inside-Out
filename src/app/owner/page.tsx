@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { logout } from "@/app/auth/actions";
-import { renewRoom, setAvailability } from "@/app/owner/actions";
+import { deleteRoom, renewRoom, setAvailability } from "@/app/owner/actions";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { DeleteRoomButton } from "@/components/delete-room-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HIDE_AFTER_DAYS } from "@/lib/listings";
 import { errorText, noticeText } from "@/lib/messages";
@@ -219,6 +220,8 @@ export default async function OwnerHome({
                       </div>
                     </>
                   )}
+
+                  <DeleteRoomButton action={deleteRoom} listingId={room.id} />
                 </CardContent>
               </Card>
             );

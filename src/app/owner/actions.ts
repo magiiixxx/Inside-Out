@@ -87,6 +87,21 @@ export async function setAvailability(formData: FormData) {
   redirect(`/owner?notice=${availability}`);
 }
 
+// Delete one of the owner's rooms (any status). The database function
+// refuses rooms that belong to someone else.
+export async function deleteRoom(formData: FormData) {
+  const listingId = text(formData, "listing_id");
+
+  if (!UUID.test(listingId)) redirect("/owner?error=invalid_request");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("delete_room", { p_listing_id: listingId });
+
+  if (error) redirect("/owner?error=delete_failed");
+
+  redirect("/owner?notice=deleted");
+}
+
 // Renew one of the owner's rooms: "this room is still as listed". Brings a
 // hidden room back for students.
 export async function renewRoom(formData: FormData) {
