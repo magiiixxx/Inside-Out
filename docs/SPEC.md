@@ -72,8 +72,9 @@ roles support the student: the **owner**, who posts rooms, and the
    show here.
 8. **Plans** (public): the Free, Premium Owner and Property Manager plans
    with their prices. Each feature is marked "Available now" or "Coming
-   soon". Owners on Free can request Premium Owner there, saying how they
-  will pay and giving a phone number. The team page lists the requests, and
+   soon". Owners choose Premium Owner or Property Manager there (only a step up
+  from their current plan), saying how they will pay and giving a phone
+  number. The team page lists the requests, and
   an admin presses Activate after the payment has arrived. The app itself
   takes no payments.
 
@@ -125,7 +126,7 @@ Row Level Security (RLS) is ON for every table.
   most 50 rooms.
 
 **plan_requests**
-- Columns: owner, plan (`premium`), pay method (`gcash`, `maya` or `bank`),
+- Columns: owner, plan (`premium` or `manager`), pay method (`gcash`, `maya` or `bank`),
   contact phone, status (`pending`, `activated` or `dismissed`), created at.
 - An owner reads only their own requests; admins read all. Nobody writes
   to the table directly: owners use `request_plan()` (one waiting request at

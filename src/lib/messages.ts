@@ -39,6 +39,8 @@ const ERRORS: Record<string, string> = {
     "The Free plan allows one room. See the plans, then ask our team about Premium Owner to post more.",
 
   // Plan requests
+  bad_plan: "Please choose Premium Owner or Property Manager.",
+  plan_already: "You already have that plan.",
   bad_pay_method: "Please choose GCash, Maya or bank transfer.",
   bad_contact_phone: "Please enter a phone number our team can reach you on.",
   plan_request_exists: "You already have a request waiting. Our team will contact you.",

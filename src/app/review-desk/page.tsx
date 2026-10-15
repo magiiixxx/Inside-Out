@@ -7,6 +7,7 @@ import { Logo } from "@/components/site-header";
 import { DeleteRoomButton } from "@/components/delete-room-button";
 import { errorText, noticeText } from "@/lib/messages";
 import { payMethodLabel } from "@/lib/payment";
+import { PLAN_NAMES, type Plan } from "@/lib/plans";
 import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 import { initials } from "@/lib/utils";
@@ -252,7 +253,7 @@ export default async function ReviewDesk({
           <div>
             <h2 className="text-xl font-extrabold tracking-tight">Plan requests</h2>
             <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">
-              Owners who asked for Premium Owner (₱149 a month). Call them,
+              Owners who asked for Premium Owner (₱149 a month) or Property Manager (₱299 a month). Call them,
               give them the payment details, and press Activate only after the
               money has arrived.
             </p>
@@ -271,7 +272,7 @@ export default async function ReviewDesk({
                     <dt className="text-muted-foreground">Owner</dt>
                     <dd className="font-semibold">{ownerName.get(request.owner_id) || "(no name)"}</dd>
                     <dt className="text-muted-foreground">Wants</dt>
-                    <dd>Premium Owner</dd>
+                    <dd>{PLAN_NAMES[request.plan as Plan] ?? request.plan}</dd>
                     <dt className="text-muted-foreground">Will pay by</dt>
                     <dd>{payMethodLabel(request.pay_method)}</dd>
                     <dt className="text-muted-foreground">Phone</dt>
@@ -285,7 +286,7 @@ export default async function ReviewDesk({
                     <form action={activatePlan}>
                       <input type="hidden" name="request_id" value={request.id} />
                       <Button type="submit" variant="accent">
-                        Activate Premium
+                        Activate plan
                       </Button>
                     </form>
                     <form action={dismissPlanRequest}>

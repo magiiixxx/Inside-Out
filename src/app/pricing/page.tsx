@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requestPremium } from "@/app/pricing/actions";
+import { requestPlan } from "@/app/pricing/actions";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { CheckIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { getUserAndRole } from "@/lib/auth";
 import { errorText, noticeText } from "@/lib/messages";
 import { PAY_METHODS, payMethodLabel } from "@/lib/payment";
+import { PLAN_NAMES, PLAN_PRICES, requestablePlans } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
 
 // Plans for boarding house owners. Students are never charged.
@@ -19,14 +20,15 @@ import { createClient } from "@/lib/supabase/server";
 // team directly by GCash, Maya or bank transfer, and a team member then
 // activates the plan (supabase/sql/013-plan-requests.sql).
 //
-// Only Premium Owner can be requested: Property Manager is "Coming soon", so
-// we do not take payment for it yet.
+// An owner chooses Premium Owner or Property Manager in the form below. The
+// Property Manager features are still "Coming soon", and the form says so.
 
 export const dynamic = "force-dynamic";
 
 type Feature = { text: string; live: boolean };
 
 type PlanCard = {
+  key?: "premium" | "manager"; // free has no key: it cannot be requested
   name: string;
   price: string;
   forWho: string;
@@ -48,6 +50,7 @@ const PLANS: PlanCard[] = [
     ],
   },
   {
+    key: "premium",
     name: "Premium Owner",
     price: "₱149",
     forWho: "For small boarding houses",
@@ -61,6 +64,7 @@ const PLANS: PlanCard[] = [
     ],
   },
   {
+    key: "manager",
     name: "Property Manager",
     price: "₱299",
     forWho: "For larger boarding houses",
@@ -78,26 +82,30 @@ const PLANS: PlanCard[] = [
 export default async function PricingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ notice?: string; error?: string }>;
+  searchParams: Promise<{ notice?: string; error?: string; plan?: string }>;
 }) {
   // The address carries only short codes; the text comes from our own list.
   const params = await searchParams;
   const notice = noticeText(params.notice);
   const error = errorText(params.error);
+  // A "Choose this plan" button on a card links here with ?plan=manager.
+  const preselected = params.plan === "manager" ? "manager" : "premium";
 
   const supabase = await createClient();
   const { user, role, plan } = await getUserAndRole(supabase);
 
   // Has this owner already asked? (Row Level Security: only their own.)
-  let pendingMethod: string | null = null;
+  let pending: { plan: "premium" | "manager"; pay_method: string } | null = null;
   if (role === "owner") {
     const { data } = await supabase
       .from("plan_requests")
-      .select("pay_method")
+      .select("plan, pay_method")
       .eq("status", "pending")
       .maybeSingle();
-    pendingMethod = data?.pay_method ?? null;
+    pending = data ?? null;
   }
+
+  const choices = requestablePlans(plan);
 
   return (
     <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
@@ -160,16 +168,25 @@ export default async function PricingPage({
                 </li>
               ))}
             </ul>
+
+            {plan.key && choices.includes(plan.key) && !pending && (
+              <Link
+                href={`/pricing?plan=${plan.key}#upgrade`}
+                className={buttonVariants({ variant: plan.recommended ? "accent" : "outline" }) + " mt-auto"}
+              >
+                Choose {plan.name}
+              </Link>
+            )}
           </section>
         ))}
       </div>
 
       <section id="upgrade" className="card flex scroll-mt-20 flex-col gap-4 p-6">
-        <h2 className="text-xl font-semibold">Get Premium Owner</h2>
+        <h2 className="text-xl font-semibold">Upgrade your plan</h2>
         {!user ? (
           <>
             <p className="text-sm text-muted-foreground">
-              Log in as an owner to ask for Premium Owner. Students never pay.
+              Log in as an owner to choose a plan. Students never pay.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/login" className={buttonVariants({ variant: "outline" })}>
@@ -184,22 +201,48 @@ export default async function PricingPage({
           <p className="text-sm text-muted-foreground">
             Plans are for boarding house owners. Students use BahayFind for free.
           </p>
-        ) : plan !== "free" ? (
-          <p className="alert-success">You already have a paid plan. Thank you!</p>
-        ) : pendingMethod ? (
+        ) : choices.length === 0 ? (
+          <p className="alert-success">You already have the top plan. Thank you!</p>
+        ) : pending ? (
           <p className="alert-info">
-            Your request is waiting. Our team will contact you to arrange
-            payment by {payMethodLabel(pendingMethod)}. Premium Owner is
-            switched on after we receive it.
+            Your request for {PLAN_NAMES[pending.plan]} is waiting. Our team will
+            contact you to arrange payment by {payMethodLabel(pending.pay_method)}.
+            The plan is switched on after we receive it.
           </p>
         ) : (
-          <form action={requestPremium} className="flex max-w-xl flex-col gap-4">
+          <form action={requestPlan} className="flex max-w-xl flex-col gap-4">
             <p className="text-sm text-muted-foreground">
-              Premium Owner is ₱149 a month. Choose how you will pay and give
-              us a number to reach you on. Nothing is charged here: our team
-              contacts you with the account details, and Premium is switched on
-              once we have received your payment.
+              Choose a plan and how you will pay, and give us a number to reach
+              you on. Nothing is charged here: our team contacts you with the
+              account details, and the plan is switched on once we have
+              received your payment.
             </p>
+            <fieldset className="flex flex-col gap-2">
+              <legend className="label mb-1">Which plan?</legend>
+              {choices.map((choice) => (
+                <label
+                  key={choice}
+                  className="flex items-start gap-3 rounded-xl border border-field-line p-3 text-sm has-[:checked]:border-ink has-[:checked]:bg-navy-soft"
+                >
+                  <input
+                    type="radio"
+                    name="plan"
+                    value={choice}
+                    defaultChecked={choices.includes(preselected) ? choice === preselected : choice === choices[0]}
+                    className="mt-0.5"
+                  />
+                  <span>
+                    <span className="font-bold">{PLAN_NAMES[choice]}</span> — ₱{PLAN_PRICES[choice]} a month
+                    {choice === "manager" && (
+                      <span className="mt-0.5 block text-muted-foreground">
+                        Includes everything in Premium Owner. Its extra features (inventory,
+                        reports, staff accounts) are still coming soon.
+                      </span>
+                    )}
+                  </span>
+                </label>
+              ))}
+            </fieldset>
             <fieldset className="flex flex-col gap-2">
               <legend className="label mb-1">How will you pay?</legend>
               <div className="flex flex-wrap gap-3">
@@ -223,7 +266,7 @@ export default async function PricingPage({
               />
             </div>
             <Button type="submit" variant="accent" className="w-fit">
-              Request Premium Owner
+              Request this plan
             </Button>
           </form>
         )}
