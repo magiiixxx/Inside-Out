@@ -3,11 +3,13 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-// Server action for the "Add a room" form. Everything is checked here on
-// the server first (the browser's form checks can be skipped by anyone),
-// and the database checks it again inside post_room().
+// Server actions for the owner's pages. Everything is checked here on the
+// server first (the browser's form checks can be skipped by anyone), and
+// the database checks again inside its own functions.
 //
 // redirect() throws a special signal, so it is never inside a try/catch.
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function back(error: string): never {
   redirect(`/owner/rooms/new?error=${encodeURIComponent(error)}`);
@@ -77,4 +79,42 @@ export async function postRoom(formData: FormData) {
   if (error) back(error.message);
 
   redirect("/owner?posted=1");
+}
+
+// Mark one of the owner's rooms available or occupied. Also restarts the
+// 7-day clock, because the owner has just confirmed the room's status.
+export async function setAvailability(formData: FormData) {
+  const listingId = text(formData, "listing_id");
+  const availability = text(formData, "availability");
+
+  if (!UUID.test(listingId) || (availability !== "available" && availability !== "occupied")) {
+    redirect("/owner?error=" + encodeURIComponent("That request was not valid."));
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_room_availability", {
+    p_listing_id: listingId,
+    p_availability: availability,
+  });
+
+  if (error) redirect("/owner?error=" + encodeURIComponent(error.message));
+
+  redirect(`/owner?updated=${availability}`);
+}
+
+// Renew one of the owner's rooms: "this room is still as listed". Brings a
+// hidden room back for students.
+export async function renewRoom(formData: FormData) {
+  const listingId = text(formData, "listing_id");
+
+  if (!UUID.test(listingId)) {
+    redirect("/owner?error=" + encodeURIComponent("That request was not valid."));
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("renew_room", { p_listing_id: listingId });
+
+  if (error) redirect("/owner?error=" + encodeURIComponent(error.message));
+
+  redirect("/owner?updated=renewed");
 }
