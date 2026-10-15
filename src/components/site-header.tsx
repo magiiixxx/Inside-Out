@@ -115,7 +115,10 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-navy-edge">
         <div className="mx-auto w-full max-w-[1200px] px-4 py-5 text-[0.8125rem] text-navy-text sm:px-8">
-          © 2026 BahayFind. All rights reserved.
+          © 2026 BahayFind. All rights reserved.{" "}
+          <Link href="/privacy" className="underline underline-offset-4 hover:text-white">
+            Privacy
+          </Link>
         </div>
       </div>
     </footer>

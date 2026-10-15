@@ -175,7 +175,9 @@ Row Level Security (RLS) is ON for every table.
 3. Can our team call this number to confirm?
 
 ## Login
-Yes, for everyone who has an account: Supabase Auth, email and password.
+Yes, for everyone who has an account: Supabase Auth, with email and
+password or with Facebook (switched on by the team once the Facebook app is
+set up).
 Browsing rooms never needs a login, but students log in to save rooms,
 owners to manage theirs, and admins to review. For the demo, turn off "Confirm email" in Supabase Auth
 settings, because the free plan limits how many emails it sends and

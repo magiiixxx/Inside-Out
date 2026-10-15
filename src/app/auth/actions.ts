@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserAndRole, homeFor } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -75,4 +76,39 @@ export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/");
+}
+
+// Start "Continue with Facebook". Supabase Auth does the real work: it sends
+// the person to Facebook, and Facebook sends them back to /auth/callback (see
+// src/app/auth/callback/route.ts). Our code never sees a Facebook password
+// or the Facebook app secret; that secret lives only in the Supabase
+// dashboard.
+//
+// The button only exists when NEXT_PUBLIC_FACEBOOK_LOGIN is "true" (see
+// src/components/facebook-buttons.tsx), and we check again here.
+export async function signInWithFacebook(formData: FormData) {
+  const from = field(formData, "from") === "signup" ? "/signup" : "/login";
+  if (process.env.NEXT_PUBLIC_FACEBOOK_LOGIN !== "true") back(from, "oauth_failed");
+
+  // Same rule as the email form: only "owner" counts; anything else is a student.
+  const accountType = field(formData, "account_type") === "owner" ? "owner" : "student";
+
+  // Our own address, so Facebook knows where to send the person back to.
+  // Supabase only accepts addresses on its allowed list (Authentication ->
+  // URL Configuration), so a faked address is refused.
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "https";
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo: `${protocol}://${host}/auth/callback?type=${accountType}`,
+      scopes: "email",
+    },
+  });
+
+  if (error || !data.url) back(from, "oauth_failed");
+  redirect(data.url);
 }
