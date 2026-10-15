@@ -1,83 +1,94 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
 
-// This is the starter screen. Once Ticket 01 is done and you can see this
-// page on your phone, delete everything here and build your own app.
+// Ticket 02: proves the live site can read from Supabase. Ticket 03 turns
+// this into the real Browse screen.
+//
+// This is a server component: it runs on the server, so the database
+// query happens before the page reaches the phone. Row Level Security
+// decides which rows come back — we do not filter approved/stale rooms
+// here, the database does it.
 
-const steps = [
-  {
-    n: "01",
-    title: "Get it live",
-    body: "If you are reading this on a vercel.app URL, this step is done. Put that URL at the top of your README and open it on your phone.",
-  },
-  {
-    n: "02",
-    title: "Find the real problem",
-    body: "Run /grill-with-docs in Claude Code. You will be asked about a real person you have watched struggle. Have an answer.",
-  },
-  {
-    n: "03",
-    title: "Pitch it",
-    body: "Run /pitch to turn your problem into a three-minute script for Session 1.",
-  },
-  {
-    n: "04",
-    title: "Spec, tickets, build",
-    body: "/to-spec, then /to-tickets, then /implement one ticket at a time. Push after every ticket and check the live URL.",
-  },
-  {
-    n: "05",
-    title: "Review before you demo",
-    body: "/code-review. Fix every red item. An unprotected database on a public URL is a real data leak.",
-  },
-];
+// Render on every visit. Without this, Next.js can build the page once and
+// reuse it, so a room marked "occupied" would keep showing as available.
+export const dynamic = "force-dynamic";
 
-export default function Home() {
+type Listing = {
+  id: string;
+  description: string;
+  price_per_month: number;
+  distance_km: number;
+  availability: "available" | "occupied";
+};
+
+async function getListings(): Promise<{ rooms: Listing[]; error?: string }> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("listings")
+      .select("id, description, price_per_month, distance_km, availability")
+      .order("distance_km", { ascending: true });
+
+    if (error) return { rooms: [], error: error.message };
+    return { rooms: (data ?? []) as Listing[] };
+  } catch (e) {
+    return {
+      rooms: [],
+      error: e instanceof Error ? e.message : "Could not reach the database.",
+    };
+  }
+}
+
+export default async function Home() {
+  const { rooms, error } = await getListings();
+
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-4 py-12 sm:py-20">
       <header className="flex flex-col gap-3">
         <span className="inline-flex w-fit items-center rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
-          PHINMA AI Builder Workshop
+          Near PHINMA UI
         </span>
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Your app is live.
+          BahayFind
         </h1>
         <p className="text-base text-muted-foreground">
-          This page is deployed on the internet right now. Anyone with the link
-          can open it. That is the whole point — you will be building on
-          something real, not something on your laptop.
+          Boarding house rooms that owners confirm are available.
         </p>
       </header>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>What happens next</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-5">
-          {steps.map((step) => (
-            <div key={step.n} className="flex gap-4">
-              <span className="font-mono text-sm text-muted-foreground tabular-nums">
-                {step.n}
-              </span>
-              <div className="flex flex-col gap-1">
-                <p className="text-sm font-medium">{step.title}</p>
-                <p className="text-sm text-muted-foreground">{step.body}</p>
-              </div>
-            </div>
+      {error ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Could not load rooms</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            {error}
+          </CardContent>
+        </Card>
+      ) : rooms.length === 0 ? (
+        <Card>
+          <CardContent className="pt-6 text-sm text-muted-foreground">
+            No rooms to show yet.
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {rooms.map((room) => (
+            <Card key={room.id}>
+              <CardHeader>
+                <CardTitle className="text-base">{room.description}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground">
+                <span>₱{Number(room.price_per_month).toLocaleString()} / month</span>
+                <span>{Number(room.distance_km)} km from PHINMA UI</span>
+                <span className="font-medium text-foreground">
+                  {room.availability === "available" ? "Available" : "Occupied"}
+                </span>
+              </CardContent>
+            </Card>
           ))}
-        </CardContent>
-      </Card>
-
-      <div className="flex flex-wrap items-center gap-3">
-        <Button>Replace this page with your app</Button>
-        <span className="text-sm text-muted-foreground">
-          src/app/page.tsx
-        </span>
-      </div>
-
-      <footer className="mt-auto border-t border-border pt-6 text-sm text-muted-foreground">
-        One user. One job. Demoable in three minutes.
-      </footer>
+        </div>
+      )}
     </main>
   );
 }
