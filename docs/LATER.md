@@ -74,6 +74,26 @@ inventory).
   printing shops and food places near campus pay to advertise. Needs
   steady traffic first.
 
+## Phone number verification by SMS (decided against for now)
+
+The team looked at adding a Phone number field to Sign up and sending a text
+message code (OTP) that must be entered before the person can log in. We chose
+**not** to build it, because real SMS needs a paid outside provider (Twilio,
+MessageBird, Vonage or Textlocal) connected to Supabase, which is outside the
+pinned stack and adds a cost per message. Email confirmation, which is already
+on, stays as the only verification.
+
+If the team reopens this, the answers already given were:
+- Apply it to **new sign-ups only**; existing accounts keep logging in as they do.
+- Apply it to **everyone who signs up, including Google and Facebook**, so there is
+  one rule.
+- Use +63 as the default country code, with Verify and Resend options and clear
+  messages for wrong or expired codes.
+- The database must refuse an unverified account, not just the page, so skipping
+  the page does not get around it.
+- First check the provider's current rules and costs for the Philippines, and
+  that a free trial only texts numbers you have verified in advance.
+
 ## Account menu ideas, not built yet
 
 - "See all profiles": the app has one profile per account, so there is nothing
