@@ -4,7 +4,7 @@ import { editRoom } from "@/app/owner/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RoomDetailsFields } from "@/components/room-details-fields";
-import { getUserAndRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
 import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
@@ -24,7 +24,7 @@ export default async function EditRoomPage({
   const error = errorText((await searchParams).error);
 
   const supabase = await createClient();
-  const { user, role } = await getUserAndRole(supabase);
+  const { user, role } = await getCurrentUser();
   if (!user) redirect("/login");
   if (role === "student") redirect("/saved");
 

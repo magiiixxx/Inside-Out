@@ -4,7 +4,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { CheckIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getUserAndRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { errorText, noticeText } from "@/lib/messages";
 import { PAY_METHODS, payMethodLabel } from "@/lib/payment";
 import { PLAN_NAMES, PLAN_PRICES, requestablePlans } from "@/lib/plans";
@@ -52,7 +52,7 @@ const PLANS: PlanCard[] = [
   {
     key: "premium",
     name: "Premium Owner",
-    price: "₱149",
+    price: `₱${PLAN_PRICES.premium}`,
     forWho: "For small boarding houses",
     recommended: true,
     features: [
@@ -66,7 +66,7 @@ const PLANS: PlanCard[] = [
   {
     key: "manager",
     name: "Property Manager",
-    price: "₱299",
+    price: `₱${PLAN_PRICES.manager}`,
     forWho: "For larger boarding houses",
     comingSoon: true,
     features: [
@@ -92,7 +92,7 @@ export default async function PricingPage({
   const preselected = params.plan === "manager" ? "manager" : "premium";
 
   const supabase = await createClient();
-  const { user, role, plan } = await getUserAndRole(supabase);
+  const { user, role, plan } = await getCurrentUser();
 
   // Has this owner already asked? (Row Level Security: only their own.)
   let pending: { plan: "premium" | "manager"; pay_method: string } | null = null;
@@ -146,7 +146,7 @@ export default async function PricingPage({
               <p className="text-sm text-muted-foreground">{plan.forWho}</p>
             </div>
 
-            <p className="font-display text-3xl font-extrabold tracking-tight">
+            <p className="text-3xl font-extrabold tracking-tight">
               {plan.price}
               <span className="text-base font-medium text-muted-foreground">
                 {plan.price === "₱0" ? "" : " / month"}

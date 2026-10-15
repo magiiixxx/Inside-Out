@@ -1,4 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { cache } from "react";
+import { createClient } from "@/lib/supabase/server";
 
 // Who is logged in, and what are they? One place for every page that needs
 // to know, so the answer is always worked out the same way.
@@ -28,6 +30,12 @@ export async function getUserAndRole(supabase: SupabaseClient) {
     plan: (profile?.plan ?? "free") as string,
   };
 }
+
+// The same answer, but asked only ONCE per page load. A page and the site
+// header both need to know who is logged in; React's cache() makes the second
+// ask reuse the first answer instead of calling Supabase again. Pages and the
+// header use this. Server actions keep using getUserAndRole() above.
+export const getCurrentUser = cache(async () => getUserAndRole(await createClient()));
 
 // Where each kind of account lands after logging in.
 export function homeFor(role: Role | null): string {

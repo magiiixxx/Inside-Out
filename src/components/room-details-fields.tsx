@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PhotoField } from "@/components/photo-field";
 import { Textarea } from "@/components/ui/textarea";
 
 // The fields about a room that students see: description, price, distance,
@@ -94,26 +95,7 @@ export function RoomDetailsFields({
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="photo">Photo of the room (optional)</Label>
-        {currentPhotoUrl && (
-          // eslint-disable-next-line @next/next/no-img-element -- a small preview of a file stored in Supabase
-          <img src={currentPhotoUrl} alt="Current photo of the room" className="h-40 w-full rounded-xl object-cover" />
-        )}
-        <input
-          id="photo"
-          name="photo"
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="field mt-0 file:mr-3 file:rounded-lg file:border-0 file:bg-navy-soft file:px-3 file:py-1.5 file:font-semibold file:text-navy"
-        />
-        <p className="hint">
-          {currentPhotoUrl
-            ? "Choose a file only if you want to replace this photo. A new photo is checked by our team again. "
-            : ""}
-          JPG, PNG or WebP, up to 2 MB.
-        </p>
-      </div>
+      <PhotoField currentPhotoUrl={currentPhotoUrl} />
 
       <label className="flex items-start gap-3 text-sm">
         <input type="checkbox" name="address_public" required className="mt-0.5 h-4 w-4" />

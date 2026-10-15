@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RoomDetailsFields } from "@/components/room-details-fields";
-import { getUserAndRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
 import { isAtRoomLimit } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
@@ -20,7 +20,7 @@ export default async function NewRoomPage({
   const error = errorText((await searchParams).error);
 
   const supabase = await createClient();
-  const { user, role, plan } = await getUserAndRole(supabase);
+  const { user, role, plan } = await getCurrentUser();
   if (!user) redirect("/login");
   // Students cannot post rooms (the database refuses too).
   if (role === "student") redirect("/saved");

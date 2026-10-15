@@ -87,7 +87,8 @@ Row Level Security (RLS) is ON for every table.
   team can change a plan: an owner sends a request, pays the team directly
   (GCash, Maya or bank transfer), and an admin presses Activate. A `free` owner may post
   one room; other plans and admins may post several.
-- A user may read only their own row. A profile is created by the
+- A user may read only their own row, except that admins may read every
+  profile (the team page shows owners' names). A profile is created by the
   database when someone signs up, as `student` or `owner` depending on
   the sign-up choice, and never as `admin`.
 - Nobody may change their own role. Team members are made admins by hand
@@ -147,8 +148,9 @@ Row Level Security (RLS) is ON for every table.
 3. Can our team call this number to confirm?
 
 ## Login
-Yes, for owners and admins: Supabase Auth, email and password. Students
-do not log in. For the demo, turn off "Confirm email" in Supabase Auth
+Yes, for everyone who has an account: Supabase Auth, email and password.
+Browsing rooms never needs a login, but students log in to save rooms,
+owners to manage theirs, and admins to review. For the demo, turn off "Confirm email" in Supabase Auth
 settings, because the free plan limits how many emails it sends and
 signup could otherwise get stuck. Admin access needs both a login and
 the `admin` role enforced by RLS. A hidden address is only an extra,
@@ -167,7 +169,7 @@ On the LIVE URL:
       students.
 - [ ] A room not updated for 7 days disappears from the student view and
       the owner can renew it.
-- [ ] RLS is on for all three tables, and no `service_role` or
+- [ ] RLS is on for all five tables, and no `service_role` or
       `sb_secret_` key is in the project.
 
 If time runs short, cut in this order: the price filter, then the

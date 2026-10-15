@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { logout } from "@/app/auth/actions";
-import { getUserAndRole, homeFor } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser, homeFor } from "@/lib/auth";
 import { initials } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -26,8 +25,7 @@ export function Logo({ onDark = false }: { onDark?: boolean }) {
 const NAV_LINK = "border-b-[3px] border-transparent py-[1.125rem] hover:border-amber";
 
 export async function SiteHeader() {
-  const supabase = await createClient();
-  const { user, role, fullName } = await getUserAndRole(supabase);
+  const { user, role, fullName } = await getCurrentUser();
   const displayName = fullName || user?.email || "";
 
   return (

@@ -5,9 +5,8 @@ import { AuthShell } from "@/components/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getUserAndRole, homeFor } from "@/lib/auth";
+import { getCurrentUser, homeFor } from "@/lib/auth";
 import { errorText, noticeText } from "@/lib/messages";
-import { createClient } from "@/lib/supabase/server";
 
 export default async function LoginPage({
   searchParams,
@@ -20,8 +19,7 @@ export default async function LoginPage({
   const notice = noticeText(params.notice);
 
   // Already logged in? Skip the form.
-  const supabase = await createClient();
-  const { user, role } = await getUserAndRole(supabase);
+  const { user, role } = await getCurrentUser();
   if (user) redirect(homeFor(role));
 
   return (

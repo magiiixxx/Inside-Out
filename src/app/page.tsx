@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { CheckIcon, PinIcon } from "@/components/icons";
 import { RoomCard, type RoomCardData } from "@/components/room-card";
 import { SaveRoomButton } from "@/components/save-room-button";
-import { getUserAndRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { hideCutoff } from "@/lib/listings";
 import { errorText, noticeText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
@@ -108,7 +108,7 @@ export default async function Home({
 
   // Who is looking? A logged-in student gets Save buttons.
   const supabase = await createClient();
-  const { user, role, fullName } = await getUserAndRole(supabase);
+  const { user, role, fullName } = await getCurrentUser();
   const isStudent = role === "student";
 
   let savedIds = new Set<string>();

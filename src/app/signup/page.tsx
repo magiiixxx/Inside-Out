@@ -5,9 +5,8 @@ import { AuthShell } from "@/components/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getUserAndRole, homeFor } from "@/lib/auth";
+import { getCurrentUser, homeFor } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
-import { createClient } from "@/lib/supabase/server";
 
 // The two kinds of account. The values are what signup() in auth/actions.ts
 // expects, so do not rename them. Admin can never be chosen here.
@@ -25,8 +24,7 @@ export default async function SignupPage({
   const error = errorText((await searchParams).error);
 
   // Already logged in? Skip the form.
-  const supabase = await createClient();
-  const { user, role } = await getUserAndRole(supabase);
+  const { user, role } = await getCurrentUser();
   if (user) redirect(homeFor(role));
 
   return (

@@ -50,6 +50,8 @@ const ERRORS: Record<string, string> = {
   invalid_request: "That request was not valid.",
   update_failed: "We could not update that room. Please try again.",
   plan_action_failed: "We could not update that plan request. It may already have been handled.",
+  plan_not_upgrade:
+    "That owner already has this plan or a higher one. Press Dismiss to clear the request.",
   review_failed: "We could not review that room. It may already have been reviewed.",
   delete_failed: "We could not delete that room. It may already be gone.",
 

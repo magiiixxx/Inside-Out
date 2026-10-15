@@ -6,6 +6,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const PHOTO_BUCKET = "room-photos";
 export const MAX_PHOTO_BYTES = 2 * 1024 * 1024; // 2 MB, the same limit as the bucket
+export const ALLOWED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 // The web address of a photo, built from its path. The bucket is public, but
 // the path is a random name that only appears in rooms the visitor may see.

@@ -4,7 +4,7 @@ import { setSaved } from "@/app/saved/actions";
 import { Card, CardContent } from "@/components/ui/card";
 import { RoomCard, type RoomCardData } from "@/components/room-card";
 import { SaveRoomButton } from "@/components/save-room-button";
-import { getUserAndRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { hideCutoff } from "@/lib/listings";
 import { errorText, noticeText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
@@ -24,7 +24,7 @@ export default async function SavedRooms({
   const error = errorText(params.error);
 
   const supabase = await createClient();
-  const { user, role, fullName } = await getUserAndRole(supabase);
+  const { user, role, fullName } = await getCurrentUser();
   if (!user) redirect("/login");
   // Owners and admins have their own home page.
   if (role !== "student") redirect("/owner");

@@ -7,7 +7,7 @@ import { Logo } from "@/components/site-header";
 import { DeleteRoomButton } from "@/components/delete-room-button";
 import { errorText, noticeText } from "@/lib/messages";
 import { payMethodLabel } from "@/lib/payment";
-import { PLAN_NAMES, type Plan } from "@/lib/plans";
+import { PLAN_NAMES, PLAN_PRICES, type Plan } from "@/lib/plans";
 import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 import { initials } from "@/lib/utils";
@@ -253,7 +253,7 @@ export default async function ReviewDesk({
           <div>
             <h2 className="text-xl font-extrabold tracking-tight">Plan requests</h2>
             <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">
-              Owners who asked for Premium Owner (₱149 a month) or Property Manager (₱299 a month). Call them,
+              Owners who asked for Premium Owner (₱{PLAN_PRICES.premium} a month) or Property Manager (₱{PLAN_PRICES.manager} a month). Call them,
               give them the payment details, and press Activate only after the
               money has arrived.
             </p>

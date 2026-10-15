@@ -65,7 +65,13 @@ export async function activatePlan(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.rpc("activate_plan", { p_request_id: requestId });
 
-  if (error) redirect("/review-desk?error=plan_action_failed");
+  if (error) {
+    redirect(
+      error.message.includes("already has this plan")
+        ? "/review-desk?error=plan_not_upgrade"
+        : "/review-desk?error=plan_action_failed",
+    );
+  }
 
   redirect("/review-desk?notice=plan_activated");
 }

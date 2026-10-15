@@ -430,7 +430,6 @@
 
   .chip-navy  { background: var(--color-navy-soft);  color: var(--color-navy); }
   .chip-amber { background: var(--color-amber-soft); color: #7a4b00; }
-  .chip-sky   { background: var(--color-sky-soft);   color: #174f9f; }
   .chip-ok    { background: var(--color-ok-soft);    color: var(--color-ok); }
   .chip-alert { background: var(--color-alert-soft); color: var(--color-alert); }
 
@@ -492,19 +491,4 @@
   .alert-success { background: var(--color-ok-soft);    color: var(--color-ok); }
   .alert-info    { background: var(--color-sky-soft);   color: #174f9f; }
   .alert-warning { background: var(--color-amber-soft); color: #7a4b00; }
-
-  /* -------------------------------------------------------------------
-     8. Gentle loading shimmer for skeletons (class="skeleton")
-     ------------------------------------------------------------------- */
-  .skeleton {
-    border-radius: var(--radius-control);
-    background: linear-gradient(90deg, #e9eff6 25%, #f4f7fa 50%, #e9eff6 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    from { background-position: 200% 0; }
-    to   { background-position: -200% 0; }
-  }
 }
