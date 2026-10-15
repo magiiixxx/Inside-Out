@@ -1,7 +1,7 @@
 /* =====================================================================
    BahayFind global styles
-   Friendly, colorful, and accessible. Works with Tailwind CSS v4.
-   Based on the "Bedspace" design template.
+   Navy and amber, from the "BahayFind – Frontend Design" boards.
+   Works with Tailwind CSS v4.
 
    Every text/background pair below meets WCAG AA contrast (4.5:1 for
    normal text). Keep it that way when you change a color: check at
@@ -10,7 +10,7 @@
 
 @import "tailwindcss";
 
-/* This app is light-only, like the template. Tailwind's "dark:" styles
+/* This app is light-only, like the design. Tailwind's "dark:" styles
    would otherwise switch on whenever a phone is in dark mode and put pale
    text on a white page. This line turns them off. */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -19,69 +19,71 @@
    1. Design tokens
    --------------------------------------------------------------------- */
 
-/* The template's brand palette. These names become Tailwind classes:
-   bg-teal, text-ink, border-line, bg-sun-soft, text-coral ...
+/* The design's brand palette. These names become Tailwind classes:
+   bg-navy, text-ink, border-line, bg-amber, text-amber-text ...
    "static" keeps every colour available even before it is first used. */
 @theme static {
   /* Text and neutrals */
-  --color-ink: #1b2540;          /* main text, dark buttons */
-  --color-line: #dfe5ee;         /* borders and dividers */
-  --color-surface: #f5f7fb;      /* soft page sections */
+  --color-ink: #0f2d52;          /* main text, navy buttons */
+  --color-line: #e3e9f0;         /* borders and dividers */
+  --color-surface: #f4f7fa;      /* soft page sections */
+  --color-field-line: #cbd6e2;   /* borders of form fields */
 
-  /* Brand: teal = actions, sun = the price sign and highlights */
-  --color-teal: #0d7a72;         /* buttons and links (5.2:1 with white) */
-  --color-teal-deep: #0a5f59;    /* hover, pressed */
-  --color-teal-soft: #e3f4f1;    /* selected chips, tinted panels */
-  --color-sign: #ffc93c;         /* sunny yellow (use with ink text) */
-  --color-sign-deep: #e8ad12;
-  --color-sun-soft: #fff6d6;
+  /* Brand: navy = actions, amber = the highlight and main call to action */
+  --color-navy: #0f2d52;         /* buttons and links (13:1 with white) */
+  --color-navy-deep: #173d6b;    /* hover, pressed */
+  --color-navy-soft: #eef3f8;    /* selected chips, tinted panels */
+  --color-navy-edge: #254a78;    /* dividers on navy */
+  --color-navy-text: #bccbdd;    /* secondary text on navy (8.5:1) */
+  --color-amber: #f2b134;        /* use with navy text */
+  --color-amber-deep: #e0a020;
+  --color-amber-soft: #fff3d6;
+  --color-amber-text: #8a5a00;   /* eyebrow labels on white (5.6:1) */
 
-  /* Friendly accents for chips, tags, and illustrations */
+  /* Info */
   --color-sky: #1c64c8;
   --color-sky-soft: #e7f0ff;
-  --color-coral: #c2410c;
-  --color-coral-soft: #ffede3;
-  --color-grape: #6741d9;
-  --color-grape-soft: #f1ecff;
 
   /* Feedback */
-  --color-ok: #127a3e;           /* success text (4.8:1 on ok-soft) */
-  --color-ok-soft: #e7f5ec;
+  --color-ok: #14653a;           /* success text (6.6:1 on ok-soft) */
+  --color-ok-soft: #e6f4ec;
   --color-alert: #b42318;        /* error text (5.7:1 on alert-soft) */
   --color-alert-soft: #fdecea;
 
-  /* Typography. The fonts are loaded in src/app/layout.tsx, which sets
-     --font-figtree and --font-bricolage. */
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-bricolage), var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  /* Typography. The font is loaded in src/app/layout.tsx, which sets
+     --font-jakarta. */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-sans);
 
   /* Shape and depth */
   --radius-card: 1rem;
-  --radius-control: 0.75rem;
-  --shadow-card: 0 1px 2px rgb(27 37 64 / 0.05), 0 8px 24px rgb(27 37 64 / 0.07);
+  --radius-control: 0.625rem;
+  --shadow-card: 0 1px 2px rgb(15 45 82 / 0.04), 0 8px 24px rgb(15 45 82 / 0.06);
+  --shadow-lift: 0 16px 36px rgb(15 45 82 / 0.12);
+  --shadow-float: 0 16px 40px rgb(15 45 82 / 0.14);
 }
 
 /* The names our components use (bg-card, text-muted-foreground, border-border,
-   bg-primary ...), pointed at the template's palette. Change a value here
+   bg-primary ...), pointed at the design's palette. Change a value here
    and every screen follows. */
 :root {
-  --background: #ffffff;
-  --foreground: #1b2540;
+  --background: #f4f7fa;
+  --foreground: #0f2d52;
   --card: #ffffff;
-  --card-foreground: #1b2540;
-  --primary: #0d7a72;
+  --card-foreground: #0f2d52;
+  --primary: #0f2d52;
   --primary-foreground: #ffffff;
-  --secondary: #f5f7fb;
-  --secondary-foreground: #1b2540;
-  --muted: #eceff4;
-  --muted-foreground: #55627a;   /* secondary text (6.1:1 on white) */
-  --accent-soft: #e3f4f1;
+  --secondary: #f4f7fa;
+  --secondary-foreground: #0f2d52;
+  --muted: #eef3f8;
+  --muted-foreground: #566579;   /* secondary text (5.7:1 on white) */
+  --accent-soft: #eef3f8;
   --destructive: #b42318;
   --destructive-foreground: #ffffff;
-  --border: #dfe5ee;
-  --input: #c3cddb;
-  --ring: #0d7a72;
-  --radius: 0.75rem;
+  --border: #e3e9f0;
+  --input: #cbd6e2;
+  --ring: #0f2d52;
+  --radius: 0.625rem;
 }
 
 @theme inline {
@@ -127,26 +129,12 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* A thin, colorful brand stripe across the top of every page */
-  body::before {
-    content: "";
-    display: block;
-    height: 4px;
-    background: linear-gradient(
-      90deg,
-      var(--color-teal) 0 25%,
-      var(--color-sign) 25% 50%,
-      var(--color-coral) 50% 75%,
-      var(--color-sky) 75% 100%
-    );
-  }
-
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
     line-height: 1.15;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
@@ -156,18 +144,20 @@
 
   /* Plain links always look like links, with a clear hover */
   a:not([class]) {
-    color: var(--color-teal);
+    color: var(--color-navy);
+    font-weight: 600;
     text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1.5px;
+    text-decoration-color: var(--color-amber);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
   }
 
   a:not([class]):hover {
-    color: var(--color-teal-deep);
+    color: var(--color-navy-deep);
   }
 
   ::selection {
-    background: var(--color-sign);
+    background: var(--color-amber);
     color: var(--color-ink);
   }
 
@@ -182,9 +172,14 @@
 
   /* A strong, visible focus ring for keyboard users on everything */
   :focus-visible {
-    outline: 3px solid var(--color-teal);
+    outline: 3px solid var(--color-navy);
     outline-offset: 2px;
     border-radius: 4px;
+  }
+
+  /* On navy backgrounds a navy ring would vanish, so it turns amber. */
+  .on-dark :focus-visible {
+    outline-color: var(--color-amber);
   }
 
   button,
@@ -199,7 +194,7 @@
   /* Tick boxes and radio buttons in the brand colour */
   input[type="checkbox"],
   input[type="radio"] {
-    accent-color: var(--color-teal);
+    accent-color: var(--color-navy);
   }
 }
 
@@ -239,6 +234,7 @@
 @media (forced-colors: active) {
   .btn-primary,
   .btn-secondary,
+  .btn-accent,
   .btn-danger,
   .field,
   .chip,
@@ -255,6 +251,7 @@
      ------------------------------------------------------------------- */
   .btn-primary,
   .btn-secondary,
+  .btn-accent,
   .btn-ghost,
   .btn-danger {
     display: inline-flex;
@@ -262,46 +259,52 @@
     justify-content: center;
     gap: 0.5rem;
     min-height: 44px;              /* easy to tap on phones */
-    padding: 0.625rem 1.15rem;
+    padding: 0.625rem 1.35rem;
+    border: 1px solid transparent;
     border-radius: var(--radius-control);
     font-weight: 700;
     line-height: 1.2;
     text-decoration: none;
-    transition: background-color 150ms, border-color 150ms, box-shadow 150ms, transform 150ms;
+    transition: background-color 150ms, border-color 150ms;
   }
 
+  /* Navy: the main button on forms, and "Sign up" in the header */
   .btn-primary {
-    background: var(--color-teal);
+    background: var(--color-navy);
     color: #ffffff;
-    box-shadow: 0 2px 0 var(--color-teal-deep);
   }
 
   .btn-primary:hover {
-    background: var(--color-teal-deep);
+    background: var(--color-navy-deep);
   }
 
-  .btn-primary:active {
-    transform: translateY(1px);
-    box-shadow: none;
+  /* Amber: the one big call to action on a screen (hero, search, approve) */
+  .btn-accent {
+    background: var(--color-amber);
+    color: var(--color-ink);
+  }
+
+  .btn-accent:hover {
+    background: var(--color-amber-deep);
   }
 
   .btn-secondary {
-    border: 1.5px solid var(--color-line);
+    border-color: var(--color-field-line);
     background: #ffffff;
     color: var(--color-ink);
   }
 
   .btn-secondary:hover {
-    border-color: var(--color-ink);
+    background: var(--color-surface);
   }
 
   .btn-ghost {
     background: transparent;
-    color: var(--color-teal);
+    color: var(--color-navy);
   }
 
   .btn-ghost:hover {
-    background: var(--color-teal-soft);
+    background: var(--color-navy-soft);
   }
 
   .btn-danger {
@@ -315,11 +318,11 @@
 
   .btn-primary:disabled,
   .btn-secondary:disabled,
+  .btn-accent:disabled,
   .btn-ghost:disabled,
   .btn-danger:disabled {
     opacity: 0.55;
     cursor: not-allowed;
-    transform: none;
   }
 
   /* -------------------------------------------------------------------
@@ -328,28 +331,29 @@
   .field {
     margin-top: 0.375rem;
     width: 100%;
-    min-height: 46px;
+    min-height: 50px;
     border-radius: var(--radius-control);
-    border: 1.5px solid var(--color-line);
+    border: 1px solid var(--color-field-line);
     background: #ffffff;
-    padding: 0.625rem 0.85rem;
+    padding: 0.625rem 0.9rem;
+    font-weight: 500;
     font-size: 1rem;               /* 16px stops phones from zooming in */
     color: var(--color-ink);
     transition: border-color 150ms, box-shadow 150ms;
   }
 
   .field::placeholder {
-    color: #677388;                /* readable placeholder (4.8:1) */
+    color: #677388;                /* readable placeholder (4.5:1) */
   }
 
   .field:hover {
-    border-color: #c3cddb;
+    border-color: #a9b8ca;
   }
 
   .field:focus {
-    border-color: var(--color-teal);
+    border-color: var(--color-navy);
     outline: none;
-    box-shadow: 0 0 0 4px var(--color-teal-soft);
+    box-shadow: 0 0 0 3px var(--color-amber);
   }
 
   /* Show errors clearly: add aria-invalid="true" to the input */
@@ -359,9 +363,9 @@
   }
 
   .label {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 700;
-    color: var(--color-ink);
+    color: #33475f;
   }
 
   .hint {
@@ -387,25 +391,46 @@
     box-shadow: var(--shadow-card);
   }
 
-  /* Colorful chips: class="chip chip-sky", "chip chip-coral", ... */
+  /* A card that rises a little when hovered (room cards) */
+  .lift {
+    transition: box-shadow 200ms, transform 200ms;
+  }
+
+  .lift:hover {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-3px);
+  }
+
+  /* The small yellow label above a heading: "AVAILABLE ROOMS" */
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-amber-text);
+  }
+
+  .on-dark .eyebrow {
+    color: var(--color-amber);
+  }
+
+  /* Chips: class="chip chip-navy", "chip chip-amber", ... */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
-    background: var(--color-surface);
-    color: var(--color-ink);
+    padding: 0.3rem 0.65rem;
+    border-radius: 0.5rem;
+    background: var(--color-navy-soft);
+    color: #33475f;
     font-size: 0.8125rem;
     font-weight: 600;
     line-height: 1.3;
   }
 
-  .chip-teal  { background: var(--color-teal-soft);  color: var(--color-teal-deep); }
-  .chip-sun   { background: var(--color-sun-soft);   color: #7a5300; }
+  .chip-navy  { background: var(--color-navy-soft);  color: var(--color-navy); }
+  .chip-amber { background: var(--color-amber-soft); color: #7a4b00; }
   .chip-sky   { background: var(--color-sky-soft);   color: #174f9f; }
-  .chip-coral { background: var(--color-coral-soft); color: #9a3410; }
-  .chip-grape { background: var(--color-grape-soft); color: #5232b8; }
   .chip-ok    { background: var(--color-ok-soft);    color: var(--color-ok); }
   .chip-alert { background: var(--color-alert-soft); color: var(--color-alert); }
 
@@ -431,29 +456,21 @@
   }
 
   .badge-available { background: var(--color-ok-soft); color: var(--color-ok); }
-  .badge-full      { background: #eceff4;              color: #3d4658; }
+  .badge-full      { background: #eef3f8;              color: #33475f; }
 
-  /* The signature element: rent shown like a painted "for rent" sign */
-  .price-sign {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.2rem;
-    background: var(--color-sign);
-    color: var(--color-ink);
-    font-family: var(--font-display);
+  /* The rent: big, bold, with "/ month" in smaller grey text */
+  .price {
+    font-size: 1.5rem;
     font-weight: 800;
     line-height: 1;
-    padding: 0.45rem 0.7rem 0.4rem;
-    border: 2px solid var(--color-ink);
-    border-radius: 8px;
-    box-shadow: 3px 3px 0 var(--color-ink);
-    transform: rotate(-2deg);
+    letter-spacing: -0.02em;
   }
 
-  .price-sign small {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.7em;
+  .price small {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    letter-spacing: 0;
   }
 
   /* -------------------------------------------------------------------
@@ -474,14 +491,14 @@
   .alert-error   { background: var(--color-alert-soft); color: var(--color-alert); }
   .alert-success { background: var(--color-ok-soft);    color: var(--color-ok); }
   .alert-info    { background: var(--color-sky-soft);   color: #174f9f; }
-  .alert-warning { background: var(--color-sun-soft);   color: #7a5300; }
+  .alert-warning { background: var(--color-amber-soft); color: #7a4b00; }
 
   /* -------------------------------------------------------------------
      8. Gentle loading shimmer for skeletons (class="skeleton")
      ------------------------------------------------------------------- */
   .skeleton {
     border-radius: var(--radius-control);
-    background: linear-gradient(90deg, #eef2f7 25%, #f7f9fc 50%, #eef2f7 75%);
+    background: linear-gradient(90deg, #e9eff6 25%, #f4f7fa 50%, #e9eff6 75%);
     background-size: 200% 100%;
     animation: shimmer 1.4s ease-in-out infinite;
   }

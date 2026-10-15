@@ -43,8 +43,8 @@ export async function proxy(request: NextRequest) {
 }
 
 // Only pages that can show a logged-in person: the home page (a student
-// sees Save buttons there), saved rooms, the owner pages, log in, sign up
-// and the team page.
+// sees Save buttons there), saved rooms, the plans page (the header shows
+// who is logged in), the owner pages, log in, sign up and the team page.
 export const config = {
-  matcher: ["/", "/saved", "/owner/:path*", "/login", "/signup", "/review-desk"],
+  matcher: ["/", "/saved", "/pricing", "/owner/:path*", "/login", "/signup", "/review-desk"],
 };

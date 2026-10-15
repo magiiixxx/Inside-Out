@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { logout } from "@/app/auth/actions";
 import { deleteRoom, renewRoom, setAvailability } from "@/app/owner/actions";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { DeleteRoomButton } from "@/components/delete-room-button";
@@ -26,7 +25,7 @@ type Room = {
 const STATUS: Record<Room["approval_status"], { label: string; className: string }> = {
   pending: {
     label: "Pending approval",
-    className: "chip chip-sun",
+    className: "chip chip-amber",
   },
   approved: {
     label: "Approved",
@@ -116,7 +115,7 @@ export default async function OwnerHome({
           <h1 className="text-2xl font-semibold tracking-tight">Hello, {name}</h1>
           {profile?.role !== "admin" && (
             <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <span className="chip chip-teal">{PLAN_NAMES[plan]} plan</span>
+              <span className="chip chip-navy">{PLAN_NAMES[plan]} plan</span>
               {plan === "free"
                 ? `${myRooms.length} of ${FREE_ROOM_LIMIT} room used`
                 : "Post as many rooms as you need"}
@@ -126,11 +125,6 @@ export default async function OwnerHome({
             </p>
           )}
         </div>
-        <form action={logout}>
-          <Button type="submit" variant="outline">
-            Log out
-          </Button>
-        </form>
       </header>
 
       {/* Only admins see this link. It is a convenience, not the lock: the

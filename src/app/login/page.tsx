@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { login } from "@/app/auth/actions";
+import { AuthShell } from "@/components/auth-shell";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getUserAndRole, homeFor } from "@/lib/auth";
@@ -25,44 +25,48 @@ export default async function LoginPage({
   if (user) redirect(homeFor(role));
 
   return (
-    <main id="main" className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-12">
-      <Link href="/" className="text-sm text-muted-foreground underline underline-offset-4">
-        ← Back to rooms
-      </Link>
-      <Card>
-        <CardHeader>
-          <CardTitle>Log in</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form action={login} className="flex flex-col gap-4">
-            {notice && (
-              <p role="status" className="alert-success">
-                {notice}
-              </p>
-            )}
-            {error && (
-              <p role="alert" className="alert-error">
-                {error}
-              </p>
-            )}
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" autoComplete="email" required />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" autoComplete="current-password" required />
-            </div>
-            <Button type="submit">Log in</Button>
-          </form>
-          <p className="mt-4 text-sm text-muted-foreground">
-            New here?{" "}
-            <Link href="/signup" className="font-medium text-foreground underline underline-offset-4">
-              Create an account
-            </Link>
+    <AuthShell
+      headline="Welcome back."
+      blurb="Log in to save the rooms you like near PHINMA University of Iloilo, or to manage the rooms you post."
+      points={["Rooms approved by our team", "Hidden if not updated in 7 days", "Call the owner directly"]}
+    >
+      <h1 className="text-[1.75rem] font-extrabold tracking-tight">Log in</h1>
+      <p className="mb-7 mt-2 text-[0.9375rem] text-muted-foreground">
+        New to BahayFind?{" "}
+        <Link href="/signup" className="font-bold text-ink underline decoration-amber decoration-2 underline-offset-4">
+          Create an account
+        </Link>
+      </p>
+      <form action={login} className="grid gap-[1.125rem]">
+        {notice && (
+          <p role="status" className="alert-success">
+            {notice}
           </p>
-        </CardContent>
-      </Card>
-    </main>
+        )}
+        {error && (
+          <p role="alert" className="alert-error">
+            {error}
+          </p>
+        )}
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="email">Email address</Label>
+          <Input id="email" name="email" type="email" autoComplete="email" placeholder="you@email.com" required />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <Button type="submit" className="w-full">
+          Log in
+        </Button>
+      </form>
+    </AuthShell>
   );
 }

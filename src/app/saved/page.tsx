@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { logout } from "@/app/auth/actions";
 import { setSaved } from "@/app/saved/actions";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RoomCard, type RoomCardData } from "@/components/room-card";
 import { SaveRoomButton } from "@/components/save-room-button";
@@ -51,7 +49,7 @@ export default async function SavedRooms({
   );
 
   return (
-    <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
+    <main id="main" className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-6 px-4 py-8 sm:px-8 sm:py-12">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
           <span className="text-sm text-muted-foreground">Saved rooms</span>
@@ -59,11 +57,6 @@ export default async function SavedRooms({
             Hello, {fullName || user.email}
           </h1>
         </div>
-        <form action={logout}>
-          <Button type="submit" variant="outline">
-            Log out
-          </Button>
-        </form>
       </header>
 
       {notice && (
@@ -90,7 +83,7 @@ export default async function SavedRooms({
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {rooms.map((room) => (
             <RoomCard key={room.id} room={room}>
               <SaveRoomButton action={setSaved} listingId={room.id} saved back="/saved" />

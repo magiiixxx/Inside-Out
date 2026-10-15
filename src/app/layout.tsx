@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Figtree } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
+import { AppChrome } from "@/components/app-chrome";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
-// Fonts. next/font downloads them once when the app is built and serves
-// them from our own site, so visitors' phones never contact Google. The
-// two variables are used by --font-sans and --font-display in globals.css.
-const figtree = Figtree({
+// The font. next/font downloads it once when the app is built and serves it
+// from our own site, so visitors' phones never contact Google. The variable
+// is used by --font-sans in globals.css.
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-figtree",
-  display: "swap",
-});
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-bricolage",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
@@ -25,14 +22,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${figtree.variable} ${bricolage.variable} h-full antialiased`}>
+    <html lang="en" className={`${jakarta.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <AppChrome header={<SiteHeader />} footer={<SiteFooter />}>
+          {children}
+        </AppChrome>
       </body>
     </html>
   );

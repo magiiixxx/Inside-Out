@@ -71,7 +71,7 @@ export default function PricingPage() {
   return (
     <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
       <header className="flex flex-col gap-3">
-        <span className="chip chip-sun w-fit">For boarding house owners</span>
+        <span className="chip chip-amber w-fit">For boarding house owners</span>
         <h1 className="max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl">
           Plans for owners
         </h1>
@@ -85,13 +85,13 @@ export default function PricingPage() {
         {PLANS.map((plan) => (
           <section
             key={plan.name}
-            className={`card flex flex-col gap-4 p-5 ${plan.recommended ? "border-2 border-teal" : ""}`}
+            className={`card flex flex-col gap-4 p-5 ${plan.recommended ? "border-2 border-navy" : ""}`}
           >
             <div className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-xl font-semibold">{plan.name}</h2>
-                {plan.recommended && <span className="chip chip-teal">Recommended</span>}
-                {plan.comingSoon && <span className="chip chip-sun">Coming soon</span>}
+                {plan.recommended && <span className="chip chip-navy">Recommended</span>}
+                {plan.comingSoon && <span className="chip chip-amber">Coming soon</span>}
               </div>
               <p className="text-sm text-muted-foreground">{plan.forWho}</p>
             </div>

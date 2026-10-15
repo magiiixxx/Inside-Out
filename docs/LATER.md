@@ -73,3 +73,25 @@ inventory).
 - Local ads or partnerships: laundry shops, water refilling stations,
   printing shops and food places near campus pay to advertise. Needs
   steady traffic first.
+
+## Seen in the frontend design, not in the MVP
+
+The design boards show some things the app does not do yet. They were left
+out on purpose, because the MVP has one job: help a student find a room
+that is really free.
+
+- Messages between students and owners, and visit or reservation booking
+  (the spec says no messaging inside the app and no payments).
+- "Continue with Google", "Forgot password", "Keep me logged in", mobile
+  number and school fields on sign up (needs extra Supabase Auth setup).
+- A map of rooms around PHINMA UI with walking-time rings.
+- Filters for room type, WiFi and own CR, and the "within 10 minutes walk"
+  chips (rooms do not store these details yet).
+- A heart button on the room picture, a Saved rooms side panel, and
+  "Compare saved rooms".
+- An FAQ on the landing page.
+- The admin Access control console: role changes, suspending users,
+  two-step verification, an audit log, and "Landlord verification" as its
+  own screen (today the team approves rooms, not accounts).
+- A "Verified" badge on rooms (today every visible room is approved, so
+  the badge would say the same thing on all of them).
