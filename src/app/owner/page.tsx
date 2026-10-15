@@ -25,15 +25,15 @@ type Room = {
 const STATUS: Record<Room["approval_status"], { label: string; className: string }> = {
   pending: {
     label: "Pending approval",
-    className: "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    className: "chip chip-sun",
   },
   approved: {
     label: "Approved",
-    className: "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    className: "chip chip-ok",
   },
   rejected: {
     label: "Rejected",
-    className: "border-destructive/50 bg-destructive/10 text-destructive",
+    className: "chip chip-alert",
   },
 };
 
@@ -103,7 +103,7 @@ export default async function OwnerHome({
   const soonCount = myRooms.filter((r) => freshness(r).soon).length;
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
+    <main id="main" className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
           <span className="text-sm text-muted-foreground">Owner home</span>
@@ -128,18 +128,18 @@ export default async function OwnerHome({
       )}
 
       {message && (
-        <p role="status" className="rounded-[var(--radius)] border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm">
+        <p role="status" className="alert-success">
           {message}
         </p>
       )}
       {error && (
-        <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+        <p role="alert" className="alert-error">
           {error}
         </p>
       )}
 
       {hiddenCount > 0 && (
-        <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+        <p role="alert" className="alert-error">
           {hiddenCount === 1 ? "1 of your rooms is" : `${hiddenCount} of your rooms are`}{" "}
           <strong>hidden from students</strong> because you have not updated{" "}
           {hiddenCount === 1 ? "it" : "them"} for {HIDE_AFTER_DAYS} days. Press
@@ -147,7 +147,7 @@ export default async function OwnerHome({
         </p>
       )}
       {soonCount > 0 && (
-        <p role="alert" className="rounded-[var(--radius)] border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm">
+        <p role="alert" className="alert-warning">
           {soonCount === 1 ? "1 of your rooms will" : `${soonCount} of your rooms will`}{" "}
           be hidden from students soon. Press Renew to keep{" "}
           {soonCount === 1 ? "it" : "them"} visible.
@@ -178,7 +178,7 @@ export default async function OwnerHome({
               <Card key={room.id}>
                 <CardHeader className="flex flex-row items-start justify-between gap-3">
                   <CardTitle className="text-base leading-snug">{room.description}</CardTitle>
-                  <span className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium ${status.className}`}>
+                  <span className={`shrink-0 ${status.className}`}>
                     {status.label}
                   </span>
                 </CardHeader>

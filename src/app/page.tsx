@@ -113,10 +113,10 @@ export default async function Home({
   const back = backParams.size > 0 ? `/?${backParams.toString()}` : "/";
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
+    <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
       <header className="flex flex-col gap-4 rounded-2xl border border-border bg-accent-soft p-5 sm:p-8">
         <div className="flex items-center justify-between gap-3">
-          <span className="inline-flex w-fit items-center rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+          <span className="chip chip-sun">
             Near PHINMA UI
           </span>
           <Link
@@ -139,9 +139,9 @@ export default async function Home({
           {PROMISES.map((promise) => (
             <li
               key={promise}
-              className="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1 text-xs font-medium"
+              className="chip bg-card"
             >
-              <CheckIcon className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <CheckIcon className="h-3.5 w-3.5 text-ok" />
               {promise}
             </li>
           ))}
@@ -181,7 +181,7 @@ export default async function Home({
             id="sort"
             name="sort"
             defaultValue={sort}
-            className="flex h-10 w-full rounded-[var(--radius)] border border-input bg-background px-3 py-2 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:text-sm"
+            className="field mt-0"
           >
             <option value="nearest">Nearest to PHINMA UI</option>
             <option value="recent">Recently updated</option>
@@ -199,12 +199,12 @@ export default async function Home({
       </form>
 
       {notice && (
-        <p role="status" className="rounded-[var(--radius)] border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm">
+        <p role="status" className="alert-success">
           {notice}
         </p>
       )}
       {actionError && (
-        <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+        <p role="alert" className="alert-error">
           {actionError}
         </p>
       )}

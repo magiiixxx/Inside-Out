@@ -8,8 +8,9 @@ import { updatedLabel } from "@/lib/listings";
 // rooms page, so a room always looks the same. Anything passed as
 // `children` (like a Save button) is shown next to the Call button.
 //
-// What a student decides on comes first: the price, then whether it is
-// available. The Call button is the main action.
+// What a student decides on comes first: the price, shown like a painted
+// "for rent" sign, then whether it is available. The Call button is the
+// main action.
 
 export type RoomCardData = {
   id: string;
@@ -32,17 +33,11 @@ export function RoomCard({
   return (
     <Card className="flex h-full flex-col gap-4 p-5">
       <div className="flex items-start justify-between gap-3">
-        <p className="text-2xl font-semibold tracking-tight">
+        <p className="price-sign text-2xl">
           ₱{Number(room.price_per_month).toLocaleString()}
-          <span className="text-sm font-normal text-muted-foreground"> / month</span>
+          <small>/month</small>
         </p>
-        <span
-          className={
-            isAvailable
-              ? "shrink-0 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-400"
-              : "shrink-0 rounded-full border border-border bg-secondary px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
-          }
-        >
+        <span className={isAvailable ? "badge-available shrink-0" : "badge-full shrink-0"}>
           {isAvailable ? "Available" : "Occupied"}
         </span>
       </div>

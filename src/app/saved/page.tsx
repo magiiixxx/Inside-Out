@@ -51,7 +51,7 @@ export default async function SavedRooms({
   );
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
+    <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
           <span className="text-sm text-muted-foreground">Saved rooms</span>
@@ -67,12 +67,12 @@ export default async function SavedRooms({
       </header>
 
       {notice && (
-        <p role="status" className="rounded-[var(--radius)] border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm">
+        <p role="status" className="alert-success">
           {notice}
         </p>
       )}
       {(error || loadError) && (
-        <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+        <p role="alert" className="alert-error">
           {error ?? "We could not load your saved rooms. Please refresh and try again."}
         </p>
       )}

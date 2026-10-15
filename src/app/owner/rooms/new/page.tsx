@@ -25,7 +25,7 @@ export default async function NewRoomPage({
   if (role === "student") redirect("/saved");
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
+    <main id="main" className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
       <Link href="/owner" className="text-sm text-muted-foreground underline underline-offset-4">
         ← Back to owner home
       </Link>
@@ -40,7 +40,7 @@ export default async function NewRoomPage({
         <CardContent>
           <form action={postRoom} className="flex flex-col gap-5">
             {error && (
-              <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+              <p role="alert" className="alert-error">
                 {error}
               </p>
             )}
@@ -90,7 +90,7 @@ export default async function NewRoomPage({
                   name="owner_or_caretaker"
                   required
                   defaultValue=""
-                  className="flex h-10 w-full rounded-[var(--radius)] border border-input bg-background px-3 py-2 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:text-sm"
+                  className="field mt-0"
                 >
                   <option value="" disabled>
                     Choose one

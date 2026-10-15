@@ -99,7 +99,7 @@ export default async function ReviewDesk({
   const ownerName = new Map((owners ?? []).map((o) => [o.id, o.full_name]));
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
+    <main id="main" className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
       <header className="flex flex-col gap-1">
         <span className="text-sm text-muted-foreground">Team only</span>
         <h1 className="text-2xl font-semibold tracking-tight">Rooms waiting for review</h1>
@@ -110,12 +110,12 @@ export default async function ReviewDesk({
       </header>
 
       {notice && (
-        <p role="status" className="rounded-[var(--radius)] border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm">
+        <p role="status" className="alert-success">
           {notice}
         </p>
       )}
       {(error || loadError) && (
-        <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+        <p role="alert" className="alert-error">
           {error ?? "We could not load the rooms waiting for review. Please refresh and try again."}
         </p>
       )}
@@ -189,7 +189,7 @@ export default async function ReviewDesk({
             <Card key={room.id}>
               <CardHeader className="flex flex-row items-start justify-between gap-3">
                 <CardTitle className="text-base leading-snug">{room.description}</CardTitle>
-                <span className="shrink-0 rounded-full border border-border px-2.5 py-0.5 text-xs font-medium capitalize text-muted-foreground">
+                <span className="chip shrink-0 capitalize">
                   {room.approval_status}
                 </span>
               </CardHeader>

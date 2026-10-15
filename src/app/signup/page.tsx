@@ -23,7 +23,7 @@ export default async function SignupPage({
   if (user) redirect(homeFor(role));
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-12">
+    <main id="main" className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-12">
       <Link href="/" className="text-sm text-muted-foreground underline underline-offset-4">
         ← Back to rooms
       </Link>
@@ -34,7 +34,7 @@ export default async function SignupPage({
         <CardContent>
           <form action={signup} className="flex flex-col gap-4">
             {error && (
-              <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+              <p role="alert" className="alert-error">
                 {error}
               </p>
             )}
