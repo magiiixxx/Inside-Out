@@ -75,22 +75,35 @@ export async function logout() {
   redirect("/");
 }
 
-// Start "Continue with Facebook". Supabase Auth does the real work: it sends
-// the person to Facebook, and Facebook sends them back to /auth/callback (see
-// src/app/auth/callback/route.ts). Our code never sees a Facebook password
-// or the Facebook app secret; that secret lives only in the Supabase
-// dashboard.
+// Start "Continue with Google" or "Continue with Facebook". Supabase Auth
+// does the real work: it sends the person to the provider, and the provider
+// sends them back to /auth/callback (see src/app/auth/callback/route.ts). Our
+// code never sees a Google or Facebook password or app secret; those secrets
+// live only in the Supabase dashboard.
 //
-// The button only exists when NEXT_PUBLIC_FACEBOOK_LOGIN is "true" (see
-// src/components/facebook-buttons.tsx), and we check again here.
-export async function signInWithFacebook(formData: FormData) {
+// Each button only exists when its switch is "true" (NEXT_PUBLIC_GOOGLE_LOGIN
+// or NEXT_PUBLIC_FACEBOOK_LOGIN, see src/components/social-buttons.tsx), and
+// we check again here.
+//
+// The button's value looks like "google:owner": the provider, then the
+// account type chosen on the Sign up page.
+export async function signInWithProvider(formData: FormData) {
   const from = field(formData, "from") === "signup" ? "/signup" : "/login";
-  if (process.env.NEXT_PUBLIC_FACEBOOK_LOGIN !== "true") back(from, "oauth_failed");
+  const [providerName, typeName] = field(formData, "choice").split(":");
+
+  let provider: "google" | "facebook";
+  if (providerName === "google" && process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true") {
+    provider = "google";
+  } else if (providerName === "facebook" && process.env.NEXT_PUBLIC_FACEBOOK_LOGIN === "true") {
+    provider = "facebook";
+  } else {
+    back(from, "oauth_failed");
+  }
 
   // Same rule as the email form: only "owner" counts; anything else is a student.
-  const accountType = field(formData, "account_type") === "owner" ? "owner" : "student";
+  const accountType = typeName === "owner" ? "owner" : "student";
 
-  // Our own address, so Facebook knows where to send the person back to.
+  // Our own address, so the provider knows where to send the person back to.
   // Supabase only accepts addresses on its allowed list (Authentication ->
   // URL Configuration), so a faked address is refused.
   // If the team sets SITE_URL (for example https://inside-out-two.vercel.app)
@@ -102,11 +115,8 @@ export async function signInWithFacebook(formData: FormData) {
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "facebook",
-    options: {
-      redirectTo: `${site}/auth/callback?type=${accountType}`,
-      scopes: "email",
-    },
+    provider,
+    options: { redirectTo: `${site}/auth/callback?type=${accountType}` },
   });
 
   if (error || !data.url) back(from, "oauth_failed");

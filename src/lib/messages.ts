@@ -38,7 +38,7 @@ const ERRORS: Record<string, string> = {
   plan_limit:
     "The Free plan allows one room. See the plans, then ask our team about Premium Owner to post more.",
 
-  oauth_failed: "We could not log you in with Facebook. Please try again, or use your email and password.",
+  oauth_failed: "We could not log you in with that account. Please try again, or use your email and password.",
 
   // Plan requests
   bad_plan: "Please choose Premium Owner or Property Manager.",

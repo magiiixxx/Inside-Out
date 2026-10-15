@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { login } from "@/app/auth/actions";
 import { AuthShell } from "@/components/auth-shell";
-import { FacebookButtons } from "@/components/facebook-buttons";
+import { SocialButtons } from "@/components/social-buttons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,7 +66,7 @@ export default async function LoginPage({
           Log in
         </Button>
       </form>
-      <FacebookButtons mode="login" />
+      <SocialButtons mode="login" />
     </AuthShell>
   );
 }

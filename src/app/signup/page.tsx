@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signup } from "@/app/auth/actions";
 import { AuthShell } from "@/components/auth-shell";
-import { FacebookButtons } from "@/components/facebook-buttons";
+import { SocialButtons } from "@/components/social-buttons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -91,7 +91,7 @@ export default async function SignupPage({
             Create account
           </Button>
         </form>
-        <FacebookButtons mode="signup" />
+        <SocialButtons mode="signup" />
       </div>
     </AuthShell>
   );
