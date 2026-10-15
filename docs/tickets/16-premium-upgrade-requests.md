@@ -8,21 +8,21 @@ which switches the owner to Premium so they can post more rooms.
 
 **Blocked by:** 12
 
-**Status:** todo
+**Status:** done
 
-- [ ] A logged-in owner on Free sees a request form on the Plans page, with
+- [x] A logged-in owner on Free sees a request form on the Plans page, with
       GCash, Maya and Bank transfer, and a phone number.
-- [ ] After sending, the owner sees "Your request is waiting", and cannot
+- [x] After sending, the owner sees "Your request is waiting", and cannot
       send a second request while one is waiting.
-- [ ] Logged-out visitors are asked to log in; students and owners already
+- [x] Logged-out visitors are asked to log in; students and owners already
       on a paid plan do not see the form.
-- [ ] The team page lists waiting requests with the owner's name, how they
+- [x] The team page lists waiting requests with the owner's name, how they
       will pay, and their phone number.
-- [ ] Activate Premium changes the owner's plan, and the owner can then
+- [x] Activate Premium changes the owner's plan, and the owner can then
       post a second room. Dismiss turns the request down.
-- [ ] A non-admin cannot activate or dismiss a request, even by calling the
+- [x] A non-admin cannot activate or dismiss a request, even by calling the
       database function directly.
-- [ ] An owner can read only their own requests.
-- [ ] Only Premium Owner can be requested (Property Manager is still
+- [x] An owner can read only their own requests.
+- [x] Only Premium Owner can be requested (Property Manager is still
       "Coming soon").
-- [ ] Works on the live URL
+- [x] Works on the live URL

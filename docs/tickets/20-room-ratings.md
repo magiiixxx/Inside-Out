@@ -7,18 +7,18 @@ rooms. There are no written reviews.
 
 **Blocked by:** 19
 
-**Status:** todo
+**Status:** done
 
-- [ ] A logged-in student sees five star buttons on each room card; pressing
+- [x] A logged-in student sees five star buttons on each room card; pressing
       one saves the rating, and pressing another changes it.
-- [ ] The student's own rating is shown filled in.
-- [ ] Every visitor sees "★ 4.3 (12)" on a room that has ratings and "No
+- [x] The student's own rating is shown filled in.
+- [x] Every visitor sees "★ 4.3 (12)" on a room that has ratings and "No
       ratings yet" on one that has none.
-- [ ] A student has one rating per room: rating again replaces the old one
+- [x] A student has one rating per room: rating again replaces the old one
       and the average updates.
-- [ ] Owners, admins and logged-out visitors cannot rate, even by calling the
+- [x] Owners, admins and logged-out visitors cannot rate, even by calling the
       database function directly.
-- [ ] Only a room students can currently see can be rated.
-- [ ] The owner's home page shows the average and the number of students for
+- [x] Only a room students can currently see can be rated.
+- [x] The owner's home page shows the average and the number of students for
       an approved room.
-- [ ] Works on the live URL
+- [x] Works on the live URL

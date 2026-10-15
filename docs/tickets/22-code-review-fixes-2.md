@@ -7,23 +7,23 @@ requests is fixed along the way.
 
 **Blocked by:** 21
 
-**Status:** todo
+**Status:** done
 
-- [ ] A student can rate a room only after saving it. On a room they have not
+- [x] A student can rate a room only after saving it. On a room they have not
       saved, the card says "Save this room to rate it", and the database
       refuses a rating for an unsaved room.
-- [ ] The team can reset the ratings of a room from the Other rooms list, and
+- [x] The team can reset the ratings of a room from the Other rooms list, and
       the room then shows "No ratings yet".
-- [ ] A room's average always matches its ratings, even when a student's
+- [x] A room's average always matches its ratings, even when a student's
       account is deleted. Deleting a room still works.
-- [ ] When the team hides a room because of a report, its owner sees "Our team
+- [x] When the team hides a room because of a report, its owner sees "Our team
       is checking a report about this room". The message goes away when the
       team approves or rejects the room.
-- [ ] The Privacy page says Facebook shares the name, email, profile picture
+- [x] The Privacy page says Facebook shares the name, email, profile picture
       link and account id.
-- [ ] The star buttons are bigger and fit on a phone.
-- [ ] The Facebook return address can be fixed with the SITE_URL setting.
-- [ ] The phone number on a plan request taps to call correctly.
-- [ ] The team page is split into small files, and the id check and form
+- [x] The star buttons are bigger and fit on a phone.
+- [x] The Facebook return address can be fixed with the SITE_URL setting.
+- [x] The phone number on a plan request taps to call correctly.
+- [x] The team page is split into small files, and the id check and form
       reader are written in one place.
-- [ ] Works on the live URL
+- [x] Works on the live URL

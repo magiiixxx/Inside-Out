@@ -7,19 +7,19 @@ to the team for checking, like changing the phone number.
 
 **Blocked by:** 13
 
-**Status:** todo
+**Status:** done
 
-- [ ] The Add a room and Edit a room forms have an optional photo field that
+- [x] The Add a room and Edit a room forms have an optional photo field that
       accepts JPG, PNG or WebP up to 2 MB.
-- [ ] A file that is too big, or is not really a JPG, PNG or WebP (for
+- [x] A file that is too big, or is not really a JPG, PNG or WebP (for
       example a renamed document), is refused with a clear message.
-- [ ] The photo shows on the owner's room, on the team's review page, and
+- [x] The photo shows on the owner's room, on the team's review page, and
       on the student's room card. Rooms without a photo still show the
       house drawing.
-- [ ] A pending room's photo does not appear to students until the room is
+- [x] A pending room's photo does not appear to students until the room is
       approved.
-- [ ] Replacing the photo of an approved room sends it back to pending.
-- [ ] An owner cannot add a file to another owner's folder, and a student
+- [x] Replacing the photo of an approved room sends it back to pending.
+- [x] An owner cannot add a file to another owner's folder, and a student
       account cannot upload at all.
-- [ ] Deleting a room, or replacing its photo, removes the old file.
-- [ ] Works on the live URL
+- [x] Deleting a room, or replacing its photo, removes the old file.
+- [x] Works on the live URL

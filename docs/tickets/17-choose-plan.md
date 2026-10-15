@@ -8,17 +8,17 @@ the plan they asked for.
 
 **Blocked by:** 16
 
-**Status:** todo
+**Status:** done
 
-- [ ] An owner on Free can choose Premium Owner or Property Manager, with
+- [x] An owner on Free can choose Premium Owner or Property Manager, with
       the price shown for each.
-- [ ] An owner on Premium can only choose Property Manager; an owner on
+- [x] An owner on Premium can only choose Property Manager; an owner on
       Property Manager sees that they already have the top plan.
-- [ ] The Choose button on a plan card selects that plan in the form.
-- [ ] The form says the extra Property Manager features are still coming
+- [x] The Choose button on a plan card selects that plan in the form.
+- [x] The form says the extra Property Manager features are still coming
       soon.
-- [ ] The waiting-request message and the team page both name the plan that
+- [x] The waiting-request message and the team page both name the plan that
       was asked for, and Activate switches the owner to exactly that plan.
-- [ ] The database refuses a request for a plan the owner already has, or
+- [x] The database refuses a request for a plan the owner already has, or
       one that is not an upgrade.
-- [ ] Works on the live URL
+- [x] Works on the live URL

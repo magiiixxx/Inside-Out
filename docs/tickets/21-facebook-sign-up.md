@@ -8,23 +8,23 @@ what we keep.
 
 **Blocked by:** 20
 
-**Status:** todo
+**Status:** done
 
-- [ ] The Log in page has "Continue with Facebook" and the Sign up page has
+- [x] The Log in page has "Continue with Facebook" and the Sign up page has
       "Sign up with Facebook as a student" and "…as an owner", but only when
       NEXT_PUBLIC_FACEBOOK_LOGIN is "true".
-- [ ] A new person signing up with Facebook as a student lands on Saved rooms
+- [x] A new person signing up with Facebook as a student lands on Saved rooms
       with a student account; as an owner, on the owner home with an owner
       account.
-- [ ] Their name from Facebook is saved on their profile.
-- [ ] Logging in again with Facebook signs them into the same account.
-- [ ] An account older than 10 minutes cannot be turned into an owner by
+- [x] Their name from Facebook is saved on their profile.
+- [x] Logging in again with Facebook signs them into the same account.
+- [x] An account older than 10 minutes cannot be turned into an owner by
       pressing the owner button, and nobody can become an admin this way.
-- [ ] If Facebook fails or is cancelled, the person sees a clear message and
+- [x] If Facebook fails or is cancelled, the person sees a clear message and
       can still use email and password.
-- [ ] The Privacy page is public and linked from the footer.
-- [ ] No Facebook secret appears anywhere in the project.
-- [ ] Works on the live URL
+- [x] The Privacy page is public and linked from the footer.
+- [x] No Facebook secret appears anywhere in the project.
+- [x] Works on the live URL
 
 ## Setup the team must do (once)
 
