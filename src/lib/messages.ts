@@ -38,9 +38,16 @@ const ERRORS: Record<string, string> = {
   plan_limit:
     "The Free plan allows one room. See the plans, then ask our team about Premium Owner to post more.",
 
+  // Plan requests
+  bad_pay_method: "Please choose GCash, Maya or bank transfer.",
+  bad_contact_phone: "Please enter a phone number our team can reach you on.",
+  plan_request_exists: "You already have a request waiting. Our team will contact you.",
+  plan_request_failed: "We could not send your request. Please try again.",
+
   // Owner home and team review
   invalid_request: "That request was not valid.",
   update_failed: "We could not update that room. Please try again.",
+  plan_action_failed: "We could not update that plan request. It may already have been handled.",
   review_failed: "We could not review that room. It may already have been reviewed.",
   delete_failed: "We could not delete that room. It may already be gone.",
 
@@ -63,6 +70,10 @@ const NOTICES: Record<string, string> = {
   edited_live: "Changes saved. The new price is live.",
   edited_review:
     "Changes saved. Because you changed details students rely on, our team will check the room again before students see it.",
+  plan_requested:
+    "Request sent. Our team will contact you to arrange payment. Premium Owner is switched on after we receive it.",
+  plan_activated: "Plan activated. The owner can now post more rooms.",
+  plan_dismissed: "Request dismissed.",
   saved: "Room saved.",
   unsaved: "Room removed from your saved rooms.",
 };

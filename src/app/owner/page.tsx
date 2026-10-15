@@ -170,7 +170,7 @@ export default async function OwnerHome({
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg font-medium">Your rooms</h2>
         {atLimit ? (
-          <Link href="/pricing" className={buttonVariants({ variant: "secondary" })}>
+          <Link href="/pricing#upgrade" className={buttonVariants({ variant: "secondary" })}>
             Upgrade to add more rooms
           </Link>
         ) : (

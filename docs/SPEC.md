@@ -72,7 +72,10 @@ roles support the student: the **owner**, who posts rooms, and the
    show here.
 8. **Plans** (public): the Free, Premium Owner and Property Manager plans
    with their prices. Each feature is marked "Available now" or "Coming
-   soon". It says payment is arranged with the team.
+   soon". Owners on Free can request Premium Owner there, saying how they
+  will pay and giving a phone number. The team page lists the requests, and
+  an admin presses Activate after the payment has arrived. The app itself
+  takes no payments.
 
 ## Data
 Row Level Security (RLS) is ON for every table.
@@ -80,7 +83,8 @@ Row Level Security (RLS) is ON for every table.
 **profiles**
 - Columns: user id, name, role (`student`, `owner` or `admin`), plan
   (`free`, `premium` or `manager`). New accounts start on `free`. Only the
-  team can change a plan, by hand in the database. A `free` owner may post
+  team can change a plan: an owner sends a request, pays the team directly
+  (GCash, Maya or bank transfer), and an admin presses Activate. A `free` owner may post
   one room; other plans and admins may post several.
 - A user may read only their own row. A profile is created by the
   database when someone signs up, as `student` or `owner` depending on
@@ -119,6 +123,14 @@ Row Level Security (RLS) is ON for every table.
   through database functions: only students may save, only rooms that are
   currently visible to students may be saved, and a student may save at
   most 50 rooms.
+
+**plan_requests**
+- Columns: owner, plan (`premium`), pay method (`gcash`, `maya` or `bank`),
+  contact phone, status (`pending`, `activated` or `dismissed`), created at.
+- An owner reads only their own requests; admins read all. Nobody writes
+  to the table directly: owners use `request_plan()` (one waiting request at
+  a time), and only admins can call `activate_plan()` and
+  `dismiss_plan_request()`.
 
 **listing_checks**
 - Columns: listing, permit number (typed in), answers to the validation

@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import { logout } from "@/app/auth/actions";
-import { deleteAnyRoom, reviewRoom } from "@/app/review-desk/actions";
+import { activatePlan, deleteAnyRoom, dismissPlanRequest, reviewRoom } from "@/app/review-desk/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/site-header";
 import { DeleteRoomButton } from "@/components/delete-room-button";
 import { errorText, noticeText } from "@/lib/messages";
+import { payMethodLabel } from "@/lib/payment";
 import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 import { initials } from "@/lib/utils";
@@ -31,6 +32,15 @@ type PendingCheck = {
     photo_path: string | null;
     created_at: string;
   };
+};
+
+type PlanRequest = {
+  id: string;
+  owner_id: string;
+  plan: string;
+  pay_method: string;
+  contact_phone: string;
+  created_at: string;
 };
 
 type OtherRoom = {
@@ -91,10 +101,23 @@ export default async function ReviewDesk({
     .limit(50);
   const otherRooms = (others ?? []) as OtherRoom[];
 
+  // Owners who asked for Premium and are waiting for the team (admins may
+  // read every plan request).
+  const { data: requestData } = await supabase
+    .from("plan_requests")
+    .select("id, owner_id, plan, pay_method, contact_phone, created_at")
+    .eq("status", "pending")
+    .order("created_at", { ascending: true });
+  const planRequests = (requestData ?? []) as PlanRequest[];
+
   // Owner names (admins may read all profiles). Sample rooms have no owner.
   const ownerIds = [
     ...new Set(
-      [...rows.map((r) => r.listings.owner_id), ...otherRooms.map((r) => r.owner_id)].filter(
+      [
+        ...rows.map((r) => r.listings.owner_id),
+        ...otherRooms.map((r) => r.owner_id),
+        ...planRequests.map((r) => r.owner_id),
+      ].filter(
         (id): id is string => id !== null,
       ),
     ),
@@ -118,6 +141,9 @@ export default async function ReviewDesk({
             className="block rounded-[10px] bg-navy-deep px-4 py-3 text-white shadow-[inset_3px_0_0_var(--color-amber)]"
           >
             Rooms waiting for review
+          </a>
+          <a href="#plans" className="block rounded-[10px] px-4 py-3 text-navy-text hover:text-white">
+            Plan requests{planRequests.length > 0 ? ` (${planRequests.length})` : ""}
           </a>
           <a href="#other" className="block rounded-[10px] px-4 py-3 text-navy-text hover:text-white">
             Other rooms
@@ -219,6 +245,59 @@ export default async function ReviewDesk({
                 </Card>
               );
             })
+          )}
+        </section>
+
+        <section id="plans" className="flex scroll-mt-6 flex-col gap-4 pt-4">
+          <div>
+            <h2 className="text-xl font-extrabold tracking-tight">Plan requests</h2>
+            <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">
+              Owners who asked for Premium Owner (₱149 a month). Call them,
+              give them the payment details, and press Activate only after the
+              money has arrived.
+            </p>
+          </div>
+          {planRequests.length === 0 ? (
+            <Card>
+              <CardContent className="pt-6 text-sm text-muted-foreground">
+                No plan requests waiting.
+              </CardContent>
+            </Card>
+          ) : (
+            planRequests.map((request) => (
+              <Card key={request.id} className="max-w-3xl">
+                <CardContent className="flex flex-col gap-4 pt-6">
+                  <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 text-sm">
+                    <dt className="text-muted-foreground">Owner</dt>
+                    <dd className="font-semibold">{ownerName.get(request.owner_id) || "(no name)"}</dd>
+                    <dt className="text-muted-foreground">Wants</dt>
+                    <dd>Premium Owner</dd>
+                    <dt className="text-muted-foreground">Will pay by</dt>
+                    <dd>{payMethodLabel(request.pay_method)}</dd>
+                    <dt className="text-muted-foreground">Phone</dt>
+                    <dd>
+                      <a href={`tel:${request.contact_phone.replace(/s+/g, "")}`}>{request.contact_phone}</a>
+                    </dd>
+                    <dt className="text-muted-foreground">Asked on</dt>
+                    <dd>{new Date(request.created_at).toLocaleDateString("en-PH")}</dd>
+                  </dl>
+                  <div className="flex flex-wrap gap-3">
+                    <form action={activatePlan}>
+                      <input type="hidden" name="request_id" value={request.id} />
+                      <Button type="submit" variant="accent">
+                        Activate Premium
+                      </Button>
+                    </form>
+                    <form action={dismissPlanRequest}>
+                      <input type="hidden" name="request_id" value={request.id} />
+                      <Button type="submit" variant="outline">
+                        Dismiss
+                      </Button>
+                    </form>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
           )}
         </section>
 

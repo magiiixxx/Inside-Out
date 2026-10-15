@@ -1,6 +1,13 @@
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { requestPremium } from "@/app/pricing/actions";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { CheckIcon } from "@/components/icons";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { getUserAndRole } from "@/lib/auth";
+import { errorText, noticeText } from "@/lib/messages";
+import { PAY_METHODS, payMethodLabel } from "@/lib/payment";
+import { createClient } from "@/lib/supabase/server";
 
 // Plans for boarding house owners. Students are never charged.
 //
@@ -8,13 +15,14 @@ import { CheckIcon } from "@/components/icons";
 // "Coming soon". Today only the room limit differs between plans, so only
 // that is marked available. The rest is the roadmap in docs/LATER.md.
 //
-// The app takes no payments. To upgrade, an owner arranges payment with
-// the team, and a team member changes the plan by hand.
+// The app takes no payments. An owner on Free sends a request here, pays the
+// team directly by GCash, Maya or bank transfer, and a team member then
+// activates the plan (supabase/sql/013-plan-requests.sql).
+//
+// Only Premium Owner can be requested: Property Manager is "Coming soon", so
+// we do not take payment for it yet.
 
-// Where owners should go to upgrade. Edit this sentence when the team has
-// a contact (a Messenger page, a phone number, a desk at the school).
-const HOW_TO_UPGRADE =
-  "To upgrade, contact the BahayFind team. You arrange payment with the team directly. BahayFind does not take payments on this website.";
+export const dynamic = "force-dynamic";
 
 type Feature = { text: string; live: boolean };
 
@@ -67,7 +75,30 @@ const PLANS: PlanCard[] = [
   },
 ];
 
-export default function PricingPage() {
+export default async function PricingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ notice?: string; error?: string }>;
+}) {
+  // The address carries only short codes; the text comes from our own list.
+  const params = await searchParams;
+  const notice = noticeText(params.notice);
+  const error = errorText(params.error);
+
+  const supabase = await createClient();
+  const { user, role, plan } = await getUserAndRole(supabase);
+
+  // Has this owner already asked? (Row Level Security: only their own.)
+  let pendingMethod: string | null = null;
+  if (role === "owner") {
+    const { data } = await supabase
+      .from("plan_requests")
+      .select("pay_method")
+      .eq("status", "pending")
+      .maybeSingle();
+    pendingMethod = data?.pay_method ?? null;
+  }
+
   return (
     <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
       <header className="flex flex-col gap-3">
@@ -80,6 +111,17 @@ export default function PricingPage() {
           room, and can upgrade to post more.
         </p>
       </header>
+
+      {notice && (
+        <p role="status" className="alert-success">
+          {notice}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="alert-error">
+          {error}
+        </p>
+      )}
 
       <div className="grid gap-4 md:grid-cols-3">
         {PLANS.map((plan) => (
@@ -122,8 +164,73 @@ export default function PricingPage() {
         ))}
       </div>
 
+      <section id="upgrade" className="card flex scroll-mt-20 flex-col gap-4 p-6">
+        <h2 className="text-xl font-semibold">Get Premium Owner</h2>
+        {!user ? (
+          <>
+            <p className="text-sm text-muted-foreground">
+              Log in as an owner to ask for Premium Owner. Students never pay.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+                Log in
+              </Link>
+              <Link href="/signup" className={buttonVariants()}>
+                Sign up as an owner
+              </Link>
+            </div>
+          </>
+        ) : role !== "owner" ? (
+          <p className="text-sm text-muted-foreground">
+            Plans are for boarding house owners. Students use BahayFind for free.
+          </p>
+        ) : plan !== "free" ? (
+          <p className="alert-success">You already have a paid plan. Thank you!</p>
+        ) : pendingMethod ? (
+          <p className="alert-info">
+            Your request is waiting. Our team will contact you to arrange
+            payment by {payMethodLabel(pendingMethod)}. Premium Owner is
+            switched on after we receive it.
+          </p>
+        ) : (
+          <form action={requestPremium} className="flex max-w-xl flex-col gap-4">
+            <p className="text-sm text-muted-foreground">
+              Premium Owner is ₱149 a month. Choose how you will pay and give
+              us a number to reach you on. Nothing is charged here: our team
+              contacts you with the account details, and Premium is switched on
+              once we have received your payment.
+            </p>
+            <fieldset className="flex flex-col gap-2">
+              <legend className="label mb-1">How will you pay?</legend>
+              <div className="flex flex-wrap gap-3">
+                {PAY_METHODS.map((method, n) => (
+                  <label key={method.value} className="flex items-center gap-2 text-sm font-semibold">
+                    <input type="radio" name="pay_method" value={method.value} defaultChecked={n === 0} />
+                    {method.label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact_phone">Your phone number</Label>
+              <Input
+                id="contact_phone"
+                name="contact_phone"
+                type="tel"
+                autoComplete="tel"
+                placeholder="e.g. 0917 123 4567"
+                required
+              />
+            </div>
+            <Button type="submit" variant="accent" className="w-fit">
+              Request Premium Owner
+            </Button>
+          </form>
+        )}
+      </section>
+
       <section className="alert-info flex-col">
-        <p>{HOW_TO_UPGRADE}</p>
+        <p>BahayFind does not take payments on this website. You pay the team directly by GCash, Maya or bank transfer.</p>
         <p className="font-normal">
           The prices are drafts that we are testing with our first owners.
           Features marked &ldquo;Coming soon&rdquo; are not built yet.

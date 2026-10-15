@@ -54,3 +54,31 @@ export async function deleteAnyRoom(formData: FormData) {
 
   redirect("/review-desk?notice=deleted");
 }
+
+// Turn on the plan an owner asked for. Do this only AFTER the payment (GCash,
+// Maya or bank) has arrived. The database function activate_plan() refuses
+// anyone who is not an admin.
+export async function activatePlan(formData: FormData) {
+  const requestId = String(formData.get("request_id") ?? "");
+  if (!UUID.test(requestId)) redirect("/review-desk?error=invalid_request");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("activate_plan", { p_request_id: requestId });
+
+  if (error) redirect("/review-desk?error=plan_action_failed");
+
+  redirect("/review-desk?notice=plan_activated");
+}
+
+// Turn a plan request down (no payment, or a mistake).
+export async function dismissPlanRequest(formData: FormData) {
+  const requestId = String(formData.get("request_id") ?? "");
+  if (!UUID.test(requestId)) redirect("/review-desk?error=invalid_request");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("dismiss_plan_request", { p_request_id: requestId });
+
+  if (error) redirect("/review-desk?error=plan_action_failed");
+
+  redirect("/review-desk?notice=plan_dismissed");
+}
