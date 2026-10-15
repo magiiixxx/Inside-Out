@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { postRoom } from "@/app/owner/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,8 +22,10 @@ export default async function NewRoomPage({
   const supabase = await createClient();
   const { user, role, plan } = await getCurrentUser();
   if (!user) redirect("/login");
-  // Students cannot post rooms (the database refuses too).
+  // Students cannot post rooms (the database refuses too). Anything that is
+  // not an owner or an admin is turned away: a missing role never opens the door.
   if (role === "student") redirect("/saved");
+  if (role !== "owner" && role !== "admin") notFound();
 
   // A Free owner who already has a room is sent back with an explanation.
   // (The database enforces the limit too.)

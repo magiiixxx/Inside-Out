@@ -1,6 +1,33 @@
 import type { NextConfig } from "next";
 
+// Instructions we give every visitor's browser, to switch on its built-in
+// protections:
+//  - X-Content-Type-Options: do not guess a file's type (stops a photo or
+//    other upload being treated as a script).
+//  - X-Frame-Options and frame-ancestors: no other website may show BahayFind
+//    inside a hidden frame to trick people into clicking (clickjacking).
+//  - Referrer-Policy: other websites we link to learn only that the visit came
+//    from BahayFind, not which page or which room.
+//  - Permissions-Policy: the page may not ask for the camera, microphone or
+//    location, which we never use.
+//  - Strict-Transport-Security: always use the secure https address.
+//  - Content-Security-Policy: only the safe parts for now. We deliberately do
+//    NOT restrict where scripts or forms may go, because that would break
+//    Next.js and the Google and Facebook login redirects.
+const securityHeaders = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+  { key: "Content-Security-Policy", value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'" },
+];
+
 const nextConfig: NextConfig = {
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
+
   // Room photos (up to 2 MB) are uploaded through a server action, and the
   // default limit for those is 1 MB.
   experimental: {

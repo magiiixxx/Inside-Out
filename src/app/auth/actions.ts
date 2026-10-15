@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserAndRole, homeFor } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { formText as field } from "@/lib/validation";
+import { formText as field, isWeakPassword } from "@/lib/validation";
 
 // Server actions: these functions run ONLY on the server, even though a
 // form in the browser calls them. That is why passwords are safe here.
@@ -19,6 +19,18 @@ function back(path: string, code: string): never {
   redirect(`${path}?error=${code}`);
 }
 
+// Our own public address, for links that send the person back to us (social
+// login, password emails). Supabase only accepts addresses on its allowed list
+// (Authentication, URL Configuration), so a faked address is refused. If the
+// team sets SITE_URL (for example https://inside-out-two.vercel.app) we use
+// it as is; without it we use the address the request came to.
+async function siteUrl(): Promise<string> {
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "https";
+  return (process.env.SITE_URL ?? `${protocol}://${host}`).replace(/\/$/, "");
+}
+
 export async function signup(formData: FormData) {
   const fullName = field(formData, "full_name");
   const email = field(formData, "email");
@@ -29,7 +41,9 @@ export async function signup(formData: FormData) {
   const accountType = field(formData, "account_type") === "owner" ? "owner" : "student";
 
   if (!fullName || !email) back("/signup", "missing_signup");
-  if (password.length < 6) back("/signup", "weak_password");
+  if (isWeakPassword(password)) back("/signup", "weak_password");
+  // Creating an account means agreeing to the Privacy page.
+  if (formData.get("agree_privacy") !== "on") back("/signup", "need_privacy");
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
@@ -61,7 +75,16 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    back("/login", error.code?.startsWith("over_") ? "too_many_attempts" : "invalid_credentials");
+    // Wrong email and wrong password get the SAME message, so nobody can use
+    // this form to find out which emails have accounts.
+    back(
+      "/login",
+      error.code?.startsWith("over_")
+        ? "too_many_attempts"
+        : error.code === "email_not_confirmed"
+          ? "email_not_confirmed"
+          : "invalid_credentials",
+    );
   }
 
   // Each kind of account lands on its own page.
@@ -103,15 +126,7 @@ export async function signInWithProvider(formData: FormData) {
   // Same rule as the email form: only "owner" counts; anything else is a student.
   const accountType = typeName === "owner" ? "owner" : "student";
 
-  // Our own address, so the provider knows where to send the person back to.
-  // Supabase only accepts addresses on its allowed list (Authentication ->
-  // URL Configuration), so a faked address is refused.
-  // If the team sets SITE_URL (for example https://inside-out-two.vercel.app)
-  // we use it as is. Without it we fall back to the address the request came to.
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? "https";
-  const site = (process.env.SITE_URL ?? `${protocol}://${host}`).replace(/\/$/, "");
+  const site = await siteUrl();
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -121,4 +136,57 @@ export async function signInWithProvider(formData: FormData) {
 
   if (error || !data.url) back(from, "oauth_failed");
   redirect(data.url);
+}
+
+// "Forgot password": email the person a link to choose a new one. The answer
+// is always the same, whether or not the email has an account, so this form
+// cannot be used to find out who has an account.
+export async function requestPasswordReset(formData: FormData) {
+  const email = field(formData, "email");
+  if (!email) back("/forgot-password", "missing_login");
+
+  const supabase = await createClient();
+  const site = await siteUrl();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${site}/auth/callback?next=/reset-password`,
+  });
+
+  // Only a rate limit is worth telling them about; any other result looks the same.
+  if (error?.code?.startsWith("over_")) back("/forgot-password", "too_many_attempts");
+
+  redirect("/forgot-password?notice=reset_sent");
+}
+
+// Choose a new password. The person arrives here logged in by the one-time
+// link from the email (see src/app/auth/callback/route.ts). Other devices are
+// logged out afterwards, so whoever may have had the old password is cut off.
+export async function updatePassword(formData: FormData) {
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) back("/forgot-password", "reset_link_invalid");
+
+  if (isWeakPassword(password)) back("/reset-password", "weak_password");
+  if (password !== confirm) back("/reset-password", "password_mismatch");
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    back(
+      "/reset-password",
+      error.code === "same_password"
+        ? "same_password"
+        : error.code === "weak_password"
+          ? "weak_password"
+          : "reset_failed_generic",
+    );
+  }
+
+  await supabase.auth.signOut({ scope: "others" });
+
+  const { role } = await getUserAndRole(supabase);
+  redirect(`${homeFor(role)}?notice=password_changed`);
 }

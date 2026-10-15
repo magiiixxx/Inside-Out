@@ -58,8 +58,9 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-bold">Who looks after the data</h2>
         <p className="text-[0.9375rem]">
           Your information is stored with Supabase, our database provider, and
-          the website runs on Vercel. We do not sell your information and we do
-          not show advertising. BahayFind does not take payments on this
+          the website runs on Vercel. Passwords are handled by Supabase
+          and are stored scrambled, so our team cannot read them. We do not sell
+          your information and we do not show advertising. BahayFind does not take payments on this
           website.
         </p>
       </section>

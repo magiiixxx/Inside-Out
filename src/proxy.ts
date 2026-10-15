@@ -6,9 +6,11 @@ import { NextResponse, type NextRequest } from "next/server";
 // that can set cookies (like this) can renew them. Without it, an owner
 // would be logged out mid-session.
 //
-// It does NOT decide who may see what. Every protected page checks the
-// user itself (see src/app/owner/page.tsx), and the database enforces the
-// real rules with Row Level Security.
+// It also sends a logged-OUT visitor away from the owner and saved-rooms
+// pages before they load. That is a first gate only. It does NOT decide who
+// may see what: every protected page checks the user and the role itself
+// (see src/app/owner/page.tsx), and the database enforces the real rules
+// with Row Level Security.
 
 export async function proxy(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -37,14 +39,32 @@ export async function proxy(request: NextRequest) {
   });
 
   // Asking Supabase who the user is is what triggers the token refresh.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { pathname } = request.nextUrl;
+  if (!user && (pathname === "/saved" || pathname.startsWith("/owner"))) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   return response;
 }
 
 // Only pages that can show a logged-in person: the home page (a student
 // sees Save buttons there), saved rooms, the plans page (the header shows
-// who is logged in), the owner pages, log in, sign up and the team page.
+// who is logged in), the owner pages, log in, sign up, the password pages and
+// the team page.
 export const config = {
-  matcher: ["/", "/saved", "/pricing", "/owner/:path*", "/login", "/signup", "/review-desk"],
+  matcher: [
+    "/",
+    "/saved",
+    "/pricing",
+    "/owner/:path*",
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+    "/review-desk",
+  ],
 };

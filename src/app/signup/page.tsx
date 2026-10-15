@@ -82,16 +82,34 @@ export default async function SignupPage({
               type="password"
               autoComplete="new-password"
               placeholder="Create a password"
-              minLength={6}
+              minLength={8}
+              maxLength={72}
               required
             />
-            <p className="hint">Use at least 6 characters.</p>
+            <p className="hint">At least 8 characters, with a letter and a number.</p>
           </div>
+          <label className="flex items-start gap-3 text-sm leading-snug">
+            <input type="checkbox" name="agree_privacy" required className="mt-0.5 h-4 w-4" />
+            <span>
+              I have read the{" "}
+              <Link href="/privacy" className="font-bold text-ink underline decoration-amber decoration-2 underline-offset-2">
+                Privacy page
+              </Link>{" "}
+              and agree to it.
+            </span>
+          </label>
           <Button type="submit" className="w-full">
             Create account
           </Button>
         </form>
         <SocialButtons mode="signup" />
+        <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
+          By continuing with Google or Facebook you agree to our{" "}
+          <Link href="/privacy" className="underline underline-offset-2">
+            Privacy page
+          </Link>
+          .
+        </p>
       </div>
     </AuthShell>
   );

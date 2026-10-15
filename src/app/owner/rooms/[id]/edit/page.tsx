@@ -26,6 +26,7 @@ export default async function EditRoomPage({
   const { user, role } = await getCurrentUser();
   if (!user) redirect("/login");
   if (role === "student") redirect("/saved");
+  if (role !== "owner" && role !== "admin") notFound();
 
   // Only our own room can be loaded: the query asks for our id, and Row
   // Level Security allows owners to read their own rooms. Anything else

@@ -181,7 +181,10 @@ Row Level Security (RLS) is ON for every table.
 Yes, for everyone who has an account: Supabase Auth, with email and
 password, with Google, or with Facebook (each switched on by the team once
 its app is set up).
-Browsing rooms never needs a login, but students log in to save rooms,
+A new password needs at least 8 characters with a letter and a number.
+Someone who forgets a password asks for an email link and chooses a new one;
+the reply never says whether an email has an account. Creating an account
+means agreeing to the Privacy page. Browsing rooms never needs a login, but students log in to save rooms,
 owners to manage theirs, and admins to review. For the demo, turn off "Confirm email" in Supabase Auth
 settings, because the free plan limits how many emails it sends and
 signup could otherwise get stuck. Admin access needs both a login and

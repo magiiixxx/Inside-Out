@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 // pages have their own full-screen layouts (a navy side panel), so for those
 // the header and footer are left out.
 
-const OWN_LAYOUT = ["/login", "/signup", "/review-desk"];
+const OWN_LAYOUT = ["/login", "/signup", "/forgot-password", "/reset-password", "/review-desk"];
 
 export function AppChrome({
   header,

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { deleteRoom, renewRoom, setAvailability } from "@/app/owner/actions";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { DeleteRoomButton } from "@/components/delete-room-button";
@@ -90,8 +90,11 @@ export default async function OwnerHome({
     .eq("id", user.id)
     .maybeSingle();
 
-  // Students have their own page. (The database also stops them posting.)
+  // Only owners and admins belong here. Students have their own page, and
+  // anything else (for example an account with no profile) is turned away,
+  // so a missing role never opens the door. The database also stops them.
   if (profile?.role === "student") redirect("/saved");
+  if (profile?.role !== "owner" && profile?.role !== "admin") notFound();
 
   // Why .eq("owner_id", ...)? Everyone may read approved rooms, so without
   // this filter an owner would also see OTHER owners' approved rooms here.

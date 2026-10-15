@@ -15,6 +15,9 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const wantsOwner = searchParams.get("type") === "owner";
+  // Where to go afterwards, from a short list of our own pages (never an
+  // address taken from the link, which could point to another website).
+  const next = searchParams.get("next") === "/reset-password" ? "/reset-password" : null;
 
   if (!code) return NextResponse.redirect(`${origin}/login?error=oauth_failed`);
 
@@ -26,6 +29,8 @@ export async function GET(request: Request) {
     // Ignore a refusal: for an existing account it simply stays as it was.
     await supabase.rpc("choose_account_type", { p_type: "owner" });
   }
+
+  if (next) return NextResponse.redirect(`${origin}${next}`);
 
   const { role } = await getUserAndRole(supabase);
   return NextResponse.redirect(`${origin}${homeFor(role)}`);

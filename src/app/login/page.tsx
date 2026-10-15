@@ -52,7 +52,12 @@ export default async function LoginPage({
           <Input id="email" name="email" type="email" autoComplete="email" placeholder="you@email.com" required />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="password">Password</Label>
+          <div className="flex items-baseline justify-between gap-3">
+            <Label htmlFor="password">Password</Label>
+            <Link href="/forgot-password" className="text-[0.8125rem] font-bold text-ink underline decoration-amber decoration-2 underline-offset-4">
+              Forgot password?
+            </Link>
+          </div>
           <Input
             id="password"
             name="password"
@@ -67,6 +72,14 @@ export default async function LoginPage({
         </Button>
       </form>
       <SocialButtons mode="login" />
+      <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground">
+        We use your email only to log you in and to contact you about your
+        account. Read our{" "}
+        <Link href="/privacy" className="underline underline-offset-2">
+          Privacy page
+        </Link>
+        .
+      </p>
     </AuthShell>
   );
 }

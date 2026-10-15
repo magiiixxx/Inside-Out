@@ -14,8 +14,14 @@ const ERRORS: Record<string, string> = {
   missing_login: "Please enter your email and password.",
   invalid_credentials: "That email and password did not match. Please try again.",
   missing_signup: "Please fill in your name and email.",
-  weak_password: "Your password needs at least 6 characters.",
-  email_taken: "An account with that email already exists. Try logging in.",
+  weak_password: "Use a password with at least 8 characters, including a letter and a number.",
+  email_taken: "We could not create that account. If you already have one, try logging in.",
+  need_privacy: "Please agree to the Privacy page to create an account.",
+  email_not_confirmed: "Please confirm your email first. Check your inbox for our message.",
+  password_mismatch: "The two passwords did not match. Please type the same password twice.",
+  same_password: "Please choose a password you have not used before on BahayFind.",
+  reset_link_invalid: "That password link has expired or was already used. Please ask for a new one.",
+  reset_failed_generic: "We could not change your password. Please try again.",
   too_many_attempts: "Too many attempts. Please wait a minute and try again.",
   signup_failed: "We could not create your account. Please try again.",
 
@@ -78,6 +84,8 @@ const ERRORS: Record<string, string> = {
 
 const NOTICES: Record<string, string> = {
   confirm_email: "Account created. Check your email to confirm it, then log in.",
+  reset_sent: "If an account exists for that email, we have sent a link to choose a new password. Open it in this same browser.",
+  password_changed: "Your password was changed. Other devices were logged out.",
   posted: "Room submitted. Our team will check it before students can see it.",
   available: "Room marked available.",
   occupied: "Room marked occupied.",
