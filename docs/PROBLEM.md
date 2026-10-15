@@ -92,9 +92,12 @@ Before Session 3, three people try the live app:
 - Messaging inside the app
 
 ## Glossary
-- **Listing**: one room or boarding house posted by an owner, with its
+- **Listing**: one room or bed space posted by an owner, with its
   description, price, distance from PHINMA UI, contact information and
   status.
+- **Property**: a boarding house building that one owner manages. A
+  property has many rooms. BahayFind has no separate property record yet;
+  each room is posted on its own.
 - **Available / Occupied**: the label an owner sets on a listing to say
   whether a bed is open today.
 - **Approved**: a listing the team has reviewed and allowed to show to

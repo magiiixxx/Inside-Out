@@ -42,6 +42,12 @@ student, will try to find a room under his budget in under a minute.
 And Monica, a boarding house owner, will sign up and post her own room.
 Then we will tell you what they said, good or bad.
 
+**[B — How we'll earn]**
+Students will always use BahayFind for free. Owners are our customers.
+A new owner starts free. An owner with several rooms can upgrade for a
+small monthly fee, for example one hundred forty-nine pesos. We have not
+proven that owners will pay. That is the next thing we will test.
+
 ## The three hardest questions
 
 **1. "You have watched one student. How do you know this is a real problem
@@ -69,6 +75,16 @@ permit and the owner's answers to a short set of validation questions."
 Say exactly that and no more. Do not claim "verified" beyond what you
 actually check. Be ready for: "Do owners know their phone numbers will be public?"
 Tell owners clearly when they post.
+
+## One more question to expect
+
+**"How will this make money?"**
+Honest answer: "Students stay free. Owners are the customers. We have
+three draft plans: Free, Premium Owner at ₱149 a month, and Property
+Manager at ₱299 a month. These prices are guesses. Before we build any
+of it, we will ask real owners like Monica whether they would pay. Today
+the app handles no money at all." The full plans are in `docs/LATER.md`.
+Do not claim the plans exist in the app, because none of it is built.
 
 ## Before you present
 
