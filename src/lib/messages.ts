@@ -55,6 +55,16 @@ const ERRORS: Record<string, string> = {
   review_failed: "We could not review that room. It may already have been reviewed.",
   delete_failed: "We could not delete that room. It may already be gone.",
 
+  // Reports, ratings and rejection reasons
+  need_reason: "Please say why you are rejecting this room (5 to 300 characters).",
+  report_failed: "We could not send your report. Please try again.",
+  already_reported: "You already reported this room. Our team will look at it.",
+  students_only_report: "Only student accounts can report a room.",
+  students_only_rate: "Only student accounts can rate a room.",
+  room_gone: "That room is no longer available.",
+  rate_failed: "We could not save your rating. Please try again.",
+  report_action_failed: "We could not update that report. It may already be closed.",
+
   // Saved rooms
   students_only: "Only student accounts can save rooms.",
   too_many_saved: "You can save up to 50 rooms. Remove one to save another.",
@@ -78,6 +88,10 @@ const NOTICES: Record<string, string> = {
     "Request sent. Our team will contact you to arrange payment. Premium Owner is switched on after we receive it.",
   plan_activated: "Plan activated. The owner can now post more rooms.",
   plan_dismissed: "Request dismissed.",
+  report_sent: "Thank you. Your report was sent to our team.",
+  rated: "Thanks for rating this room.",
+  report_resolved: "Report marked as resolved.",
+  report_hidden: "Room hidden until it has been checked, and its reports closed.",
   saved: "Room saved.",
   unsaved: "Room removed from your saved rooms.",
 };

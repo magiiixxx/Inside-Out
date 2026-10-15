@@ -16,15 +16,21 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export async function reviewRoom(formData: FormData) {
   const listingId = String(formData.get("listing_id") ?? "");
   const decision = String(formData.get("decision") ?? "");
+  const reason = String(formData.get("reason") ?? "").trim();
 
   if (!UUID.test(listingId) || (decision !== "approved" && decision !== "rejected")) {
     redirect("/review-desk?error=invalid_request");
+  }
+  // A rejection must say why: the owner reads this to fix the room.
+  if (decision === "rejected" && (reason.length < 5 || reason.length > 300)) {
+    redirect("/review-desk?error=need_reason");
   }
 
   const supabase = await createClient();
   const { error } = await supabase.rpc("review_listing", {
     p_listing_id: listingId,
     p_decision: decision,
+    p_reason: decision === "rejected" ? reason : null,
   });
 
   if (error) redirect("/review-desk?error=review_failed");
@@ -87,4 +93,23 @@ export async function dismissPlanRequest(formData: FormData) {
   if (error) redirect("/review-desk?error=plan_action_failed");
 
   redirect("/review-desk?notice=plan_dismissed");
+}
+
+// Close a student's report. With hide = "1" the room also goes back to
+// "pending" (students stop seeing it) until the team has checked it. The
+// database function resolve_report() refuses anyone who is not an admin.
+export async function resolveReport(formData: FormData) {
+  const reportId = String(formData.get("report_id") ?? "");
+  const hide = formData.get("hide") === "1";
+  if (!UUID.test(reportId)) redirect("/review-desk?error=invalid_request");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("resolve_report", {
+    p_report_id: reportId,
+    p_hide: hide,
+  });
+
+  if (error) redirect("/review-desk?error=report_action_failed");
+
+  redirect(`/review-desk?notice=${hide ? "report_hidden" : "report_resolved"}`);
 }

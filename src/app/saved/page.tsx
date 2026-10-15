@@ -36,7 +36,7 @@ export default async function SavedRooms({
   const { data, error: loadError } = await supabase
     .from("favorites")
     .select(
-      "created_at, listings!inner(id, description, price_per_month, distance_km, contact_phone, address, photo_path, availability, last_updated_at)",
+      "created_at, listings!inner(id, description, price_per_month, distance_km, contact_phone, address, photo_path, availability, last_updated_at, rating_avg, rating_count)",
     )
     .eq("listings.approval_status", "approved")
     .gt("listings.last_updated_at", hideCutoff())

@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckIcon, PinIcon } from "@/components/icons";
+import { RateRoom } from "@/components/rate-room";
+import { ReportRoom } from "@/components/report-room";
 import { RoomCard, type RoomCardData } from "@/components/room-card";
 import { SaveRoomButton } from "@/components/save-room-button";
 import { getCurrentUser } from "@/lib/auth";
@@ -60,7 +62,7 @@ async function getListings(
     let query = supabase
       .from("listings")
       .select(
-        "id, description, price_per_month, distance_km, contact_phone, address, photo_path, availability, last_updated_at",
+        "id, description, price_per_month, distance_km, contact_phone, address, photo_path, availability, last_updated_at, rating_avg, rating_count",
       )
       .eq("approval_status", "approved")
       .gt("last_updated_at", hideCutoff());
@@ -112,9 +114,15 @@ export default async function Home({
   const isStudent = role === "student";
 
   let savedIds = new Set<string>();
+  // The stars this student already gave, by room. (Row Level Security: a
+  // student reads only their own ratings.)
+  const myStars = new Map<string, number>();
   if (isStudent) {
     const { data: saved } = await supabase.from("favorites").select("listing_id");
     savedIds = new Set((saved ?? []).map((s) => s.listing_id as string));
+
+    const { data: ratings } = await supabase.from("room_ratings").select("listing_id, stars");
+    for (const r of ratings ?? []) myStars.set(r.listing_id as string, r.stars as number);
   }
 
   // Where to come back to after pressing Save, keeping the filter.
@@ -240,7 +248,18 @@ export default async function Home({
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {rooms.map((room) => (
-              <RoomCard key={room.id} room={room}>
+              <RoomCard
+                key={room.id}
+                room={room}
+                footer={
+                  isStudent && (
+                    <div className="flex flex-col gap-2">
+                      <RateRoom listingId={room.id} mine={myStars.get(room.id) ?? null} back={back} />
+                      <ReportRoom listingId={room.id} back={back} />
+                    </div>
+                  )
+                }
+              >
                 {isStudent && (
                   <SaveRoomButton
                     action={setSaved}

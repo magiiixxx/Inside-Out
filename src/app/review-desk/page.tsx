@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { logout } from "@/app/auth/actions";
-import { activatePlan, deleteAnyRoom, dismissPlanRequest, reviewRoom } from "@/app/review-desk/actions";
+import { activatePlan, deleteAnyRoom, dismissPlanRequest, resolveReport, reviewRoom } from "@/app/review-desk/actions";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/site-header";
 import { DeleteRoomButton } from "@/components/delete-room-button";
@@ -9,6 +11,7 @@ import { errorText, noticeText } from "@/lib/messages";
 import { payMethodLabel } from "@/lib/payment";
 import { PLAN_NAMES, PLAN_PRICES, type Plan } from "@/lib/plans";
 import { photoUrl } from "@/lib/photos";
+import { reportReasonLabel } from "@/lib/reports";
 import { createClient } from "@/lib/supabase/server";
 import { initials } from "@/lib/utils";
 
@@ -42,6 +45,15 @@ type PlanRequest = {
   pay_method: string;
   contact_phone: string;
   created_at: string;
+};
+
+type OpenReport = {
+  id: string;
+  reason: string;
+  note: string | null;
+  created_at: string;
+  reporter_id: string;
+  listings: { id: string; description: string; contact_phone: string };
 };
 
 type OtherRoom = {
@@ -102,6 +114,15 @@ export default async function ReviewDesk({
     .limit(50);
   const otherRooms = (others ?? []) as OtherRoom[];
 
+  // Open reports from students about rooms they can see (admins may read
+  // every report). Oldest first.
+  const { data: reportData } = await supabase
+    .from("room_reports")
+    .select("id, reason, note, created_at, reporter_id, listings!inner(id, description, contact_phone)")
+    .eq("status", "open")
+    .order("created_at", { ascending: true });
+  const openReports = (reportData ?? []) as unknown as OpenReport[];
+
   // Owners who asked for Premium and are waiting for the team (admins may
   // read every plan request).
   const { data: requestData } = await supabase
@@ -118,6 +139,7 @@ export default async function ReviewDesk({
         ...rows.map((r) => r.listings.owner_id),
         ...otherRooms.map((r) => r.owner_id),
         ...planRequests.map((r) => r.owner_id),
+        ...openReports.map((r) => r.reporter_id),
       ].filter(
         (id): id is string => id !== null,
       ),
@@ -142,6 +164,9 @@ export default async function ReviewDesk({
             className="block rounded-[10px] bg-navy-deep px-4 py-3 text-white shadow-[inset_3px_0_0_var(--color-amber)]"
           >
             Rooms waiting for review
+          </a>
+          <a href="#reports" className="block rounded-[10px] px-4 py-3 text-navy-text hover:text-white">
+            Reports{openReports.length > 0 ? ` (${openReports.length})` : ""}
           </a>
           <a href="#plans" className="block rounded-[10px] px-4 py-3 text-navy-text hover:text-white">
             Plan requests{planRequests.length > 0 ? ` (${planRequests.length})` : ""}
@@ -233,19 +258,96 @@ export default async function ReviewDesk({
                       <dd>{row.open_beds}</dd>
                     </dl>
 
-                    <form action={reviewRoom} className="flex flex-wrap gap-3">
-                      <input type="hidden" name="listing_id" value={room.id} />
-                      <Button type="submit" name="decision" value="approved" variant="accent">
-                        Approve
-                      </Button>
-                      <Button type="submit" name="decision" value="rejected" variant="outline">
-                        Reject
-                      </Button>
-                    </form>
+                    <div className="flex flex-col gap-4">
+                      <form action={reviewRoom}>
+                        <input type="hidden" name="listing_id" value={room.id} />
+                        <input type="hidden" name="decision" value="approved" />
+                        <Button type="submit" variant="accent">
+                          Approve
+                        </Button>
+                      </form>
+                      <form action={reviewRoom} className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                        <input type="hidden" name="listing_id" value={room.id} />
+                        <input type="hidden" name="decision" value="rejected" />
+                        <div className="flex flex-1 flex-col gap-1.5">
+                          <Label htmlFor={`reason-${room.id}`}>Reason for rejecting (the owner will read this)</Label>
+                          <Input
+                            id={`reason-${room.id}`}
+                            name="reason"
+                            minLength={5}
+                            maxLength={300}
+                            required
+                            placeholder="e.g. The phone number did not answer"
+                          />
+                        </div>
+                        <Button type="submit" variant="outline">
+                          Reject
+                        </Button>
+                      </form>
+                    </div>
                   </CardContent>
                 </Card>
               );
             })
+          )}
+        </section>
+
+        <section id="reports" className="flex scroll-mt-6 flex-col gap-4 pt-4">
+          <div>
+            <h2 className="text-xl font-extrabold tracking-tight">Reports from students</h2>
+            <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">
+              Call the owner to check. &ldquo;Hide room until checked&rdquo; takes the
+              room off the student list (it goes back to waiting for review) and
+              closes every open report about it.
+            </p>
+          </div>
+          {openReports.length === 0 ? (
+            <Card>
+              <CardContent className="pt-6 text-sm text-muted-foreground">
+                No open reports.
+              </CardContent>
+            </Card>
+          ) : (
+            openReports.map((report) => (
+              <Card key={report.id} className="max-w-3xl">
+                <CardContent className="flex flex-col gap-4 pt-6">
+                  <p className="font-bold leading-snug">{report.listings.description}</p>
+                  <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 text-sm">
+                    <dt className="text-muted-foreground">Problem</dt>
+                    <dd className="font-semibold">{reportReasonLabel(report.reason)}</dd>
+                    {report.note && (
+                      <>
+                        <dt className="text-muted-foreground">Detail</dt>
+                        <dd className="break-words">{report.note}</dd>
+                      </>
+                    )}
+                    <dt className="text-muted-foreground">Reported by</dt>
+                    <dd>{ownerName.get(report.reporter_id) || "(no name)"}</dd>
+                    <dt className="text-muted-foreground">Owner phone</dt>
+                    <dd>
+                      <a href={`tel:${report.listings.contact_phone.replace(/\s+/g, "")}`}>
+                        {report.listings.contact_phone}
+                      </a>
+                    </dd>
+                  </dl>
+                  <div className="flex flex-wrap gap-3">
+                    <form action={resolveReport}>
+                      <input type="hidden" name="report_id" value={report.id} />
+                      <input type="hidden" name="hide" value="1" />
+                      <Button type="submit" variant="accent">
+                        Hide room until checked
+                      </Button>
+                    </form>
+                    <form action={resolveReport}>
+                      <input type="hidden" name="report_id" value={report.id} />
+                      <Button type="submit" variant="outline">
+                        Mark resolved
+                      </Button>
+                    </form>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
           )}
         </section>
 

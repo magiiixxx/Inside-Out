@@ -20,6 +20,8 @@ export type RoomCardData = {
   contact_phone: string;
   address: string | null; // rooms posted before addresses existed have none
   photo_path: string | null; // optional; without one we draw a house
+  rating_avg: number | null; // null until a student rates the room
+  rating_count: number;
   availability: "available" | "occupied";
   last_updated_at: string;
 };
@@ -34,9 +36,11 @@ const TINTS = [
 export function RoomCard({
   room,
   children,
+  footer,
 }: {
   room: RoomCardData;
-  children?: ReactNode;
+  children?: ReactNode; // buttons next to Call (like Save)
+  footer?: ReactNode; // anything wider, under the buttons (rate, report)
 }) {
   const isAvailable = room.availability === "available";
   const tint = TINTS[room.id.charCodeAt(0) % TINTS.length];
@@ -85,10 +89,20 @@ export function RoomCard({
         </ul>
 
         <div className="mt-auto flex flex-col gap-4 border-t border-line pt-4">
-          <p className="price">
-            ₱{Number(room.price_per_month).toLocaleString()}
-            <small> / month</small>
-          </p>
+          <div className="flex items-baseline justify-between gap-3">
+            <p className="price">
+              ₱{Number(room.price_per_month).toLocaleString()}
+              <small> / month</small>
+            </p>
+            {room.rating_count > 0 && room.rating_avg !== null ? (
+              <p className="shrink-0 text-sm font-bold" aria-label={`Rated ${room.rating_avg} out of 5 by ${room.rating_count} students`}>
+                <span className="text-amber-text">★</span> {Number(room.rating_avg).toFixed(1)}
+                <span className="font-medium text-muted-foreground"> ({room.rating_count})</span>
+              </p>
+            ) : (
+              <p className="shrink-0 text-sm text-muted-foreground">No ratings yet</p>
+            )}
+          </div>
           <div className="flex flex-wrap items-center gap-3">
             <a
               href={`tel:${room.contact_phone.replace(/\s+/g, "")}`}
@@ -99,6 +113,7 @@ export function RoomCard({
             </a>
             {children}
           </div>
+          {footer}
         </div>
       </div>
     </article>

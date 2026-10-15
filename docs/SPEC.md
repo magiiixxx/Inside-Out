@@ -46,6 +46,14 @@ roles support the student: the **owner**, who posts rooms, and the
 12. As an owner, I want to add an address and edit my room's details and
     price, so that students find the place and see correct information.
 
+13. As a student, I want to report a room that is already taken or has
+    wrong details, so that the team can check it and other students are not
+    sent there.
+14. As a student, I want to give a room 1 to 5 stars and see how others
+    rated it, so that I can choose better.
+15. As an owner, I want to read why our team rejected my room, so that I can
+    fix it and ask again.
+
 ## Screens
 1. **Browse rooms** (public): cards for approved rooms, each showing
    price, distance from PHINMA UI, an available/occupied label, last
@@ -117,7 +125,26 @@ Row Level Security (RLS) is ON for every table.
   `pending` so the owner can fix it. The address is shown to students, and
   the owner agrees to that when posting.
 - An admin may read all rows, change the approval status, and delete any
-  room (to remove spam or leftover test rooms).
+  room (to remove spam or leftover test rooms). Rejecting a room
+  needs a written reason (5 to 300 characters) that the owner can read; it is
+  cleared when the room is approved or edited.
+
+**room_reports**
+- Columns: room, the student who reported, reason (`not_available`,
+  `wrong_phone`, `wrong_info`, `scam` or `other`), a short note,
+  status (`open` or `resolved`), created at.
+- A student reads only their own reports; admins read all. Reporting and
+  resolving go through database functions: only students can report, only
+  rooms students can currently see, one open report per student per room, at
+  most 20 open at once. Only admins can resolve; "hide" sends the room back
+  to `pending`.
+
+**room_ratings**
+- Columns: room, student, stars (1 to 5), created and updated at. One row per
+  student per room. A student reads only their own. `rate_room()` is the
+  only way to write, and only for students and rooms students can see.
+- The average and the count are copied onto the room (`rating_avg`,
+  `rating_count`) so everyone sees them without reading the ratings.
 
 **favorites**
 - Columns: user (a student), listing, saved at.
@@ -178,7 +205,7 @@ approves, and a student sees it.
 
 ## Out of scope
 - More than one photo per room (one photo is in scope, see ticket 15)
-- Reviews or ratings
+- Written reviews or comments (star ratings are in scope, see ticket 20)
 - Email notifications (the banner on the owner home is the notice)
 - Stronger owner verification (ID, permit photos, house visits)
 - Distance from schools other than PHINMA UI

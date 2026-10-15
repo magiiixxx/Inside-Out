@@ -22,6 +22,9 @@ type Room = {
   approval_status: "pending" | "approved" | "rejected";
   last_updated_at: string;
   photo_path: string | null;
+  rejection_reason: string | null;
+  rating_avg: number | null;
+  rating_count: number;
 };
 
 const STATUS: Record<Room["approval_status"], { label: string; className: string }> = {
@@ -94,7 +97,7 @@ export default async function OwnerHome({
   const { data: rooms } = await supabase
     .from("listings")
     .select(
-      "id, description, price_per_month, distance_km, availability, approval_status, last_updated_at, photo_path",
+      "id, description, price_per_month, distance_km, availability, approval_status, last_updated_at, photo_path, rejection_reason, rating_avg, rating_count",
     )
     .eq("owner_id", user.id)
     .order("created_at", { ascending: false });
@@ -227,6 +230,24 @@ export default async function OwnerHome({
                       {isAvailable ? "Available" : "Occupied"}
                     </span>
                   </div>
+
+                  {room.approval_status === "rejected" && room.rejection_reason && (
+                    <p className="alert-error">
+                      <span>
+                        <strong>Why our team rejected this room:</strong> {room.rejection_reason}. Fix
+                        it with Edit room and it will be checked again.
+                      </span>
+                    </p>
+                  )}
+
+                  {isApproved && room.rating_count > 0 && room.rating_avg !== null && (
+                    <p className="text-sm font-semibold">
+                      <span className="text-amber-text">★</span> {Number(room.rating_avg).toFixed(1)}{" "}
+                      <span className="font-medium text-muted-foreground">
+                        from {room.rating_count} {room.rating_count === 1 ? "student" : "students"}
+                      </span>
+                    </p>
+                  )}
 
                   {isApproved && (
                     <>
