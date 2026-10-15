@@ -12,7 +12,7 @@ Nothing the team page does changes, only how it is navigated.
 - [ ] A "← Return" button sits at the top left of the team page header.
 - [ ] If the admin came from another page of the site, Return goes back to it.
 - [ ] If the page was opened directly, in a new tab, or the previous page was a
-      log in, sign up, password or code page, Return goes to the owner dashboard.
+      log in, sign up, password or code page, Return goes to the public home page.
       It never bounces the admin forward again.
 - [ ] Refreshing the page does not break Return.
 - [ ] The two-step set-up page has a Return button that goes to the team page.

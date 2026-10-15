@@ -119,8 +119,8 @@ export default async function ReviewDesk({
       <main id="main" className="flex min-w-0 flex-col gap-6 px-4 py-8 sm:px-10 sm:py-10">
         <header>
           {/* No fixed target: go back to the page the admin came from, or to the
-              owner dashboard when there is none (opened directly, or refreshed). */}
-          <ReturnButton fallbackHref="/owner" />
+              public home page when there is none (opened directly, or in a new tab). */}
+          <ReturnButton fallbackHref="/" />
           <p className="eyebrow mb-2 mt-5">Team only</p>
           <h1 className="text-[2rem] font-extrabold tracking-tight">Rooms waiting for review</h1>
           <p className="mt-2 max-w-2xl text-[0.9375rem] text-muted-foreground">
