@@ -89,9 +89,17 @@ export default async function Home({
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
       <header className="flex flex-col gap-3">
-        <span className="inline-flex w-fit items-center rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
-          Near PHINMA UI
-        </span>
+        <div className="flex items-center justify-between gap-3">
+          <span className="inline-flex w-fit items-center rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
+            Near PHINMA UI
+          </span>
+          <Link
+            href="/login"
+            className="text-sm text-muted-foreground underline underline-offset-4"
+          >
+            Owner log in
+          </Link>
+        </div>
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           BahayFind
         </h1>
