@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { ContactLines } from "@/components/contact-lines";
 
 // What BahayFind does with people's information. Facebook requires a page
 // like this before a Facebook login can be used by the public, and it is the
@@ -71,9 +72,10 @@ export default function PrivacyPage() {
           You can ask the BahayFind team to delete your account and everything
           linked to it (your rooms, saved rooms, reports and ratings). Owners
           can also delete their own rooms from the owner home page at any time.
-          Tell any member of the team, or message us through the page where
-          you found BahayFind, and we will remove your account.
+          Send a message from Contact support while you are logged in, and we
+          will remove your account.
         </p>
+        <ContactLines heading="You can also reach the team here:" />
       </section>
 
       <Link href="/" className={buttonVariants({ variant: "ghost" }) + " w-fit"}>

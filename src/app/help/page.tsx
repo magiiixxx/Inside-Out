@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { ContactLines } from "@/components/contact-lines";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/auth";
 
@@ -131,6 +132,7 @@ export default async function HelpPage() {
           Send our team a message and we will get back to you.
           {!user && " You need to log in first, so we know who to reply to."}
         </p>
+        <ContactLines />
         <div className="flex flex-wrap gap-3">
           {user ? (
             <>

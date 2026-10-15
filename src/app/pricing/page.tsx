@@ -6,7 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getCurrentUser } from "@/lib/auth";
 import { errorText, noticeText } from "@/lib/messages";
-import { PAY_METHODS, payMethodLabel } from "@/lib/payment";
+import { PAY_METHODS, payMethodLabel, type PayMethod } from "@/lib/payment";
+import { getPaymentAccount } from "@/lib/support-info";
+import { ContactLines } from "@/components/contact-lines";
 import { PLAN_NAMES, PLAN_PRICES, requestablePlans } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
 
@@ -107,6 +109,9 @@ export default async function PricingPage({
 
   const choices = requestablePlans(plan);
 
+  // Where to send the payment. Only shown to an owner who has asked for a plan.
+  const payAccount = pending ? getPaymentAccount(pending.pay_method as PayMethod) : null;
+
   return (
     <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
       <header className="flex flex-col gap-3">
@@ -204,11 +209,32 @@ export default async function PricingPage({
         ) : choices.length === 0 ? (
           <p className="alert-success">You already have the top plan. Thank you!</p>
         ) : pending ? (
-          <p className="alert-info">
-            Your request for {PLAN_NAMES[pending.plan]} is waiting. Our team will
-            contact you to arrange payment by {payMethodLabel(pending.pay_method)}.
-            The plan is switched on after we receive it.
-          </p>
+          <div className="flex flex-col gap-4">
+            <p className="alert-info">
+              Your request for {PLAN_NAMES[pending.plan]} is waiting. Our team will
+              contact you to arrange payment by {payMethodLabel(pending.pay_method)}.
+              The plan is switched on after we receive it.
+            </p>
+            {payAccount && (
+              <div className="rounded-xl border border-line p-4">
+                <p className="font-bold">
+                  Pay ₱{PLAN_PRICES[pending.plan]} by {payAccount.heading}
+                </p>
+                <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 text-sm">
+                  {payAccount.rows.map((row) => (
+                    <div key={row.label} className="contents">
+                      <dt className="text-muted-foreground">{row.label}</dt>
+                      <dd className="font-bold">{row.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  After you pay, send a screenshot of your payment to our team so we can switch your plan on.
+                </p>
+                <ContactLines className="mt-2" />
+              </div>
+            )}
+          </div>
         ) : (
           <form action={requestPlan} className="flex max-w-xl flex-col gap-4">
             <p className="text-sm text-muted-foreground">
