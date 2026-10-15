@@ -5,9 +5,10 @@ import { signInWithFacebook } from "@/app/auth/actions";
 // Facebook app and the Facebook provider in Supabase). Until then nothing is
 // shown, so visitors never meet a button that cannot work.
 //
-// The Sign up page offers two buttons, because the email form's "I am a
-// Student / Owner" choice cannot travel through Facebook: each button carries
-// its own choice.
+// The email form's "I am a Student / Owner" choice cannot travel through
+// Facebook, so each Facebook button carries its own choice. The Sign up page
+// shows only the button that matches the choice ticked above it (its content
+// sits inside a "group/choice" wrapper, see signup/page.tsx).
 
 const BUTTON =
   "inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-[var(--radius-control)] bg-[#1877f2] px-4 font-bold text-white hover:bg-[#166fe0]";
@@ -39,14 +40,21 @@ export function FacebookButtons({ mode }: { mode: "login" | "signup" }) {
           </button>
         ) : (
           <>
-            <button type="submit" name="account_type" value="student" className={BUTTON}>
-              <FacebookMark />
-              Sign up with Facebook as a student
-            </button>
-            <button type="submit" name="account_type" value="owner" className={BUTTON}>
-              <FacebookMark />
-              Sign up with Facebook as an owner
-            </button>
+            {/* Only the button for the chosen account type shows. The choice is
+                the "I am a Student / Owner" radio above; the CSS below reads
+                which one is ticked, so it needs no JavaScript. */}
+            <div className="group-has-[input[value=owner]:checked]/choice:hidden">
+              <button type="submit" name="account_type" value="student" className={BUTTON}>
+                <FacebookMark />
+                Sign up with Facebook as a student
+              </button>
+            </div>
+            <div className="hidden group-has-[input[value=owner]:checked]/choice:block">
+              <button type="submit" name="account_type" value="owner" className={BUTTON}>
+                <FacebookMark />
+                Sign up with Facebook as an owner
+              </button>
+            </div>
           </>
         )}
       </form>

@@ -11,7 +11,8 @@ what we keep.
 **Status:** done
 
 - [x] The Log in page has "Continue with Facebook" and the Sign up page has
-      "Sign up with Facebook as a student" and "…as an owner", but only when
+      "Sign up with Facebook as a student" or "…as an owner" (only the button for the
+      account type chosen above it is shown), but only when
       NEXT_PUBLIC_FACEBOOK_LOGIN is "true".
 - [x] A new person signing up with Facebook as a student lands on Saved rooms
       with a student account; as an owner, on the owner home with an owner
