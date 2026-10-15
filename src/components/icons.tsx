@@ -218,3 +218,17 @@ export function CreditCardIcon({ className }: IconProps) {
     </Icon>
   );
 }
+
+// A solid five-point star. Colour it with text/fill classes (fill-current).
+export function StarIcon({ className }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" className={className}>
+      <path
+        d="M12 2.6l2.9 6.1 6.7.8-4.9 4.6 1.3 6.6L12 17.4l-6 3.3 1.3-6.6L2.4 9.5l6.7-.8z"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+        className="fill-current"
+      />
+    </svg>
+  );
+}

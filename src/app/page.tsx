@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckIcon, PinIcon } from "@/components/icons";
+import { DemoBanner } from "@/components/rating-demo/demo-banner";
+import { HideInDemo } from "@/components/rating-demo/hide-in-demo";
 import { RateRoom } from "@/components/rate-room";
 import { ReportRoom } from "@/components/report-room";
 import { RoomCard, type RoomCardData } from "@/components/room-card";
@@ -219,6 +221,8 @@ export default async function Home({
           )}
         </div>
 
+        <DemoBanner />
+
         {notice && (
           <p role="status" className="alert-success">
             {notice}
@@ -254,11 +258,13 @@ export default async function Home({
                 footer={
                   isStudent && (
                     <div className="flex flex-col gap-2">
-                      {savedIds.has(room.id) ? (
-                        <RateRoom listingId={room.id} mine={myStars.get(room.id) ?? null} back={back} />
-                      ) : (
-                        <p className="text-sm text-muted-foreground">Save this room to rate it.</p>
-                      )}
+                      <HideInDemo>
+                        {savedIds.has(room.id) ? (
+                          <RateRoom listingId={room.id} mine={myStars.get(room.id) ?? null} back={back} />
+                        ) : (
+                          <p className="text-sm text-muted-foreground">Save this room to rate it.</p>
+                        )}
+                      </HideInDemo>
                       <ReportRoom listingId={room.id} back={back} />
                     </div>
                   )

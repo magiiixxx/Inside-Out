@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { ClockIcon, HouseIcon, PhoneIcon, PinIcon } from "@/components/icons";
+import { RatingArea } from "@/components/rating-demo/rating-area";
 import { updatedLabel } from "@/lib/listings";
 import { telHref } from "@/lib/utils";
 import { photoUrl } from "@/lib/photos";
@@ -86,19 +87,12 @@ export function RoomCard({
         </ul>
 
         <div className="mt-auto flex flex-col gap-4 border-t border-line pt-4">
-          <div className="flex items-baseline justify-between gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
             <p className="price">
               ₱{Number(room.price_per_month).toLocaleString()}
               <small> / month</small>
             </p>
-            {room.rating_count > 0 && room.rating_avg !== null ? (
-              <p className="shrink-0 text-sm font-bold" aria-label={`Rated ${room.rating_avg} out of 5 by ${room.rating_count} students`}>
-                <span className="text-amber-text">★</span> {Number(room.rating_avg).toFixed(1)}
-                <span className="font-medium text-muted-foreground"> ({room.rating_count})</span>
-              </p>
-            ) : (
-              <p className="shrink-0 text-sm text-muted-foreground">No ratings yet</p>
-            )}
+            <RatingArea count={room.rating_count} average={room.rating_avg} />
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <a

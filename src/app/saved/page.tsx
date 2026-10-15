@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { setSaved } from "@/app/saved/actions";
 import { Card, CardContent } from "@/components/ui/card";
+import { DemoBanner } from "@/components/rating-demo/demo-banner";
 import { RoomCard, type RoomCardData } from "@/components/room-card";
 import { SaveRoomButton } from "@/components/save-room-button";
 import { getCurrentUser } from "@/lib/auth";
@@ -69,6 +70,8 @@ export default async function SavedRooms({
           {error ?? "We could not load your saved rooms. Please refresh and try again."}
         </p>
       )}
+
+      <DemoBanner />
 
       <p className="text-sm text-muted-foreground">
         Call the owner to see a room and to arrange payment in person. Rooms

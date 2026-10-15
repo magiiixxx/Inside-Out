@@ -48,6 +48,7 @@
   --color-link: #0f2d52;
   --color-text-soft: #33475f;
   --color-on-amber: #0f2d52;
+  --color-star-off: #cbd5e1;       /* a star that is not selected */
   --color-logo-bg: #0f2d52;        /* the logo square, and the house on it */
   --color-logo-fg: #f2b134;
   --color-placeholder: #677388;
@@ -138,6 +139,7 @@
   --color-action: #2f6bb8;
   --color-action-deep: #255ca3;
   --color-link: #8fb4ea;
+  --color-star-off: #3b4d6b;
   --color-logo-bg: #f2b134;
   --color-logo-fg: #0f2d52;
   --color-navy-soft: #1a2c4a;

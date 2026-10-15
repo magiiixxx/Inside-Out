@@ -94,6 +94,16 @@ If the team reopens this, the answers already given were:
 - First check the provider's current rules and costs for the Philippines, and
   that a free trial only texts numbers you have verified in advance.
 
+## Written reviews (previewed in demo mode only)
+
+Rating demo mode (open the home page with `?demo=ratings`) shows a fictional
+sample review beside each star rating, to show how written reviews could look.
+The real app has star ratings only, from students who saved a room. Real
+written reviews would need: a place to store them, moderation by the team
+(people can write anything), a rule for who may review (for example only
+students who visited), and a way for owners to reply. The demo reviews are
+fictional, live only in code, and are never mixed with real data.
+
 ## Account menu ideas, not built yet
 
 - "See all profiles": the app has one profile per account, so there is nothing
