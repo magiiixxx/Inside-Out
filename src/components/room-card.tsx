@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { ClockIcon, HouseIcon, PhoneIcon, PinIcon } from "@/components/icons";
 import { updatedLabel } from "@/lib/listings";
+import { telHref } from "@/lib/utils";
 import { photoUrl } from "@/lib/photos";
 
 // One room as a student sees it. Used by the Browse page and the Saved
@@ -105,7 +106,7 @@ export function RoomCard({
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <a
-              href={`tel:${room.contact_phone.replace(/\s+/g, "")}`}
+              href={telHref(room.contact_phone)}
               className={buttonVariants({ size: "sm", variant: isAvailable ? "default" : "outline" })}
             >
               <PhoneIcon className="h-4 w-4" />

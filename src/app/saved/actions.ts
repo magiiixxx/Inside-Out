@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { safeBack, withCode } from "@/lib/back";
 import { createClient } from "@/lib/supabase/server";
+import { UUID } from "@/lib/validation";
 
 // Save or remove a favorite room. The real rules (only students, only
 // visible rooms, at most 50) are enforced inside the database function
@@ -12,8 +13,6 @@ import { createClient } from "@/lib/supabase/server";
 // page looks the code up in src/lib/messages.ts.
 //
 // redirect() throws a special signal, so it is never inside a try/catch.
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function setSaved(formData: FormData) {
   const listingId = String(formData.get("listing_id") ?? "");

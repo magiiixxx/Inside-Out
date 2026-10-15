@@ -63,8 +63,10 @@ const ERRORS: Record<string, string> = {
   already_reported: "You already reported this room. Our team will look at it.",
   students_only_report: "Only student accounts can report a room.",
   students_only_rate: "Only student accounts can rate a room.",
+  rate_needs_save: "Save this room first, then you can rate it.",
   room_gone: "That room is no longer available.",
   rate_failed: "We could not save your rating. Please try again.",
+  reset_failed: "We could not reset the ratings. Please try again.",
   report_action_failed: "We could not update that report. It may already be closed.",
 
   // Saved rooms
@@ -92,6 +94,7 @@ const NOTICES: Record<string, string> = {
   plan_dismissed: "Request dismissed.",
   report_sent: "Thank you. Your report was sent to our team.",
   rated: "Thanks for rating this room.",
+  ratings_reset: "Ratings for that room were reset.",
   report_resolved: "Report marked as resolved.",
   report_hidden: "Room hidden until it has been checked, and its reports closed.",
   saved: "Room saved.",

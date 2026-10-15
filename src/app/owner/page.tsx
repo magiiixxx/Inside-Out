@@ -23,6 +23,7 @@ type Room = {
   last_updated_at: string;
   photo_path: string | null;
   rejection_reason: string | null;
+  held_for_report: boolean;
   rating_avg: number | null;
   rating_count: number;
 };
@@ -97,7 +98,7 @@ export default async function OwnerHome({
   const { data: rooms } = await supabase
     .from("listings")
     .select(
-      "id, description, price_per_month, distance_km, availability, approval_status, last_updated_at, photo_path, rejection_reason, rating_avg, rating_count",
+      "id, description, price_per_month, distance_km, availability, approval_status, last_updated_at, photo_path, rejection_reason, held_for_report, rating_avg, rating_count",
     )
     .eq("owner_id", user.id)
     .order("created_at", { ascending: false });
@@ -237,6 +238,13 @@ export default async function OwnerHome({
                         <strong>Why our team rejected this room:</strong> {room.rejection_reason}. Fix
                         it with Edit room and it will be checked again.
                       </span>
+                    </p>
+                  )}
+
+                  {room.approval_status === "pending" && room.held_for_report && (
+                    <p className="alert-warning">
+                      Our team is checking a report about this room, so students cannot
+                      see it for now. We may call you to confirm it is still as listed.
                     </p>
                   )}
 

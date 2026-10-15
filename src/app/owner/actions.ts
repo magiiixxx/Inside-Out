@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { removePhoto, uploadPhoto } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
+import { UUID, formText as text } from "@/lib/validation";
 
 // Server actions for the owner's pages. Everything is checked here on the
 // server first (the browser's form checks can be skipped by anyone), and
@@ -13,14 +14,8 @@ import { createClient } from "@/lib/supabase/server";
 //
 // redirect() throws a special signal, so it is never inside a try/catch.
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 function backToForm(code: string): never {
   redirect(`/owner/rooms/new?error=${code}`);
-}
-
-function text(formData: FormData, name: string): string {
-  return String(formData.get(name) ?? "").trim();
 }
 
 export async function postRoom(formData: FormData) {

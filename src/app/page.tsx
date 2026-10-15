@@ -254,7 +254,11 @@ export default async function Home({
                 footer={
                   isStudent && (
                     <div className="flex flex-col gap-2">
-                      <RateRoom listingId={room.id} mine={myStars.get(room.id) ?? null} back={back} />
+                      {savedIds.has(room.id) ? (
+                        <RateRoom listingId={room.id} mine={myStars.get(room.id) ?? null} back={back} />
+                      ) : (
+                        <p className="text-sm text-muted-foreground">Save this room to rate it.</p>
+                      )}
                       <ReportRoom listingId={room.id} back={back} />
                     </div>
                   )

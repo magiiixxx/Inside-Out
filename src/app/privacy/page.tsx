@@ -27,8 +27,9 @@ export default function PrivacyPage() {
           <li>
             <strong>Everyone with an account:</strong> your name, your email
             address, and whether you are a student or an owner. If you sign up
-            with Facebook, we receive only the name and email Facebook shares.
-            We never see your Facebook password.
+            with Facebook, we receive the name, email address and profile
+            picture link that Facebook shares, and Facebook&apos;s id for your
+            account. We never see your Facebook password.
           </li>
           <li>
             <strong>Students:</strong> the rooms you save, the reports you send,

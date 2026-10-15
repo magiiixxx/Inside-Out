@@ -137,12 +137,15 @@ Row Level Security (RLS) is ON for every table.
   resolving go through database functions: only students can report, only
   rooms students can currently see, one open report per student per room, at
   most 20 open at once. Only admins can resolve; "hide" sends the room back
-  to `pending`.
+  to `pending` and marks it as held for a report, so its owner can be told
+  why. Approving or rejecting the room clears the mark.
 
 **room_ratings**
 - Columns: room, student, stars (1 to 5), created and updated at. One row per
   student per room. A student reads only their own. `rate_room()` is the
-  only way to write, and only for students and rooms students can see.
+  only way to write, and only for students, for rooms students can see, and
+  only for a room the student has saved. An admin can reset a room's
+  ratings (`reset_room_ratings()`).
 - The average and the count are copied onto the room (`rating_avg`,
   `rating_count`) so everyone sees them without reading the ratings.
 

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserAndRole, homeFor } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { formText as field } from "@/lib/validation";
 
 // Server actions: these functions run ONLY on the server, even though a
 // form in the browser calls them. That is why passwords are safe here.
@@ -13,10 +14,6 @@ import { createClient } from "@/lib/supabase/server";
 //
 // Note: redirect() works by throwing a special signal, so it must never be
 // inside a try/catch.
-
-function field(formData: FormData, name: string): string {
-  return String(formData.get(name) ?? "").trim();
-}
 
 function back(path: string, code: string): never {
   redirect(`${path}?error=${code}`);
@@ -96,15 +93,18 @@ export async function signInWithFacebook(formData: FormData) {
   // Our own address, so Facebook knows where to send the person back to.
   // Supabase only accepts addresses on its allowed list (Authentication ->
   // URL Configuration), so a faked address is refused.
+  // If the team sets SITE_URL (for example https://inside-out-two.vercel.app)
+  // we use it as is. Without it we fall back to the address the request came to.
   const requestHeaders = await headers();
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
   const protocol = requestHeaders.get("x-forwarded-proto") ?? "https";
+  const site = (process.env.SITE_URL ?? `${protocol}://${host}`).replace(/\/$/, "");
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "facebook",
     options: {
-      redirectTo: `${protocol}://${host}/auth/callback?type=${accountType}`,
+      redirectTo: `${site}/auth/callback?type=${accountType}`,
       scopes: "email",
     },
   });

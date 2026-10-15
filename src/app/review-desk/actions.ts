@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { removePhoto } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
+import { UUID } from "@/lib/validation";
 
 // Approve or reject a room. The real protection is inside the database:
 // review_listing() refuses anyone who is not an admin. The checks here
@@ -10,8 +11,6 @@ import { createClient } from "@/lib/supabase/server";
 // code that the page looks up in src/lib/messages.ts.
 //
 // redirect() throws a special signal, so it is never inside a try/catch.
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function reviewRoom(formData: FormData) {
   const listingId = String(formData.get("listing_id") ?? "");
@@ -112,4 +111,18 @@ export async function resolveReport(formData: FormData) {
   if (error) redirect("/review-desk?error=report_action_failed");
 
   redirect(`/review-desk?notice=${hide ? "report_hidden" : "report_resolved"}`);
+}
+
+// Clear every star rating on a room (fake or abusive ratings). The database
+// function reset_room_ratings() refuses anyone who is not an admin.
+export async function resetRatings(formData: FormData) {
+  const listingId = String(formData.get("listing_id") ?? "");
+  if (!UUID.test(listingId)) redirect("/review-desk?error=invalid_request");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("reset_room_ratings", { p_listing_id: listingId });
+
+  if (error) redirect("/review-desk?error=reset_failed");
+
+  redirect("/review-desk?notice=ratings_reset");
 }

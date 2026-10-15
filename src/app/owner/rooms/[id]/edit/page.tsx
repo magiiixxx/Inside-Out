@@ -8,10 +8,9 @@ import { getCurrentUser } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
 import { photoUrl } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
+import { UUID } from "@/lib/validation";
 
 // Edit one of the owner's own rooms.
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export default async function EditRoomPage({
   params,

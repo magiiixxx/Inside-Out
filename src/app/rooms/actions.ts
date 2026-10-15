@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { safeBack, withCode } from "@/lib/back";
 import { REPORT_REASONS } from "@/lib/reports";
 import { createClient } from "@/lib/supabase/server";
+import { UUID } from "@/lib/validation";
 
 // Student actions on a room: report a problem, and give it stars. The real
 // rules (only students, only rooms students can see, one rating each) are
@@ -11,8 +12,6 @@ import { createClient } from "@/lib/supabase/server";
 // checks here only give friendlier messages.
 //
 // redirect() throws a special signal, so it is never inside a try/catch.
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function reportRoom(formData: FormData) {
   const listingId = String(formData.get("listing_id") ?? "");
@@ -64,9 +63,11 @@ export async function rateRoom(formData: FormData) {
   if (error) {
     const code = error.message.includes("Only student")
       ? "students_only_rate"
-      : error.message.includes("not available")
-        ? "room_gone"
-        : "rate_failed";
+      : error.message.includes("Save this room")
+        ? "rate_needs_save"
+        : error.message.includes("not available")
+          ? "room_gone"
+          : "rate_failed";
     redirect(withCode(back, "error", code));
   }
 
