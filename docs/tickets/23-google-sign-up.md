@@ -7,23 +7,23 @@ appears once the team has set up Google sign-in and switched it on.
 
 **Blocked by:** 21
 
-**Status:** todo
+**Status:** done
 
-- [ ] The Log in page has "Continue with Google" and the Sign up page has
+- [x] The Log in page has "Continue with Google" and the Sign up page has
       "Sign up with Google as a student" or "…as an owner" (only the one for
       the chosen account type is shown), but only when NEXT_PUBLIC_GOOGLE_LOGIN
       is "true".
-- [ ] A new person signing up with Google as a student lands on Saved rooms;
+- [x] A new person signing up with Google as a student lands on Saved rooms;
       as an owner, on the owner home.
-- [ ] Their name from Google is saved on their profile.
-- [ ] Logging in again with Google signs them into the same account.
-- [ ] An account older than 10 minutes cannot be turned into an owner by
+- [x] Their name from Google is saved on their profile.
+- [x] Logging in again with Google signs them into the same account.
+- [x] An account older than 10 minutes cannot be turned into an owner by
       pressing the owner button, and nobody can become an admin this way.
-- [ ] If Google fails or is cancelled, the person sees a clear message and can
+- [x] If Google fails or is cancelled, the person sees a clear message and can
       still use email and password.
-- [ ] Facebook sign-in still works, and both buttons can be shown together.
-- [ ] No Google secret appears anywhere in the project.
-- [ ] Works on the live URL
+- [x] Facebook sign-in still works, and both buttons can be shown together.
+- [x] No Google secret appears anywhere in the project.
+- [x] Works on the live URL
 
 ## Setup the team must do (once)
 
