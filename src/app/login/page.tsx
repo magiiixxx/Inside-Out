@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getUserAndRole, homeFor } from "@/lib/auth";
 import { errorText, noticeText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
 
@@ -20,10 +21,8 @@ export default async function LoginPage({
 
   // Already logged in? Skip the form.
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (user) redirect("/owner");
+  const { user, role } = await getUserAndRole(supabase);
+  if (user) redirect(homeFor(role));
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-12">
@@ -32,7 +31,7 @@ export default async function LoginPage({
       </Link>
       <Card>
         <CardHeader>
-          <CardTitle>Owner log in</CardTitle>
+          <CardTitle>Log in</CardTitle>
         </CardHeader>
         <CardContent>
           <form action={login} className="flex flex-col gap-4">
@@ -57,7 +56,7 @@ export default async function LoginPage({
             <Button type="submit">Log in</Button>
           </form>
           <p className="mt-4 text-sm text-muted-foreground">
-            New boarding house owner?{" "}
+            New here?{" "}
             <Link href="/signup" className="font-medium text-foreground underline underline-offset-4">
               Create an account
             </Link>

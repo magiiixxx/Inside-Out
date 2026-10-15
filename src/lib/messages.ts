@@ -36,6 +36,12 @@ const ERRORS: Record<string, string> = {
   update_failed: "We could not update that room. Please try again.",
   review_failed: "We could not review that room. It may already have been reviewed.",
   delete_failed: "We could not delete that room. It may already be gone.",
+
+  // Saved rooms
+  students_only: "Only student accounts can save rooms.",
+  too_many_saved: "You can save up to 50 rooms. Remove one to save another.",
+  room_unavailable: "That room is not available to save any more.",
+  favorite_failed: "We could not update your saved rooms. Please try again.",
 };
 
 const NOTICES: Record<string, string> = {
@@ -47,6 +53,8 @@ const NOTICES: Record<string, string> = {
   approved: "Room approved. Students can now see it.",
   rejected: "Room rejected.",
   deleted: "Room deleted.",
+  saved: "Room saved.",
+  unsaved: "Room removed from your saved rooms.",
 };
 
 function lookup(list: Record<string, string>, code: string | undefined) {

@@ -42,7 +42,9 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
-// Only pages that involve login. The public Browse page needs no session.
+// Only pages that can show a logged-in person: the home page (a student
+// sees Save buttons there), saved rooms, the owner pages, log in, sign up
+// and the team page.
 export const config = {
-  matcher: ["/owner/:path*", "/login", "/signup", "/review-desk"],
+  matcher: ["/", "/saved", "/owner/:path*", "/login", "/signup", "/review-desk"],
 };

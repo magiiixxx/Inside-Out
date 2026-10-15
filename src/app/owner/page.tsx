@@ -84,6 +84,9 @@ export default async function OwnerHome({
     .eq("id", user.id)
     .maybeSingle();
 
+  // Students have their own page. (The database also stops them posting.)
+  if (profile?.role === "student") redirect("/saved");
+
   // Why .eq("owner_id", ...)? Everyone may read approved rooms, so without
   // this filter an owner would also see OTHER owners' approved rooms here.
   const { data: rooms } = await supabase

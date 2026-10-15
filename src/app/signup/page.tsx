@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getUserAndRole, homeFor } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,10 +19,8 @@ export default async function SignupPage({
 
   // Already logged in? Skip the form.
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (user) redirect("/owner");
+  const { user, role } = await getUserAndRole(supabase);
+  if (user) redirect(homeFor(role));
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-12">
@@ -30,7 +29,7 @@ export default async function SignupPage({
       </Link>
       <Card>
         <CardHeader>
-          <CardTitle>Create an owner account</CardTitle>
+          <CardTitle>Create an account</CardTitle>
         </CardHeader>
         <CardContent>
           <form action={signup} className="flex flex-col gap-4">
@@ -39,6 +38,17 @@ export default async function SignupPage({
                 {error}
               </p>
             )}
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-1 text-sm font-medium">I am…</legend>
+              <label className="flex items-center gap-3 text-sm">
+                <input type="radio" name="account_type" value="student" defaultChecked className="h-4 w-4" />
+                <span>A student looking for a room</span>
+              </label>
+              <label className="flex items-center gap-3 text-sm">
+                <input type="radio" name="account_type" value="owner" className="h-4 w-4" />
+                <span>A boarding house owner or caretaker</span>
+              </label>
+            </fieldset>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="full_name">Your name</Label>
               <Input id="full_name" name="full_name" autoComplete="name" required />

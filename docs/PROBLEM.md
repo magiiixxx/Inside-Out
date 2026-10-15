@@ -53,8 +53,9 @@ Before Session 3, three people try the live app:
   available or occupied.
 
 ## Rules for the MVP
-- Students do not need to log in to browse. Owners must sign up and log
-  in. Only approved listings are visible to students.
+- Students do not need to log in to browse. A student may create an
+  account only to save favorite rooms. Owners must sign up and log in.
+  Only approved listings are visible to students.
 - Owners can edit only their own rooms. Only the team can approve.
 - The app never handles money, deposits or payments.
 - Owner contact information is shown publicly, so owners must know that

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { getUserAndRole } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,10 +19,10 @@ export default async function NewRoomPage({
   const error = errorText((await searchParams).error);
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, role } = await getUserAndRole(supabase);
   if (!user) redirect("/login");
+  // Students cannot post rooms (the database refuses too).
+  if (role === "student") redirect("/saved");
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">

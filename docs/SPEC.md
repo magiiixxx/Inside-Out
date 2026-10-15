@@ -37,12 +37,18 @@ roles support the student: the **owner**, who posts rooms, and the
 8. As an admin, I want to review pending rooms with their permit and
    answers and approve or reject them, so that students can trust what
    they see.
+9. As a student, I want to create an account and log in, so that I can
+   keep a list of rooms I like. (Browsing stays open to everyone.)
+10. As a student, I want to save a room and see my saved rooms in one
+    place, so that I can compare them and call the owners later.
 
 ## Screens
 1. **Browse rooms** (public): cards for approved rooms, each showing
    price, distance from PHINMA UI, an available/occupied label, last
    updated and the owner's phone. Max-price filter and sort by distance.
-2. **Sign up / Log in**: email and password, for owners and admins.
+2. **Sign up / Log in**: email and password, for students, owners and
+   admins. Sign-up asks whether you are a student or a boarding house
+   owner. Admin can never be chosen here.
 3. **Owner home**: the owner's rooms with a status badge (pending,
    approved, rejected, hidden). A banner warns when a room is about to
    hide or is already hidden. Buttons: mark available/occupied, renew,
@@ -54,14 +60,19 @@ roles support the student: the **owner**, who posts rooms, and the
    permit number and answers, and approve / reject buttons. A person who
    is not an admin sees the Not found page.
 6. **Not found**.
+7. **Saved rooms** (students): the rooms the student saved that are still
+   visible, each with price, distance, available/occupied label, phone
+   and a button to remove it. Rooms that are hidden or deleted do not
+   show here.
 
 ## Data
 Row Level Security (RLS) is ON for every table.
 
 **profiles**
-- Columns: user id, name, role (`owner` or `admin`).
-- A user may read and create only their own row, and only with role
-  `owner`.
+- Columns: user id, name, role (`student`, `owner` or `admin`).
+- A user may read only their own row. A profile is created by the
+  database when someone signs up, as `student` or `owner` depending on
+  the sign-up choice, and never as `admin`.
 - Nobody may change their own role. Team members are made admins by hand
   in the Supabase dashboard.
 
@@ -81,6 +92,13 @@ Row Level Security (RLS) is ON for every table.
   and post it again. An owner may delete their own rooms.
 - An admin may read all rows, change the approval status, and delete any
   room (to remove spam or leftover test rooms).
+
+**favorites**
+- Columns: user (a student), listing, saved at.
+- A student may read only their own saved rooms. Saving and removing go
+  through database functions: only students may save, only rooms that are
+  currently visible to students may be saved, and a student may save at
+  most 50 rooms.
 
 **listing_checks**
 - Columns: listing, permit number (typed in), answers to the validation

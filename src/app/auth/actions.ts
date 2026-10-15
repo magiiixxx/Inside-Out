@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getUserAndRole, homeFor } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 // Server actions: these functions run ONLY on the server, even though a
@@ -24,6 +25,10 @@ export async function signup(formData: FormData) {
   const fullName = field(formData, "full_name");
   const email = field(formData, "email");
   const password = String(formData.get("password") ?? "");
+  // Only two choices exist. Anything else, including "admin", becomes a
+  // student. The database makes the same decision again (see 009), because
+  // anyone can tamper with what a browser sends.
+  const accountType = field(formData, "account_type") === "owner" ? "owner" : "student";
 
   if (!fullName || !email) back("/signup", "missing_signup");
   if (password.length < 6) back("/signup", "weak_password");
@@ -32,7 +37,7 @@ export async function signup(formData: FormData) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { full_name: fullName } },
+    options: { data: { full_name: fullName, account_type: accountType } },
   });
 
   if (error) {
@@ -45,7 +50,7 @@ export async function signup(formData: FormData) {
   // If "Confirm email" is still ON in Supabase, there is no session yet.
   if (!data.session) redirect("/login?notice=confirm_email");
 
-  redirect("/owner");
+  redirect(accountType === "owner" ? "/owner" : "/saved");
 }
 
 export async function login(formData: FormData) {
@@ -61,7 +66,9 @@ export async function login(formData: FormData) {
     back("/login", error.code?.startsWith("over_") ? "too_many_attempts" : "invalid_credentials");
   }
 
-  redirect("/owner");
+  // Each kind of account lands on its own page.
+  const { role } = await getUserAndRole(supabase);
+  redirect(homeFor(role));
 }
 
 export async function logout() {
