@@ -254,6 +254,13 @@ export default async function OwnerHome({
                     </>
                   )}
 
+                  <Link
+                    href={`/owner/rooms/${room.id}/edit`}
+                    className={buttonVariants({ variant: "secondary", size: "sm" }) + " w-fit"}
+                  >
+                    Edit room
+                  </Link>
+
                   <DeleteRoomButton action={deleteRoom} listingId={room.id} />
                 </CardContent>
               </Card>

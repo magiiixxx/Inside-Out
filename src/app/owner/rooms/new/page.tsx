@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { RoomDetailsFields } from "@/components/room-details-fields";
 import { getUserAndRole } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
 import { isAtRoomLimit } from "@/lib/plans";
@@ -54,33 +54,7 @@ export default async function NewRoomPage({
               </p>
             )}
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="description">Describe the room</Label>
-              <Textarea
-                id="description"
-                name="description"
-                required
-                minLength={10}
-                maxLength={500}
-                placeholder="e.g. Bed space in a room for 4, includes water, 5 minutes walk from the gate"
-              />
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="price_per_month">Price per month (₱)</Label>
-                <Input id="price_per_month" name="price_per_month" type="number" inputMode="numeric" min="1" step="1" required />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="distance_km">Distance from PHINMA UI (km)</Label>
-                <Input id="distance_km" name="distance_km" type="number" inputMode="decimal" min="0" step="0.1" placeholder="e.g. 0.8" required />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="contact_phone">Contact phone (shown to students)</Label>
-              <Input id="contact_phone" name="contact_phone" type="tel" autoComplete="tel" placeholder="e.g. 0917 123 4567" required />
-            </div>
+            <RoomDetailsFields />
 
             <fieldset className="flex flex-col gap-4 rounded-[var(--radius)] border border-border p-4">
               <legend className="px-1 text-sm font-medium">

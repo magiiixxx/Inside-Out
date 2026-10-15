@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ClockIcon, PhoneIcon, PinIcon } from "@/components/icons";
+import { ClockIcon, HouseIcon, PhoneIcon, PinIcon } from "@/components/icons";
 import { updatedLabel } from "@/lib/listings";
 
 // One room as a student sees it. Used by the Browse page and the Saved
@@ -18,6 +18,7 @@ export type RoomCardData = {
   price_per_month: number;
   distance_km: number;
   contact_phone: string;
+  address: string | null; // rooms posted before addresses existed have none
   availability: "available" | "occupied";
   last_updated_at: string;
 };
@@ -45,6 +46,12 @@ export function RoomCard({
       <p className="break-words text-base leading-snug">{room.description}</p>
 
       <ul className="flex flex-col gap-1.5 text-sm text-muted-foreground">
+        {room.address && (
+          <li className="flex items-start gap-2">
+            <HouseIcon className="mt-0.5 h-4 w-4 shrink-0" />
+            <span className="break-words">{room.address}</span>
+          </li>
+        )}
         <li className="flex items-center gap-2">
           <PinIcon className="h-4 w-4 shrink-0" />
           {Number(room.distance_km)} km from PHINMA UI

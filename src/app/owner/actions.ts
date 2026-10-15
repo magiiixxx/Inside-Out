@@ -32,8 +32,11 @@ export async function postRoom(formData: FormData) {
   const openBeds = Number(text(formData, "open_beds"));
   const canCall = formData.get("can_call") === "on";
   const phonePublic = formData.get("phone_public") === "on";
+  const address = text(formData, "address");
+  const addressPublic = formData.get("address_public") === "on";
 
   if (description.length < 10 || description.length > 500) backToForm("bad_description");
+  if (address.length < 5 || address.length > 200) backToForm("bad_address");
   if (!Number.isFinite(price) || price <= 0 || price > 100000) backToForm("bad_price");
   if (!Number.isFinite(distanceKm) || distanceKm < 0 || distanceKm > 50) backToForm("bad_distance");
   if (!/^[0-9+()\-\s]{7,20}$/.test(contactPhone)) backToForm("bad_phone");
@@ -42,6 +45,7 @@ export async function postRoom(formData: FormData) {
   if (!Number.isInteger(openBeds) || openBeds < 0 || openBeds > 200) backToForm("bad_beds");
   if (!canCall) backToForm("need_call_ok");
   if (!phonePublic) backToForm("need_phone_ok");
+  if (!addressPublic) backToForm("need_address_ok");
 
   const supabase = await createClient();
   const {
@@ -59,6 +63,8 @@ export async function postRoom(formData: FormData) {
     p_open_beds: openBeds,
     p_can_call: canCall,
     p_phone_public: phonePublic,
+    p_address: address,
+    p_address_public: addressPublic,
   });
 
   if (error) {
@@ -69,6 +75,52 @@ export async function postRoom(formData: FormData) {
   }
 
   redirect("/owner?notice=posted");
+}
+
+// Edit one of the owner's rooms. The database function update_room() decides
+// what happens: a price-only change stays live; any other change sends an
+// approved room back to our team (see supabase/sql/011). It answers with
+// "approved" or "pending", and we tell the owner which one it was.
+export async function editRoom(formData: FormData) {
+  const listingId = text(formData, "listing_id");
+  if (!UUID.test(listingId)) redirect("/owner?error=invalid_request");
+
+  const backToEdit = (code: string): never =>
+    redirect(`/owner/rooms/${listingId}/edit?error=${code}`);
+
+  const description = text(formData, "description");
+  const contactPhone = text(formData, "contact_phone");
+  const address = text(formData, "address");
+  const price = Number(text(formData, "price_per_month"));
+  const distanceKm = Number(text(formData, "distance_km"));
+  const addressPublic = formData.get("address_public") === "on";
+
+  if (description.length < 10 || description.length > 500) backToEdit("bad_description");
+  if (!Number.isFinite(price) || price <= 0 || price > 100000) backToEdit("bad_price");
+  if (!Number.isFinite(distanceKm) || distanceKm < 0 || distanceKm > 50) backToEdit("bad_distance");
+  if (!/^[0-9+()\-\s]{7,20}$/.test(contactPhone)) backToEdit("bad_phone");
+  if (address.length < 5 || address.length > 200) backToEdit("bad_address");
+  if (!addressPublic) backToEdit("need_address_ok");
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data, error } = await supabase.rpc("update_room", {
+    p_listing_id: listingId,
+    p_description: description,
+    p_price_per_month: price,
+    p_distance_km: distanceKm,
+    p_contact_phone: contactPhone,
+    p_address: address,
+    p_address_public: addressPublic,
+  });
+
+  if (error) backToEdit("edit_failed");
+
+  redirect(data === "pending" ? "/owner?notice=edited_review" : "/owner?notice=edited_live");
 }
 
 // Mark one of the owner's rooms available or occupied. Also restarts the

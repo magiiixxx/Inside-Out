@@ -23,6 +23,7 @@ type PendingCheck = {
     price_per_month: number;
     distance_km: number;
     contact_phone: string;
+    address: string | null;
     created_at: string;
   };
 };
@@ -68,7 +69,7 @@ export default async function ReviewDesk({
   const { data: pending, error: loadError } = await supabase
     .from("listing_checks")
     .select(
-      "permit_number, owner_or_caretaker, open_beds, listings!inner(id, owner_id, description, price_per_month, distance_km, contact_phone, created_at)",
+      "permit_number, owner_or_caretaker, open_beds, listings!inner(id, owner_id, description, price_per_month, distance_km, contact_phone, address, created_at)",
     )
     .eq("listings.approval_status", "pending")
     .order("created_at", { ascending: true });
@@ -143,6 +144,8 @@ export default async function ReviewDesk({
                 <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 rounded-[var(--radius)] border border-border p-3 text-sm">
                   <dt className="text-muted-foreground">Posted by</dt>
                   <dd>{ownerName.get(room.owner_id) || "(no name)"}</dd>
+                  <dt className="text-muted-foreground">Address</dt>
+                  <dd className="break-words">{room.address ?? "(none)"}</dd>
                   <dt className="text-muted-foreground">Phone to call</dt>
                   <dd>
                     <a href={`tel:${room.contact_phone.replace(/\s+/g, "")}`} className="underline underline-offset-4">

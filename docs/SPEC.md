@@ -43,6 +43,8 @@ roles support the student: the **owner**, who posts rooms, and the
     place, so that I can compare them and call the owners later.
 11. As an owner, I want to see the owner plans and my own plan, so that I
     know how many rooms I can post and how to upgrade.
+12. As an owner, I want to add an address and edit my room's details and
+    price, so that students find the place and see correct information.
 
 ## Screens
 1. **Browse rooms** (public): cards for approved rooms, each showing
@@ -56,8 +58,10 @@ roles support the student: the **owner**, who posts rooms, and the
    hide or is already hidden. Buttons: mark available/occupied, renew,
    and add a room.
 4. **Add a room**: description, price per month, distance from PHINMA
-   UI, contact phone, permit number, the three validation questions, and
-   a tick box "I understand my phone number will be public".
+   UI, address, contact phone, permit number, the three validation
+   questions, and tick boxes "I understand my phone number will be public"
+   and "I understand the address will be public". **Edit a room** uses the
+   same fields for a room the owner already posted.
 5. **Admin page** (hidden address): pending rooms with the owner's
    permit number and answers, and approve / reject buttons. A person who
    is not an admin sees the Not found page.
@@ -94,10 +98,14 @@ Row Level Security (RLS) is ON for every table.
   hides stale rooms, so no scheduled job is needed.
 - An owner may read all of their own rows, and create rows only for
   themselves with status `pending`.
-- An owner may change only the availability of their own row, and renew
-  it (which sets last updated to now). An owner can never change the
-  approval status. To change price or description they delete the room
-  and post it again. An owner may delete their own rooms.
+- An owner may mark their own room available or occupied, renew it
+  (which sets last updated to now), edit it, and delete it. An owner can
+  never change the approval status directly. **Editing rule:** changing
+  only the price goes live straight away; changing the description,
+  distance, address or phone number sends an approved room back to
+  `pending` for the team to check again, and a rejected room goes back to
+  `pending` so the owner can fix it. The address is shown to students, and
+  the owner agrees to that when posting.
 - An admin may read all rows, change the approval status, and delete any
   room (to remove spam or leftover test rooms).
 
@@ -153,7 +161,6 @@ approves, and a student sees it.
 - Photos
 - Reviews or ratings
 - Email notifications (the banner on the owner home is the notice)
-- Editing a room's price or description after posting
 - Stronger owner verification (ID, permit photos, house visits)
 - Distance from schools other than PHINMA UI
 - Payments, deposits or any payment procedure

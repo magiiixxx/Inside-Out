@@ -29,6 +29,9 @@ const ERRORS: Record<string, string> = {
   bad_beds: "Please enter how many beds are open right now.",
   need_call_ok: "Please agree that our team may call you to confirm the room.",
   need_phone_ok: "Please confirm that you understand your phone number will be public.",
+  bad_address: "Please enter the room's address (5 to 200 characters).",
+  need_address_ok: "Please confirm that you understand the address will be public.",
+  edit_failed: "We could not save your changes. Please check the form and try again.",
   post_failed: "We could not save your room. Please check the form and try again.",
   plan_limit:
     "The Free plan allows one room. See the plans, then ask our team about Premium Owner to post more.",
@@ -55,6 +58,9 @@ const NOTICES: Record<string, string> = {
   approved: "Room approved. Students can now see it.",
   rejected: "Room rejected.",
   deleted: "Room deleted.",
+  edited_live: "Changes saved. The new price is live.",
+  edited_review:
+    "Changes saved. Because you changed details students rely on, our team will check the room again before students see it.",
   saved: "Room saved.",
   unsaved: "Room removed from your saved rooms.",
 };

@@ -49,7 +49,7 @@ async function getListings(
     let query = supabase
       .from("listings")
       .select(
-        "id, description, price_per_month, distance_km, contact_phone, availability, last_updated_at",
+        "id, description, price_per_month, distance_km, contact_phone, address, availability, last_updated_at",
       )
       .eq("approval_status", "approved")
       .gt("last_updated_at", hideCutoff());
