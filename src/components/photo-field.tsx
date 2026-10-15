@@ -38,7 +38,7 @@ export function PhotoField({ currentPhotoUrl }: { currentPhotoUrl?: string | nul
         onChange={(event) => check(event.currentTarget)}
         aria-invalid={problem ? true : undefined}
         aria-describedby="photo-hint"
-        className="field mt-0 file:mr-3 file:rounded-lg file:border-0 file:bg-navy-soft file:px-3 file:py-1.5 file:font-semibold file:text-navy"
+        className="field mt-0 file:mr-3 file:rounded-lg file:border-0 file:bg-navy-soft file:px-3 file:py-1.5 file:font-semibold file:text-link"
       />
       {problem && (
         <p role="alert" className="error-text">

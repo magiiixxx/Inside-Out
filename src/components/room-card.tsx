@@ -27,12 +27,9 @@ export type RoomCardData = {
   last_updated_at: string;
 };
 
-// Three soft tints, picked from the room's id so a room keeps its colour.
-const TINTS = [
-  { bg: "#dde7f2", wall: "#a9bdd3" },
-  { bg: "#e6edf4", wall: "#b4c4d6" },
-  { bg: "#dce8e6", wall: "#a8c2be" },
-];
+// Three soft tints (room-tint-0, 1 and 2 in globals.css), picked from the
+// room's id so a room keeps its colour, in light and dark mode.
+const TINT_COUNT = 3;
 
 export function RoomCard({
   room,
@@ -44,13 +41,12 @@ export function RoomCard({
   footer?: ReactNode; // anything wider, under the buttons (rate, report)
 }) {
   const isAvailable = room.availability === "available";
-  const tint = TINTS[room.id.charCodeAt(0) % TINTS.length];
+  const tint = room.id.charCodeAt(0) % TINT_COUNT;
   const src = photoUrl(room.photo_path);
   return (
     <article className="card lift flex h-full flex-col overflow-hidden">
       <div
-        className="relative flex h-44 items-end justify-center overflow-hidden"
-        style={{ background: tint.bg }}
+        className={`rt-bg room-tint-${tint} relative flex h-44 items-end justify-center overflow-hidden`}
       >
         <span className={`absolute left-3.5 top-3.5 ${isAvailable ? "badge-available" : "badge-full"}`}>
           {isAvailable ? "Available" : "Occupied"}
@@ -60,11 +56,11 @@ export function RoomCard({
           <img src={src} alt="Photo of the room" loading="lazy" className="h-full w-full object-cover" />
         ) : (
           <svg width="150" height="110" viewBox="0 0 220 150" aria-hidden="true">
-            <rect x="30" y="30" width="160" height="120" fill={tint.wall} />
-            <rect x="50" y="48" width="26" height="24" fill={tint.bg} />
-            <rect x="97" y="48" width="26" height="24" fill={tint.bg} />
-            <rect x="144" y="48" width="26" height="24" fill={tint.bg} />
-            <rect x="95" y="100" width="30" height="50" fill="#0f2d52" />
+            <rect x="30" y="30" width="160" height="120" className="rt-wall" />
+            <rect x="50" y="48" width="26" height="24" className="rt-window" />
+            <rect x="97" y="48" width="26" height="24" className="rt-window" />
+            <rect x="144" y="48" width="26" height="24" className="rt-window" />
+            <rect x="95" y="100" width="30" height="50" className="rt-door" />
           </svg>
         )}
       </div>

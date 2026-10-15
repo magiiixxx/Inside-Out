@@ -8,7 +8,8 @@ import { PendingRoomCard } from "./_components/pending-room-card";
 import { PlanRequestCard } from "./_components/plan-request-card";
 import { ReportCard } from "./_components/report-card";
 import { ReviewSection } from "./_components/review-section";
-import type { OpenReport, OtherRoom, PendingCheck, PlanRequest } from "./_components/types";
+import { SupportMessageCard } from "./_components/support-message-card";
+import type { OpenReport, OtherRoom, PendingCheck, PlanRequest, SupportMessage } from "./_components/types";
 
 // The team's review page. Its address is not linked anywhere on the site.
 //
@@ -83,6 +84,14 @@ export default async function ReviewDesk({
     .order("created_at", { ascending: true });
   const planRequests = (requestData ?? []) as PlanRequest[];
 
+  // Messages from users (Report a Problem and Contact support), oldest first.
+  const { data: messageData } = await supabase
+    .from("support_messages")
+    .select("id, user_id, kind, message, page, created_at")
+    .eq("status", "open")
+    .order("created_at", { ascending: true });
+  const supportMessages = (messageData ?? []) as SupportMessage[];
+
   // Names for everyone mentioned above (admins may read all profiles).
   // Sample rooms have no owner.
   const personIds = [
@@ -92,6 +101,7 @@ export default async function ReviewDesk({
         ...otherRooms.map((r) => r.owner_id),
         ...planRequests.map((r) => r.owner_id),
         ...openReports.map((r) => r.reporter_id),
+        ...supportMessages.map((m) => m.user_id),
       ].filter((id): id is string => id !== null),
     ),
   ];
@@ -106,6 +116,7 @@ export default async function ReviewDesk({
         name={me.full_name || user.email || ""}
         reports={openReports.length}
         planRequests={planRequests.length}
+        messages={supportMessages.length}
       />
 
       <main id="main" className="flex min-w-0 flex-col gap-6 px-4 py-8 sm:px-10 sm:py-10">
@@ -150,6 +161,18 @@ export default async function ReviewDesk({
         >
           {openReports.map((report) => (
             <ReportCard key={report.id} report={report} ownerName={ownerName} />
+          ))}
+        </ReviewSection>
+
+        <ReviewSection
+          id="messages"
+          title="Messages from users"
+          intro="Bug reports, ideas and questions sent from Report a Problem. Reply to the person yourself, then mark the message as handled."
+          emptyText="No open messages."
+          isEmpty={supportMessages.length === 0}
+        >
+          {supportMessages.map((message) => (
+            <SupportMessageCard key={message.id} message={message} people={ownerName} />
           ))}
         </ReviewSection>
 

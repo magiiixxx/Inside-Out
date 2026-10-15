@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { logout } from "@/app/auth/actions";
-import { getCurrentUser, homeFor } from "@/lib/auth";
-import { initials } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { AccountMenu } from "@/components/account-menu";
+import { getCurrentUser } from "@/lib/auth";
+import { PLAN_NAMES, type Plan } from "@/lib/plans";
+import { parsePrefs, PREFS_COOKIE } from "@/lib/preferences";
 import { buttonVariants } from "@/components/ui/button";
 
 // The bar at the top of every page: the logo, which always leads home, a few
@@ -13,9 +15,11 @@ export function Logo({ onDark = false }: { onDark?: boolean }) {
   return (
     <span className={`flex items-center gap-2.5 text-[1.375rem] font-extrabold tracking-tight ${onDark ? "text-white" : ""}`}>
       <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
-        <rect width="32" height="32" rx="9" fill={onDark ? "#f2b134" : "#0f2d52"} />
-        <path d="M7 16 16 8l9 8v9H7z" fill={onDark ? "#0f2d52" : "#f2b134"} />
-        <rect x="13" y="18" width="6" height="7" fill={onDark ? "#f2b134" : "#0f2d52"} />
+        {/* On a navy panel the colours are fixed. On the page they follow the
+            theme (navy square in light mode, amber square in dark mode). */}
+        <rect width="32" height="32" rx="9" className={onDark ? "fill-[#f2b134]" : "fill-logo-bg"} />
+        <path d="M7 16 16 8l9 8v9H7z" className={onDark ? "fill-[#0f2d52]" : "fill-logo-fg"} />
+        <rect x="13" y="18" width="6" height="7" className={onDark ? "fill-[#f2b134]" : "fill-logo-bg"} />
       </svg>
       BahayFind
     </span>
@@ -25,11 +29,18 @@ export function Logo({ onDark = false }: { onDark?: boolean }) {
 const NAV_LINK = "border-b-[3px] border-transparent py-[1.125rem] hover:border-amber";
 
 export async function SiteHeader() {
-  const { user, role, fullName } = await getCurrentUser();
+  const { user, role, fullName, plan } = await getCurrentUser();
   const displayName = fullName || user?.email || "";
+  const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
+
+  // The picture comes from the person's Google or Facebook sign-in, when they
+  // used one. Email sign-ups have none, and show their initials instead.
+  const metadata = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const picture = metadata.avatar_url ?? metadata.picture;
+  const avatarUrl = typeof picture === "string" ? picture : null;
 
   return (
-    <header className="sticky top-0 z-10 border-b border-line bg-white">
+    <header className="sticky top-0 z-10 border-b border-line bg-card">
       <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-x-8 px-4 sm:px-8">
         <Link href="/" aria-label="BahayFind home" className="py-3">
           <Logo />
@@ -55,19 +66,16 @@ export async function SiteHeader() {
         </nav>
 
         {user ? (
-          <div className="flex items-center gap-3">
-            <Link href={homeFor(role)} className="flex items-center gap-2.5" aria-label="Your home page">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy text-[0.8125rem] font-extrabold text-white">
-                {initials(displayName)}
-              </span>
-              <span className="hidden max-w-[10rem] truncate text-sm font-bold sm:block">{displayName}</span>
-            </Link>
-            <form action={logout}>
-              <button type="submit" className={buttonVariants({ variant: "outline", size: "sm" })}>
-                Log out
-              </button>
-            </form>
-          </div>
+          <AccountMenu
+            name={displayName}
+            email={user.email ?? ""}
+            avatarUrl={avatarUrl}
+            roleLabel={role === "owner" ? "Owner" : role === "admin" ? "Admin" : "Student"}
+            planLabel={role === "owner" ? `${PLAN_NAMES[(plan as Plan) ?? "free"] ?? "Free"} plan` : null}
+            homeHref={role === "student" ? "/saved" : "/owner"}
+            homeLabel={role === "student" ? "Go to my saved rooms" : "Go to my rooms"}
+            prefs={prefs}
+          />
         ) : (
           <div className="flex gap-2.5 py-2">
             <Link href="/login" className={buttonVariants({ variant: "outline", size: "sm" })}>

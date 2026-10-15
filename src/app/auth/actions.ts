@@ -1,8 +1,8 @@
 "use server";
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserAndRole, homeFor } from "@/lib/auth";
+import { siteUrl } from "@/lib/site-url";
 import { createClient } from "@/lib/supabase/server";
 import { formText as field, isWeakPassword } from "@/lib/validation";
 
@@ -17,18 +17,6 @@ import { formText as field, isWeakPassword } from "@/lib/validation";
 
 function back(path: string, code: string): never {
   redirect(`${path}?error=${code}`);
-}
-
-// Our own public address, for links that send the person back to us (social
-// login, password emails). Supabase only accepts addresses on its allowed list
-// (Authentication, URL Configuration), so a faked address is refused. If the
-// team sets SITE_URL (for example https://inside-out-two.vercel.app) we use
-// it as is; without it we use the address the request came to.
-async function siteUrl(): Promise<string> {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? "https";
-  return (process.env.SITE_URL ?? `${protocol}://${host}`).replace(/\/$/, "");
 }
 
 export async function signup(formData: FormData) {
@@ -95,7 +83,7 @@ export async function login(formData: FormData) {
 export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/");
+  redirect("/login?notice=logged_out");
 }
 
 // Start "Continue with Google" or "Continue with Facebook". Supabase Auth

@@ -46,6 +46,17 @@ const ERRORS: Record<string, string> = {
 
   oauth_failed: "We could not log you in with that account. Please try again, or use your email and password.",
 
+  // Settings, support and display
+  bad_name: "Please enter your name (2 to 80 characters).",
+  name_failed: "We could not save your name. Please try again.",
+  bad_message: "Please write at least 10 characters so we can understand the problem.",
+  bad_kind: "Please choose what kind of message this is.",
+  support_failed: "We could not send your message. Please try again.",
+  support_too_many: "You have sent a lot of messages today. Please try again tomorrow.",
+  support_action_failed: "We could not update that message. It may already be closed.",
+  others_failed: "We could not log out your other devices. Please try again.",
+  reset_email_failed: "We could not send the email. Please try again in a minute.",
+
   // Plan requests
   bad_plan: "Please choose Premium Owner or Property Manager.",
   plan_already: "You already have that plan.",
@@ -85,6 +96,11 @@ const ERRORS: Record<string, string> = {
 const NOTICES: Record<string, string> = {
   confirm_email: "Account created. Check your email to confirm it, then log in.",
   reset_sent: "If an account exists for that email, we have sent a link to choose a new password. Open it in this same browser.",
+  logged_out: "You have been logged out.",
+  name_saved: "Your name was saved.",
+  support_sent: "Thank you. Your message was sent to our team.",
+  support_closed: "Message marked as handled.",
+  others_signed_out: "Your other devices were logged out.",
   password_changed: "Your password was changed. Other devices were logged out.",
   posted: "Room submitted. Our team will check it before students can see it.",
   available: "Room marked available.",

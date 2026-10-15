@@ -59,7 +59,7 @@ export default async function SignupPage({
                   defaultChecked={n === 0}
                   className="peer absolute opacity-0"
                 />
-                <span className="block cursor-pointer rounded-xl border border-field-line bg-white px-4 py-3.5 font-bold peer-checked:border-ink peer-checked:bg-navy-soft peer-checked:shadow-[0_0_0_1px_var(--color-ink)] peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink">
+                <span className="block cursor-pointer rounded-xl border border-field-line bg-card px-4 py-3.5 font-bold peer-checked:border-ink peer-checked:bg-navy-soft peer-checked:shadow-[0_0_0_1px_var(--color-ink)] peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink">
                   {type.title}
                   <small className="mt-0.5 block text-xs font-medium text-muted-foreground">{type.hint}</small>
                 </span>

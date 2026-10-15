@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { redirect } from "next/navigation";
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -36,6 +37,16 @@ export async function getUserAndRole(supabase: SupabaseClient) {
 // ask reuse the first answer instead of calling Supabase again. Pages and the
 // header use this. Server actions keep using getUserAndRole() above.
 export const getCurrentUser = cache(async () => getUserAndRole(await createClient()));
+
+// For pages that need a logged-in person (settings, report a problem). A
+// visitor who is not logged in is sent to the Log in page. Every such page
+// calls this itself: a shared layout is not enough, because Next.js does not
+// re-run a layout when someone moves between two pages inside it.
+export async function requireUser() {
+  const current = await getCurrentUser();
+  if (!current.user) redirect("/login");
+  return { ...current, user: current.user };
+}
 
 // Where each kind of account lands after logging in.
 export function homeFor(role: Role | null): string {

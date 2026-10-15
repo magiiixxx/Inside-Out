@@ -74,6 +74,21 @@ inventory).
   printing shops and food places near campus pay to advertise. Needs
   steady traffic first.
 
+## Account menu ideas, not built yet
+
+- "See all profiles": the app has one profile per account, so there is nothing
+  to switch between.
+- Real notification preferences (email or text when a room is approved, about
+  to hide, or reported). Needs an email or SMS service, so the team must agree
+  first. Until then the Notifications settings page says so.
+- Saving display choices to the account so they follow a person to another
+  phone. Today they are kept on each device.
+- Uploading your own profile picture. Today the picture comes from Google or
+  Facebook, otherwise initials are shown.
+- Deleting your own account with one button. Today a person asks the team.
+- A reply from the team inside the app. Today the team replies outside the app
+  and marks the message handled.
+
 ## Seen in the frontend design, not in the MVP
 
 The design boards show some things the app does not do yet. They were left

@@ -126,3 +126,17 @@ export async function resetRatings(formData: FormData) {
 
   redirect("/review-desk?notice=ratings_reset");
 }
+
+// Mark a user's message as handled. The database function
+// close_support_message() refuses anyone who is not an admin.
+export async function closeSupportMessage(formData: FormData) {
+  const messageId = String(formData.get("message_id") ?? "");
+  if (!UUID.test(messageId)) redirect("/review-desk?error=invalid_request");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("close_support_message", { p_id: messageId });
+
+  if (error) redirect("/review-desk?error=support_action_failed");
+
+  redirect("/review-desk?notice=support_closed");
+}

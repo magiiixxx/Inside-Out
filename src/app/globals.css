@@ -40,9 +40,24 @@
   --color-amber-soft: #fff3d6;
   --color-amber-text: #8a5a00;   /* eyebrow labels on white (5.6:1) */
 
+  /* Colours that CHANGE in dark mode (see the dark block below):
+     action = filled buttons, link = coloured text on the page,
+     text-soft = labels and chips. on-amber is always navy, for text on amber. */
+  --color-action: #0f2d52;
+  --color-action-deep: #173d6b;
+  --color-link: #0f2d52;
+  --color-text-soft: #33475f;
+  --color-on-amber: #0f2d52;
+  --color-logo-bg: #0f2d52;        /* the logo square, and the house on it */
+  --color-logo-fg: #f2b134;
+  --color-placeholder: #677388;
+  --color-field-hover: #a9b8ca;
+  --color-danger-hover: #fbd9d5;
+
   /* Info */
   --color-sky: #1c64c8;
   --color-sky-soft: #e7f0ff;
+  --color-sky-text: #174f9f;
 
   /* Feedback */
   --color-ok: #14653a;           /* success text (6.6:1 on ok-soft) */
@@ -106,6 +121,65 @@
   --radius-base: var(--radius);
 }
 
+/* The dark theme. The page gets data-theme="dark" on <html> when the person
+   chose Dark, or chose System and their device is in dark mode (see
+   src/lib/preferences.ts and the script in src/app/layout.tsx). Only colours
+   that must change are listed. The navy panels (hero, footer, login side,
+   team sidebar) are already dark, so they stay as they are. Text and
+   background pairs keep at least 4.5:1 contrast. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-ink: #e6edf7;
+  --color-line: #263550;
+  --color-surface: #0e1829;
+  --color-field-line: #3b4d6b;
+  --color-text-soft: #c3d0e3;
+  --color-action: #2f6bb8;
+  --color-action-deep: #255ca3;
+  --color-link: #8fb4ea;
+  --color-logo-bg: #f2b134;
+  --color-logo-fg: #0f2d52;
+  --color-navy-soft: #1a2c4a;
+  --color-amber-soft: #3a2f10;
+  --color-amber-text: #f2c15c;
+  --color-sky-soft: #12284a;
+  --color-sky-text: #9cc2f5;
+  --color-ok: #7fd6a1;
+  --color-ok-soft: #10301f;
+  --color-alert: #ff9c92;
+  --color-alert-soft: #3a1714;
+  --color-placeholder: #8a9ab2;
+  --color-field-hover: #51658a;
+  --color-danger-hover: #4a1d19;
+
+  --background: #0a1322;
+  --foreground: #e6edf7;
+  --card: #131f35;
+  --card-foreground: #e6edf7;
+  --secondary: #0e1829;
+  --secondary-foreground: #e6edf7;
+  --muted: #1a2c4a;
+  --muted-foreground: #9fb0c8;
+  --accent-soft: #1a2c4a;
+  --border: #263550;
+  --input: #3b4d6b;
+  --ring: #8fb4ea;
+}
+
+/* The three soft colours behind the house drawing on a room card (rooms with
+   no photo). They are classes, not inline colours, so dark mode can change them. */
+.room-tint-0 { --tint-bg: #dde7f2; --tint-wall: #a9bdd3; --tint-door: #0f2d52; }
+.room-tint-1 { --tint-bg: #e6edf4; --tint-wall: #b4c4d6; --tint-door: #0f2d52; }
+.room-tint-2 { --tint-bg: #dce8e6; --tint-wall: #a8c2be; --tint-door: #0f2d52; }
+:root[data-theme="dark"] .room-tint-0 { --tint-bg: #16243d; --tint-wall: #2c4468; --tint-door: #0a1322; }
+:root[data-theme="dark"] .room-tint-1 { --tint-bg: #182741; --tint-wall: #314a70; --tint-door: #0a1322; }
+:root[data-theme="dark"] .room-tint-2 { --tint-bg: #142a2c; --tint-wall: #2a4a4c; --tint-door: #0a1322; }
+.rt-bg { background: var(--tint-bg); }
+.rt-wall { fill: var(--tint-wall); }
+.rt-window { fill: var(--tint-bg); }
+.rt-door { fill: var(--tint-door); }
+
 /* ---------------------------------------------------------------------
    2. Base: readable, comfortable defaults for every page
    --------------------------------------------------------------------- */
@@ -118,6 +192,26 @@
   html {
     font-size: 100%;               /* respects the user's browser font size */
     scroll-behavior: smooth;
+  }
+
+  /* Display & Accessibility choices (set on <html>, see src/lib/preferences.ts).
+     Everything is sized in rem, so changing the root size scales the whole site. */
+  html[data-size="small"] { font-size: 93.75%; }
+  html[data-size="large"] { font-size: 112.5%; }
+
+  html[data-motion="reduce"] { scroll-behavior: auto; }
+  html[data-motion="reduce"] *,
+  html[data-motion="reduce"] *::before,
+  html[data-motion="reduce"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Underline every link that is not a button, so links never depend on colour alone. */
+  html[data-links="underline"] a:not([class*="btn-"]) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   body {
@@ -144,7 +238,7 @@
 
   /* Plain links always look like links, with a clear hover */
   a:not([class]) {
-    color: var(--color-navy);
+    color: var(--color-link);
     font-weight: 600;
     text-decoration: underline;
     text-decoration-color: var(--color-amber);
@@ -153,12 +247,12 @@
   }
 
   a:not([class]):hover {
-    color: var(--color-navy-deep);
+    text-decoration-thickness: 3px;
   }
 
   ::selection {
     background: var(--color-amber);
-    color: var(--color-ink);
+    color: var(--color-on-amber);
   }
 
   img {
@@ -172,7 +266,7 @@
 
   /* A strong, visible focus ring for keyboard users on everything */
   :focus-visible {
-    outline: 3px solid var(--color-navy);
+    outline: 3px solid var(--color-link);
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -194,7 +288,7 @@
   /* Tick boxes and radio buttons in the brand colour */
   input[type="checkbox"],
   input[type="radio"] {
-    accent-color: var(--color-navy);
+    accent-color: var(--color-action);
   }
 }
 
@@ -207,7 +301,7 @@
   z-index: 100;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-control);
-  background: var(--color-ink);
+  background: var(--color-navy);
   color: #ffffff;
   font-weight: 700;
 }
@@ -270,18 +364,18 @@
 
   /* Navy: the main button on forms, and "Sign up" in the header */
   .btn-primary {
-    background: var(--color-navy);
+    background: var(--color-action);
     color: #ffffff;
   }
 
   .btn-primary:hover {
-    background: var(--color-navy-deep);
+    background: var(--color-action-deep);
   }
 
   /* Amber: the one big call to action on a screen (hero, search, approve) */
   .btn-accent {
     background: var(--color-amber);
-    color: var(--color-ink);
+    color: var(--color-on-amber);
   }
 
   .btn-accent:hover {
@@ -290,7 +384,7 @@
 
   .btn-secondary {
     border-color: var(--color-field-line);
-    background: #ffffff;
+    background: var(--card);
     color: var(--color-ink);
   }
 
@@ -300,7 +394,7 @@
 
   .btn-ghost {
     background: transparent;
-    color: var(--color-navy);
+    color: var(--color-link);
   }
 
   .btn-ghost:hover {
@@ -313,7 +407,7 @@
   }
 
   .btn-danger:hover {
-    background: #fbd9d5;
+    background: var(--color-danger-hover);
   }
 
   .btn-primary:disabled,
@@ -334,7 +428,7 @@
     min-height: 50px;
     border-radius: var(--radius-control);
     border: 1px solid var(--color-field-line);
-    background: #ffffff;
+    background: var(--card);
     padding: 0.625rem 0.9rem;
     font-weight: 500;
     font-size: 1rem;               /* 16px stops phones from zooming in */
@@ -343,15 +437,15 @@
   }
 
   .field::placeholder {
-    color: #677388;                /* readable placeholder (4.5:1) */
+    color: var(--color-placeholder); /* readable placeholder (4.5:1) */
   }
 
   .field:hover {
-    border-color: #a9b8ca;
+    border-color: var(--color-field-hover);
   }
 
   .field:focus {
-    border-color: var(--color-navy);
+    border-color: var(--color-action);
     outline: none;
     box-shadow: 0 0 0 3px var(--color-amber);
   }
@@ -365,7 +459,7 @@
   .label {
     font-size: 0.8125rem;
     font-weight: 700;
-    color: #33475f;
+    color: var(--color-text-soft);
   }
 
   .hint {
@@ -387,7 +481,7 @@
   .card {
     border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
-    background: #ffffff;
+    background: var(--card);
     box-shadow: var(--shadow-card);
   }
 
@@ -422,14 +516,14 @@
     padding: 0.3rem 0.65rem;
     border-radius: 0.5rem;
     background: var(--color-navy-soft);
-    color: #33475f;
+    color: var(--color-text-soft);
     font-size: 0.8125rem;
     font-weight: 600;
     line-height: 1.3;
   }
 
-  .chip-navy  { background: var(--color-navy-soft);  color: var(--color-navy); }
-  .chip-amber { background: var(--color-amber-soft); color: #7a4b00; }
+  .chip-navy  { background: var(--color-navy-soft);  color: var(--color-link); }
+  .chip-amber { background: var(--color-amber-soft); color: var(--color-amber-text); }
   .chip-ok    { background: var(--color-ok-soft);    color: var(--color-ok); }
   .chip-alert { background: var(--color-alert-soft); color: var(--color-alert); }
 
@@ -455,7 +549,7 @@
   }
 
   .badge-available { background: var(--color-ok-soft); color: var(--color-ok); }
-  .badge-full      { background: #eef3f8;              color: #33475f; }
+  .badge-full      { background: var(--color-navy-soft); color: var(--color-text-soft); }
 
   /* The rent: big, bold, with "/ month" in smaller grey text */
   .price {
@@ -489,6 +583,6 @@
 
   .alert-error   { background: var(--color-alert-soft); color: var(--color-alert); }
   .alert-success { background: var(--color-ok-soft);    color: var(--color-ok); }
-  .alert-info    { background: var(--color-sky-soft);   color: #174f9f; }
-  .alert-warning { background: var(--color-amber-soft); color: #7a4b00; }
+  .alert-info    { background: var(--color-sky-soft);   color: var(--color-sky-text); }
+  .alert-warning { background: var(--color-amber-soft); color: var(--color-amber-text); }
 }

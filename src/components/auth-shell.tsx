@@ -44,7 +44,7 @@ export function AuthShell({
           <Link href="/" aria-label="BahayFind home" className="self-start md:hidden">
             <Logo />
           </Link>
-          <div className="rounded-[1.25rem] border border-line bg-white p-6 shadow-[0_16px_40px_rgb(15_45_82/0.08)] sm:p-10">
+          <div className="rounded-[1.25rem] border border-line bg-card p-6 shadow-[0_16px_40px_rgb(15_45_82/0.08)] sm:p-10">
             {children}
           </div>
           <Link href="/" className="self-center text-sm font-semibold text-muted-foreground hover:text-ink">

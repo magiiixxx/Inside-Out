@@ -11,16 +11,18 @@ export function AdminSidebar({
   name,
   reports,
   planRequests,
+  messages,
 }: {
   name: string;
   reports: number;
   planRequests: number;
+  messages: number;
 }) {
   return (
     <aside className="on-dark flex flex-wrap items-center justify-between gap-x-6 gap-y-4 bg-navy px-5 py-5 text-white lg:flex-col lg:items-stretch lg:justify-start lg:gap-7 lg:px-5 lg:py-7">
       <div className="flex items-center gap-2.5">
         <Logo onDark />
-        <span className="rounded-md bg-amber px-[7px] py-[3px] text-[0.6875rem] font-bold tracking-wide text-ink">ADMIN</span>
+        <span className="rounded-md bg-amber px-[7px] py-[3px] text-[0.6875rem] font-bold tracking-wide text-on-amber">ADMIN</span>
       </div>
 
       <nav aria-label="Team" className="grid gap-1 text-[0.9375rem] font-semibold">
@@ -33,6 +35,9 @@ export function AdminSidebar({
         <a href="#reports" className={LINK}>
           Reports{reports > 0 ? ` (${reports})` : ""}
         </a>
+        <a href="#messages" className={LINK}>
+          Messages{messages > 0 ? ` (${messages})` : ""}
+        </a>
         <a href="#plans" className={LINK}>
           Plan requests{planRequests > 0 ? ` (${planRequests})` : ""}
         </a>
@@ -42,7 +47,7 @@ export function AdminSidebar({
       </nav>
 
       <div className="flex items-center gap-3 lg:mt-auto lg:border-t lg:border-navy-edge lg:pt-5">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber text-[0.8125rem] font-extrabold text-ink">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber text-[0.8125rem] font-extrabold text-on-amber">
           {initials(name)}
         </span>
         <div className="min-w-0">

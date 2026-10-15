@@ -14,7 +14,7 @@ import { signInWithProvider } from "@/app/auth/actions";
 
 const BASE =
   "inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-[var(--radius-control)] px-4 font-bold";
-const GOOGLE_STYLE = `${BASE} border border-field-line bg-white text-ink hover:bg-surface`;
+const GOOGLE_STYLE = `${BASE} border border-field-line bg-card text-ink hover:bg-surface`;
 const FACEBOOK_STYLE = `${BASE} bg-[#1877f2] text-white hover:bg-[#166fe0]`;
 
 function GoogleMark() {

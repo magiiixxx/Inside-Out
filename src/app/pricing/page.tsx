@@ -135,7 +135,7 @@ export default async function PricingPage({
         {PLANS.map((plan) => (
           <section
             key={plan.name}
-            className={`card flex flex-col gap-4 p-5 ${plan.recommended ? "border-2 border-navy" : ""}`}
+            className={`card flex flex-col gap-4 p-5 ${plan.recommended ? "border-2 border-link" : ""}`}
           >
             <div className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2">

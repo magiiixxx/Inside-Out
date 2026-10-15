@@ -86,6 +86,16 @@ roles support the student: the **owner**, who posts rooms, and the
   an admin presses Activate after the payment has arrived. The app itself
   takes no payments.
 
+9. **Account menu** (logged in): the person's picture, name and email, then
+   Settings & Privacy, Help & Support, Report a Problem, Display &
+   Accessibility and Log Out.
+10. **Settings** (logged in): Account (change your name), Privacy (what others
+    can see), Security (password link, log out other devices), Notifications
+    (an honest "nothing yet") and Display (theme, text size, reduced motion,
+    underlined links, kept on the device in a cookie).
+11. **Help center** (public) with guides and FAQs, and **Report a problem**
+    (logged in): a message to the team, shown to admins under Messages.
+
 ## Data
 Row Level Security (RLS) is ON for every table.
 
@@ -128,6 +138,15 @@ Row Level Security (RLS) is ON for every table.
   room (to remove spam or leftover test rooms). Rejecting a room
   needs a written reason (5 to 300 characters) that the owner can read; it is
   cleared when the room is approved or edited.
+
+**support_messages**
+- Columns: user, kind (`bug`, `feedback` or `question`), message (10 to
+  1000 characters), the page it is about, status (`open` or `closed`),
+  created and closed at.
+- A user reads only their own; admins read all. `send_support_message()` is
+  the only way to write (logged-in users, at most 10 a day);
+  `close_support_message()` is for admins. A person changes the name on their
+  own profile only through `update_my_name()`.
 
 **room_reports**
 - Columns: room, the student who reported, reason (`not_available`,

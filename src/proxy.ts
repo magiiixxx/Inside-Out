@@ -44,7 +44,12 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  if (!user && (pathname === "/saved" || pathname.startsWith("/owner"))) {
+  const needsLogin =
+    pathname === "/saved" ||
+    pathname === "/report-problem" ||
+    pathname.startsWith("/owner") ||
+    pathname.startsWith("/settings");
+  if (!user && needsLogin) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -54,7 +59,8 @@ export async function proxy(request: NextRequest) {
 // Only pages that can show a logged-in person: the home page (a student
 // sees Save buttons there), saved rooms, the plans page (the header shows
 // who is logged in), the owner pages, log in, sign up, the password pages and
-// the team page.
+// the team page, settings, help and report a problem (the header shows who is
+// logged in on all of them).
 export const config = {
   matcher: [
     "/",
@@ -66,5 +72,8 @@ export const config = {
     "/forgot-password",
     "/reset-password",
     "/review-desk",
+    "/settings/:path*",
+    "/report-problem",
+    "/help",
   ],
 };

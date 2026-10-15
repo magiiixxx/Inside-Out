@@ -47,3 +47,12 @@ export type OtherRoom = {
   approval_status: "approved" | "rejected";
   rating_count: number;
 };
+
+export type SupportMessage = {
+  id: string;
+  user_id: string;
+  kind: "bug" | "feedback" | "question";
+  message: string;
+  page: string | null;
+  created_at: string;
+};

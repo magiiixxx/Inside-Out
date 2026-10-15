@@ -162,11 +162,11 @@ export default async function Home({
             )}
           </div>
 
-          <ul className="flex flex-col gap-4 rounded-[1.25rem] bg-white p-6 text-ink shadow-[0_24px_48px_rgb(0_0_0/0.25)]">
+          <ul className="flex flex-col gap-4 rounded-[1.25rem] bg-card p-6 text-ink shadow-[0_24px_48px_rgb(0_0_0/0.25)]">
             {PROMISES.map((promise) => (
               <li key={promise} className="flex items-center gap-3.5 font-semibold">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f0fa]">
-                  <CheckIcon className="h-5 w-5 text-navy" />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-navy-soft">
+                  <CheckIcon className="h-5 w-5 text-link" />
                 </span>
                 {promise}
               </li>
