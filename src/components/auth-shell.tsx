@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { CheckIcon } from "@/components/icons";
-import { Logo } from "@/components/site-header";
+import { Logo } from "@/components/logo";
 
 // The layout shared by Log in and Sign up: a navy panel with the pitch on
 // the left (hidden on phones, where the form needs the room), and the form

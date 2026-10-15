@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { adminAssurance, requireAdminAccount } from "@/lib/admin-2fa";
 import { createClient } from "@/lib/supabase/server";
 import { MfaSetup } from "../_components/mfa-setup";
@@ -18,12 +17,10 @@ export default async function AdminSecurityPage() {
   return (
     <MfaShell
       title="Two-step verification"
+      returnHref="/review-desk"
       intro="Protect the team page with a 6-digit code from an authenticator app, in addition to your password."
     >
       <MfaSetup currentLevel={level} enforced={enforced} />
-      <Link href="/review-desk" className="text-sm font-semibold underline underline-offset-4">
-        ← Back to the team page
-      </Link>
     </MfaShell>
   );
 }

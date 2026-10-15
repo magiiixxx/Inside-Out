@@ -20,7 +20,7 @@ export function ReviewSection({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="flex scroll-mt-6 flex-col gap-4 pt-4 first:pt-0">
+    <section id={id} className="flex scroll-mt-20 flex-col gap-4 md:scroll-mt-6 pt-4 first:pt-0">
       {title && (
         <div>
           <h2 className="text-xl font-extrabold tracking-tight">{title}</h2>

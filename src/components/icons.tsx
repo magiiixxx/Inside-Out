@@ -189,3 +189,32 @@ export function MessageIcon({ className }: IconProps) {
     </Icon>
   );
 }
+
+export function MenuIcon({ className }: IconProps) {
+  return (
+    <Icon className={className}>
+      <path d="M4 6h16" />
+      <path d="M4 12h16" />
+      <path d="M4 18h16" />
+    </Icon>
+  );
+}
+
+export function CloseIcon({ className }: IconProps) {
+  return (
+    <Icon className={className}>
+      <path d="M6 6l12 12" />
+      <path d="M18 6 6 18" />
+    </Icon>
+  );
+}
+
+export function CreditCardIcon({ className }: IconProps) {
+  return (
+    <Icon className={className}>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M7 15h3" />
+    </Icon>
+  );
+}

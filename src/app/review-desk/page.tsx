@@ -2,6 +2,7 @@ import { requireAdminAccount, requireAdminSecondStep } from "@/lib/admin-2fa";
 import { errorText, noticeText } from "@/lib/messages";
 import { PLAN_PRICES } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
+import { ReturnButton } from "@/components/return-button";
 import { AdminSidebar } from "./_components/admin-sidebar";
 import { OtherRoomCard } from "./_components/other-room-card";
 import { PendingRoomCard } from "./_components/pending-room-card";
@@ -104,17 +105,23 @@ export default async function ReviewDesk({
   const ownerName = new Map((people ?? []).map((p) => [p.id, p.full_name]));
 
   return (
-    <div className="grid flex-1 bg-surface lg:grid-cols-[260px_minmax(0,1fr)]">
+    <div className="grid flex-1 bg-surface md:grid-cols-[232px_minmax(0,1fr)] lg:grid-cols-[260px_minmax(0,1fr)]">
       <AdminSidebar
         name={name || user.email || ""}
-        reports={openReports.length}
-        planRequests={planRequests.length}
-        messages={supportMessages.length}
+        counts={{
+          waiting: rows.length,
+          reports: openReports.length,
+          messages: supportMessages.length,
+          plans: planRequests.length,
+        }}
       />
 
       <main id="main" className="flex min-w-0 flex-col gap-6 px-4 py-8 sm:px-10 sm:py-10">
         <header>
-          <p className="eyebrow mb-2">Team only</p>
+          {/* No fixed target: go back to the page the admin came from, or to the
+              owner dashboard when there is none (opened directly, or refreshed). */}
+          <ReturnButton fallbackHref="/owner" />
+          <p className="eyebrow mb-2 mt-5">Team only</p>
           <h1 className="text-[2rem] font-extrabold tracking-tight">Rooms waiting for review</h1>
           <p className="mt-2 max-w-2xl text-[0.9375rem] text-muted-foreground">
             Check the permit and call the owner before you approve. Approving

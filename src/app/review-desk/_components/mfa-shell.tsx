@@ -1,13 +1,25 @@
 import type { ReactNode } from "react";
-import { Logo } from "@/components/site-header";
+import { Logo } from "@/components/logo";
+import { ReturnButton } from "@/components/return-button";
 
 // The frame for the two-step pages: a centred card on the soft background,
 // with no site header (these are team-only pages).
 
-export function MfaShell({ title, intro, children }: { title: string; intro: string; children: ReactNode }) {
+export function MfaShell({
+  title,
+  intro,
+  returnHref,
+  children,
+}: {
+  title: string;
+  intro: string;
+  returnHref?: string; // when set, a Return button to that page is shown at the top
+  children: ReactNode;
+}) {
   return (
     <main id="main" className="flex flex-1 items-start justify-center bg-surface px-4 py-10 sm:py-16">
       <div className="flex w-full max-w-[34rem] flex-col gap-6">
+        {returnHref && <ReturnButton href={returnHref} />}
         <div className="flex items-center gap-2.5">
           <Logo />
           <span className="rounded-md bg-amber px-[7px] py-[3px] text-[0.6875rem] font-bold tracking-wide text-on-amber">ADMIN</span>
