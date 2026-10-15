@@ -19,6 +19,8 @@ updated.
       and when it is already hidden.
 - [ ] A room not updated for 7 days disappears from the student Browse
       screen.
+- [ ] The SAMPLE rooms are deleted from the database before the real
+      demo.
 - [ ] Works on the live URL
 
 **Cut first if time is short:** the "about to hide" banner.
