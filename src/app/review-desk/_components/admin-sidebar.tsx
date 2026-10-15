@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { logout } from "@/app/auth/actions";
 import { Logo } from "@/components/site-header";
 import { initials } from "@/lib/utils";
@@ -52,11 +53,16 @@ export function AdminSidebar({
         </span>
         <div className="min-w-0">
           <p className="truncate text-sm font-bold">{name}</p>
-          <form action={logout}>
-            <button type="submit" className="text-[0.8125rem] text-navy-text underline-offset-4 hover:text-white hover:underline">
-              Log out
-            </button>
-          </form>
+          <div className="flex flex-wrap gap-x-3">
+            <Link href="/review-desk/security" className="text-[0.8125rem] text-navy-text underline-offset-4 hover:text-white hover:underline">
+              Two-step
+            </Link>
+            <form action={logout}>
+              <button type="submit" className="text-[0.8125rem] text-navy-text underline-offset-4 hover:text-white hover:underline">
+                Log out
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </aside>

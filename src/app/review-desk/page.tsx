@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { requireAdminAccount, requireAdminSecondStep } from "@/lib/admin-2fa";
 import { errorText, noticeText } from "@/lib/messages";
 import { PLAN_PRICES } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
@@ -31,21 +31,14 @@ export default async function ReviewDesk({
   const error = errorText(params.error);
   const supabase = await createClient();
 
-  // Check 1: logged in? (Logged-out visitors see the Not found page, so
-  // they cannot even tell this page exists.)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) notFound();
+  // Checks 1 and 2: logged in, and an admin? (Anyone else sees the Not found
+  // page, so they cannot even tell this page exists.) Row Level Security lets
+  // each user read only their own profile row, so the role check is about the
+  // caller themselves.
+  const { user, name } = await requireAdminAccount(supabase);
 
-  // Check 2: is this account an admin? Row Level Security lets each user
-  // read only their own profile row, so this returns the caller's own role.
-  const { data: me } = await supabase
-    .from("profiles")
-    .select("role, full_name")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (!me || me.role !== "admin") notFound();
+  // Check 3: two-step verification, once the team has switched it on.
+  await requireAdminSecondStep(supabase);
 
   // Pending rooms with their private permit check. Only admins can read
   // listing_checks, so for anyone else this would return nothing.
@@ -113,7 +106,7 @@ export default async function ReviewDesk({
   return (
     <div className="grid flex-1 bg-surface lg:grid-cols-[260px_minmax(0,1fr)]">
       <AdminSidebar
-        name={me.full_name || user.email || ""}
+        name={name || user.email || ""}
         reports={openReports.length}
         planRequests={planRequests.length}
         messages={supportMessages.length}

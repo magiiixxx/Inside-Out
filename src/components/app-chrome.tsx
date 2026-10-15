@@ -19,7 +19,8 @@ export function AppChrome({
   children: ReactNode;
 }) {
   const pathname = usePathname();
-  if (OWN_LAYOUT.includes(pathname)) return <>{children}</>;
+  // The team pages (the review desk and its two-step pages) have their own layout.
+  if (OWN_LAYOUT.includes(pathname) || pathname.startsWith("/review-desk")) return <>{children}</>;
   return (
     <>
       {header}

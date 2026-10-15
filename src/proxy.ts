@@ -72,6 +72,7 @@ export const config = {
     "/forgot-password",
     "/reset-password",
     "/review-desk",
+    "/review-desk/:path*",
     "/settings/:path*",
     "/report-problem",
     "/help",

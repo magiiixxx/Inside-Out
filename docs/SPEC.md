@@ -207,7 +207,9 @@ means agreeing to the Privacy page. Browsing rooms never needs a login, but stud
 owners to manage theirs, and admins to review. For the demo, turn off "Confirm email" in Supabase Auth
 settings, because the free plan limits how many emails it sends and
 signup could otherwise get stuck. Admin access needs both a login and
-the `admin` role enforced by RLS. A hidden address is only an extra,
+the `admin` role enforced by RLS. Once the team switches it on, it also needs
+a code from an authenticator app (two-step verification), enforced by the
+database as well as the page. A hidden address is only an extra,
 never the lock.
 
 ## Done for the demo
