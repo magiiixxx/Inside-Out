@@ -80,6 +80,17 @@ export default async function OwnerHome({
         </form>
       </header>
 
+      {/* Only admins see this link. It is a convenience, not the lock: the
+          review page and the database check the admin role themselves. */}
+      {profile?.role === "admin" && (
+        <Link
+          href="/review-desk"
+          className="rounded-[var(--radius)] border border-border px-3 py-2 text-sm font-medium underline-offset-4 hover:underline"
+        >
+          Team review: rooms waiting for approval →
+        </Link>
+      )}
+
       {posted && (
         <p role="status" className="rounded-[var(--radius)] border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm">
           Room submitted. Our team will check it before students can see it.
