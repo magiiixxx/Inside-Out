@@ -4,6 +4,8 @@ import { logout } from "@/app/auth/actions";
 import { renewRoom, setAvailability } from "@/app/owner/actions";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { HIDE_AFTER_DAYS } from "@/lib/listings";
+import { errorText, noticeText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
 
 // The owner's home page: their rooms, each with a status badge, and the
@@ -34,16 +36,8 @@ const STATUS: Record<Room["approval_status"], { label: string; className: string
   },
 };
 
-const MESSAGES: Record<string, string> = {
-  posted: "Room submitted. Our team will check it before students can see it.",
-  available: "Room marked available.",
-  occupied: "Room marked occupied.",
-  renewed: "Room renewed. Students can see it again.",
-};
-
-// The database hides a room from students 7 days after it was last
-// updated. These two numbers must match that rule (see 002-create-listings).
-const HIDE_AFTER_DAYS = 7;
+// The database hides a room from students HIDE_AFTER_DAYS after it was last
+// updated (see src/lib/listings.ts). We warn the owner this many days before.
 const WARN_WITHIN_DAYS = 2;
 const DAY_MS = 86_400_000;
 
@@ -66,9 +60,12 @@ function freshness(room: Room) {
 export default async function OwnerHome({
   searchParams,
 }: {
-  searchParams: Promise<{ posted?: string; updated?: string; error?: string }>;
+  searchParams: Promise<{ notice?: string; error?: string }>;
 }) {
-  const { posted, updated, error } = await searchParams;
+  // The address carries only short codes; the text comes from our own list.
+  const params = await searchParams;
+  const message = noticeText(params.notice);
+  const error = errorText(params.error);
   const supabase = await createClient();
 
   // The real login check. getUser() asks Supabase to verify the session,
@@ -100,7 +97,6 @@ export default async function OwnerHome({
   const myRooms = (rooms ?? []) as Room[];
   const hiddenCount = myRooms.filter((r) => freshness(r).hidden).length;
   const soonCount = myRooms.filter((r) => freshness(r).soon).length;
-  const message = MESSAGES[posted ? "posted" : (updated ?? "")];
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">

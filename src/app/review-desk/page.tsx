@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { reviewRoom } from "@/app/review-desk/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { errorText, noticeText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
 
 // The team's review page. Its address is not linked anywhere on the site.
@@ -28,9 +29,12 @@ type PendingCheck = {
 export default async function ReviewDesk({
   searchParams,
 }: {
-  searchParams: Promise<{ done?: string; error?: string }>;
+  searchParams: Promise<{ notice?: string; error?: string }>;
 }) {
-  const { done, error } = await searchParams;
+  // The address carries only short codes; the text comes from our own list.
+  const params = await searchParams;
+  const notice = noticeText(params.notice);
+  const error = errorText(params.error);
   const supabase = await createClient();
 
   // Check 1: logged in? (Logged-out visitors see the Not found page, so
@@ -79,14 +83,14 @@ export default async function ReviewDesk({
         </p>
       </header>
 
-      {done && (
+      {notice && (
         <p role="status" className="rounded-[var(--radius)] border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm">
-          Room {done}.
+          {notice}
         </p>
       )}
       {(error || loadError) && (
         <p role="alert" className="rounded-[var(--radius)] border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
-          {error ?? loadError?.message}
+          {error ?? "We could not load the rooms waiting for review. Please refresh and try again."}
         </p>
       )}
 

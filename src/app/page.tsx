@@ -3,14 +3,20 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { hideCutoff } from "@/lib/listings";
 import { createClient } from "@/lib/supabase/server";
 
 // The student Browse screen. No login needed.
 //
 // This is a server component: the database query runs on the server before
-// the page reaches the phone. Row Level Security decides which rooms come
-// back (approved AND updated in the last 7 days) — we do not filter those
-// here, so a mistake on this page can never leak a pending or stale room.
+// the page reaches the phone.
+//
+// Two locks work together. Row Level Security keeps the public from reading
+// anything but approved rooms updated in the last 7 days. But owners may
+// also read their OWN rooms, and admins may read ALL rooms, so when one of
+// them opens this page the database would hand back pending and stale rooms
+// too. That is why this page ALSO asks only for approved, recent rooms:
+// everyone sees the same student view, whoever they are.
 //
 // The filter and sort live in the URL (?max=1500&sort=recent), so the page
 // works without any browser JavaScript and a filtered view can be shared.
@@ -31,6 +37,9 @@ type Listing = {
 
 type SortOrder = "nearest" | "recent";
 
+// What students see if something goes wrong. Never show them system messages.
+const LOAD_ERROR = "We could not load the rooms right now. Please try again in a moment.";
+
 async function getListings(
   maxPrice: number | null,
   sort: SortOrder,
@@ -41,7 +50,9 @@ async function getListings(
       .from("listings")
       .select(
         "id, description, price_per_month, distance_km, contact_phone, availability, last_updated_at",
-      );
+      )
+      .eq("approval_status", "approved")
+      .gt("last_updated_at", hideCutoff());
 
     if (maxPrice !== null) query = query.lte("price_per_month", maxPrice);
 
@@ -51,13 +62,15 @@ async function getListings(
         : query.order("distance_km", { ascending: true });
 
     const { data, error } = await query;
-    if (error) return { rooms: [], error: error.message };
+    if (error) {
+      // The detail goes to the server log (Vercel -> Logs), not to the page.
+      console.error("Browse: could not load rooms:", error.message);
+      return { rooms: [], error: LOAD_ERROR };
+    }
     return { rooms: (data ?? []) as Listing[] };
   } catch (e) {
-    return {
-      rooms: [],
-      error: e instanceof Error ? e.message : "Could not reach the database.",
-    };
+    console.error("Browse: could not load rooms:", e);
+    return { rooms: [], error: LOAD_ERROR };
   }
 }
 

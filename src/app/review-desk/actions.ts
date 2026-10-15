@@ -5,7 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 
 // Approve or reject a room. The real protection is inside the database:
 // review_listing() refuses anyone who is not an admin. The checks here
-// only give friendlier errors.
+// only give friendlier errors, and on a problem we redirect with a short
+// code that the page looks up in src/lib/messages.ts.
 //
 // redirect() throws a special signal, so it is never inside a try/catch.
 
@@ -16,7 +17,7 @@ export async function reviewRoom(formData: FormData) {
   const decision = String(formData.get("decision") ?? "");
 
   if (!UUID.test(listingId) || (decision !== "approved" && decision !== "rejected")) {
-    redirect("/review-desk?error=" + encodeURIComponent("That request was not valid."));
+    redirect("/review-desk?error=invalid_request");
   }
 
   const supabase = await createClient();
@@ -25,9 +26,7 @@ export async function reviewRoom(formData: FormData) {
     p_decision: decision,
   });
 
-  if (error) {
-    redirect("/review-desk?error=" + encodeURIComponent(error.message));
-  }
+  if (error) redirect("/review-desk?error=review_failed");
 
-  redirect(`/review-desk?done=${decision}`);
+  redirect(`/review-desk?notice=${decision}`);
 }

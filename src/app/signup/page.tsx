@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { errorText } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function SignupPage({
@@ -12,7 +13,8 @@ export default async function SignupPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
-  const { error } = await searchParams;
+  // The address carries only a short code; the text comes from our own list.
+  const error = errorText((await searchParams).error);
 
   // Already logged in? Skip the form.
   const supabase = await createClient();
