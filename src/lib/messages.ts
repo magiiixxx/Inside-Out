@@ -30,6 +30,8 @@ const ERRORS: Record<string, string> = {
   need_call_ok: "Please agree that our team may call you to confirm the room.",
   need_phone_ok: "Please confirm that you understand your phone number will be public.",
   post_failed: "We could not save your room. Please check the form and try again.",
+  plan_limit:
+    "The Free plan allows one room. See the plans, then ask our team about Premium Owner to post more.",
 
   // Owner home and team review
   invalid_request: "That request was not valid.",

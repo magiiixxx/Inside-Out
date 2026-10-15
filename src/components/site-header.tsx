@@ -29,7 +29,10 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-4xl px-4 py-6 text-sm text-muted-foreground">
         BahayFind helps students find boarding house rooms near PHINMA UI.
         Every room is approved by our team, and the owner confirms it is still
-        available.
+        available.{" "}
+        <Link href="/pricing" className="underline underline-offset-4">
+          Plans for owners
+        </Link>
       </div>
     </footer>
   );

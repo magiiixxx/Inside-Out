@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getUserAndRole } from "@/lib/auth";
 import { errorText } from "@/lib/messages";
+import { isAtRoomLimit } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function NewRoomPage({
@@ -19,10 +20,18 @@ export default async function NewRoomPage({
   const error = errorText((await searchParams).error);
 
   const supabase = await createClient();
-  const { user, role } = await getUserAndRole(supabase);
+  const { user, role, plan } = await getUserAndRole(supabase);
   if (!user) redirect("/login");
   // Students cannot post rooms (the database refuses too).
   if (role === "student") redirect("/saved");
+
+  // A Free owner who already has a room is sent back with an explanation.
+  // (The database enforces the limit too.)
+  const { count } = await supabase
+    .from("listings")
+    .select("id", { count: "exact", head: true })
+    .eq("owner_id", user.id);
+  if (isAtRoomLimit(role, plan, count ?? 0)) redirect("/owner?error=plan_limit");
 
   return (
     <main id="main" className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">

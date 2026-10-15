@@ -13,11 +13,11 @@ export async function getUserAndRole(supabase: SupabaseClient) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { user: null, role: null, fullName: "" };
+  if (!user) return { user: null, role: null, fullName: "", plan: "free" };
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, full_name")
+    .select("role, full_name, plan")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -25,6 +25,7 @@ export async function getUserAndRole(supabase: SupabaseClient) {
     user,
     role: (profile?.role ?? null) as Role | null,
     fullName: (profile?.full_name ?? "") as string,
+    plan: (profile?.plan ?? "free") as string,
   };
 }
 

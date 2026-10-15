@@ -7,6 +7,7 @@ import { DeleteRoomButton } from "@/components/delete-room-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HIDE_AFTER_DAYS } from "@/lib/listings";
 import { errorText, noticeText } from "@/lib/messages";
+import { FREE_ROOM_LIMIT, isAtRoomLimit, PLAN_NAMES, type Plan } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
 
 // The owner's home page: their rooms, each with a status badge, and the
@@ -80,7 +81,7 @@ export default async function OwnerHome({
   // Row Level Security means this query can only ever return our own row.
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, role")
+    .select("full_name, role, plan")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -102,12 +103,28 @@ export default async function OwnerHome({
   const hiddenCount = myRooms.filter((r) => freshness(r).hidden).length;
   const soonCount = myRooms.filter((r) => freshness(r).soon).length;
 
+  // The Free plan allows one room. (The database enforces it; this only
+  // decides what to show.)
+  const plan = (profile?.plan ?? "free") as Plan;
+  const atLimit = isAtRoomLimit(profile?.role, plan, myRooms.length);
+
   return (
     <main id="main" className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:py-16">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
           <span className="text-sm text-muted-foreground">Owner home</span>
           <h1 className="text-2xl font-semibold tracking-tight">Hello, {name}</h1>
+          {profile?.role !== "admin" && (
+            <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+              <span className="chip chip-teal">{PLAN_NAMES[plan]} plan</span>
+              {plan === "free"
+                ? `${myRooms.length} of ${FREE_ROOM_LIMIT} room used`
+                : "Post as many rooms as you need"}
+              <Link href="/pricing" className="underline underline-offset-4">
+                See plans
+              </Link>
+            </p>
+          )}
         </div>
         <form action={logout}>
           <Button type="submit" variant="outline">
@@ -156,10 +173,23 @@ export default async function OwnerHome({
 
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg font-medium">Your rooms</h2>
-        <Link href="/owner/rooms/new" className={buttonVariants()}>
-          Add a room
-        </Link>
+        {atLimit ? (
+          <Link href="/pricing" className={buttonVariants({ variant: "secondary" })}>
+            Upgrade to add more rooms
+          </Link>
+        ) : (
+          <Link href="/owner/rooms/new" className={buttonVariants()}>
+            Add a room
+          </Link>
+        )}
       </div>
+
+      {atLimit && (
+        <p className="alert-info">
+          The Free plan allows {FREE_ROOM_LIMIT} room. To post another, delete
+          this one or ask our team about the Premium Owner plan.
+        </p>
+      )}
 
       {myRooms.length === 0 ? (
         <Card>

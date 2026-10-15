@@ -41,6 +41,8 @@ roles support the student: the **owner**, who posts rooms, and the
    keep a list of rooms I like. (Browsing stays open to everyone.)
 10. As a student, I want to save a room and see my saved rooms in one
     place, so that I can compare them and call the owners later.
+11. As an owner, I want to see the owner plans and my own plan, so that I
+    know how many rooms I can post and how to upgrade.
 
 ## Screens
 1. **Browse rooms** (public): cards for approved rooms, each showing
@@ -64,12 +66,18 @@ roles support the student: the **owner**, who posts rooms, and the
    visible, each with price, distance, available/occupied label, phone
    and a button to remove it. Rooms that are hidden or deleted do not
    show here.
+8. **Plans** (public): the Free, Premium Owner and Property Manager plans
+   with their prices. Each feature is marked "Available now" or "Coming
+   soon". It says payment is arranged with the team.
 
 ## Data
 Row Level Security (RLS) is ON for every table.
 
 **profiles**
-- Columns: user id, name, role (`student`, `owner` or `admin`).
+- Columns: user id, name, role (`student`, `owner` or `admin`), plan
+  (`free`, `premium` or `manager`). New accounts start on `free`. Only the
+  team can change a plan, by hand in the database. A `free` owner may post
+  one room; other plans and admins may post several.
 - A user may read only their own row. A profile is created by the
   database when someone signs up, as `student` or `owner` depending on
   the sign-up choice, and never as `admin`.

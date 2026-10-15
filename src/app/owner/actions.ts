@@ -61,7 +61,12 @@ export async function postRoom(formData: FormData) {
     p_phone_public: phonePublic,
   });
 
-  if (error) backToForm("post_failed");
+  if (error) {
+    // The Free plan's room limit gets its own message; any other problem
+    // gets the general one (never the raw database text).
+    if (error.message.includes("Free plan")) redirect("/owner?error=plan_limit");
+    backToForm("post_failed");
+  }
 
   redirect("/owner?notice=posted");
 }

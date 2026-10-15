@@ -54,13 +54,13 @@ real thing in the app only if a plan needs it (for example bed
 inventory).
 
 **Build in phases, in this order:**
-1. **Now (done):** the plans are written here and in the pitch. Nothing
-   is built.
-2. **After the demo, a minimal version:** a plan on each owner account, a
-   pricing page, a limit on how many rooms the Free plan may post, and the
-   team switching a plan by hand after the owner pays in person or by
-   GCash. The app still never handles money and uses no payment provider.
-   First decide what the Free limit means: one room, or one property.
+1. **Done:** the plans are written here and in the pitch.
+2. **Done (ticket 12), the minimal version:** a plan on each owner
+   account, a Plans page, a limit of **one room** on the Free plan, and
+   the team switching a plan by hand after the owner arranges payment
+   with the team. The app still never handles money and uses no payment
+   provider. Only the room limit is built; every other premium feature
+   is marked "Coming soon" on the Plans page.
 3. **Later, one at a time, each with its own spec:** analytics, inquiry
    and waiting lists, availability reminders (needs an email or SMS
    service), extra photos (needs file storage), bed inventory and
