@@ -176,7 +176,8 @@ Row Level Security (RLS) is ON for every table.
   most 50 rooms.
 
 **plan_requests**
-- Columns: owner, plan (`premium` or `manager`), pay method (`gcash`, `maya` or `bank`),
+- Columns: owner, plan (`premium` or `manager`), payment reference number (typed
+  by the owner after paying, 6 to 40 characters, usable once) and when it was sent, pay method (`gcash`, `maya` or `bank`),
   contact phone, status (`pending`, `activated` or `dismissed`), created at.
 - An owner reads only their own requests; admins read all. Nobody writes
   to the table directly: owners use `request_plan()` (one waiting request at

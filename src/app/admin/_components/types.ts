@@ -27,6 +27,8 @@ export type PlanRequest = {
   pay_method: string;
   contact_phone: string;
   created_at: string;
+  payment_reference: string | null;
+  reference_sent_at: string | null;
 };
 
 export type OpenReport = {

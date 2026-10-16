@@ -73,7 +73,7 @@ export default async function ReviewDesk({
     // Owners who asked for a paid plan and are waiting for the team.
     supabase
       .from("plan_requests")
-      .select("id, owner_id, plan, pay_method, contact_phone, created_at")
+      .select("id, owner_id, plan, pay_method, contact_phone, created_at, payment_reference, reference_sent_at")
       .eq("status", "pending")
       .order("created_at", { ascending: true }),
 

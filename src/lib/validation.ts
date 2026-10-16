@@ -17,3 +17,11 @@ export function formText(formData: FormData, name: string): string {
 export function isWeakPassword(password: string): boolean {
   return password.length < 8 || password.length > 72 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password);
 }
+
+// The payment reference number an owner types after paying (GCash, Maya or bank):
+// 6 to 40 letters, numbers, spaces and dashes, with at least 6 real letters or
+// numbers among them (so "------" or spaces alone do not count). The database
+// checks the same rule.
+export function isValidPaymentReference(reference: string): boolean {
+  return /^(?=(?:[^A-Za-z0-9]*[A-Za-z0-9]){6})[A-Za-z0-9 -]{6,40}$/.test(reference);
+}

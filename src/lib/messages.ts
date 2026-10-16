@@ -60,6 +60,10 @@ const ERRORS: Record<string, string> = {
   // Plan requests
   bad_plan: "Please choose Premium Owner or Property Manager.",
   plan_already: "You already have that plan.",
+  bad_reference: "Please type the reference number from your payment receipt (6 to 40 letters and numbers).",
+  reference_used: "That reference number was already used. Please check it and try again.",
+  no_pending_request: "You have no plan request waiting. Send a request first.",
+  no_reference_yet: "That request has no payment reference number yet. Ask the owner to send it first.",
   bad_pay_method: "Please choose GCash, Maya or bank transfer.",
   bad_contact_phone: "Please enter a phone number our team can reach you on.",
   plan_request_exists: "You already have a request waiting. Our team will contact you.",
@@ -95,6 +99,7 @@ const ERRORS: Record<string, string> = {
 
 const NOTICES: Record<string, string> = {
   confirm_email: "Account created. Check your email to confirm it, then log in.",
+  reference_saved: "Thank you. Your reference number was sent. Our team will check it and switch your plan on.",
   reset_sent: "If an account exists for that email, we have sent a link to choose a new password. Open it in this same browser.",
   logged_out: "You have been logged out.",
   name_saved: "Your name was saved.",

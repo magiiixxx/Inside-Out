@@ -75,7 +75,9 @@ export async function activatePlan(formData: FormData) {
     redirect(
       error.message.includes("already has this plan")
         ? "/admin?error=plan_not_upgrade"
-        : "/admin?error=plan_action_failed",
+        : error.message.includes("no payment reference")
+          ? "/admin?error=no_reference_yet"
+          : "/admin?error=plan_action_failed",
     );
   }
 

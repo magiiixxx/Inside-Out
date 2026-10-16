@@ -8,7 +8,8 @@ import { getCurrentUser } from "@/lib/auth";
 import { errorText, noticeText } from "@/lib/messages";
 import { PAY_METHODS, payMethodLabel, type PayMethod } from "@/lib/payment";
 import { getPaymentAccount } from "@/lib/support-info";
-import { ContactLines } from "@/components/contact-lines";
+import { getPaymentQrUrl } from "@/lib/payment-qr";
+import { PaymentSteps } from "./_components/payment-steps";
 import { PLAN_NAMES, PLAN_PRICES, requestablePlans } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
 
@@ -97,11 +98,11 @@ export default async function PricingPage({
   const { user, role, plan } = await getCurrentUser();
 
   // Has this owner already asked? (Row Level Security: only their own.)
-  let pending: { plan: "premium" | "manager"; pay_method: string } | null = null;
+  let pending: { plan: "premium" | "manager"; pay_method: string; payment_reference: string | null } | null = null;
   if (role === "owner") {
     const { data } = await supabase
       .from("plan_requests")
-      .select("plan, pay_method")
+      .select("plan, pay_method, payment_reference")
       .eq("status", "pending")
       .maybeSingle();
     pending = data ?? null;
@@ -111,6 +112,8 @@ export default async function PricingPage({
 
   // Where to send the payment. Only shown to an owner who has asked for a plan.
   const payAccount = pending ? getPaymentAccount(pending.pay_method as PayMethod) : null;
+  // The team's QR code for this plan and way of paying (kept in private storage).
+  const qrUrl = pending ? await getPaymentQrUrl(supabase, pending.pay_method, pending.plan) : null;
 
   return (
     <main id="main" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
@@ -209,32 +212,14 @@ export default async function PricingPage({
         ) : choices.length === 0 ? (
           <p className="alert-success">You already have the top plan. Thank you!</p>
         ) : pending ? (
-          <div className="flex flex-col gap-4">
-            <p className="alert-info">
-              Your request for {PLAN_NAMES[pending.plan]} is waiting. Our team will
-              contact you to arrange payment by {payMethodLabel(pending.pay_method)}.
-              The plan is switched on after we receive it.
-            </p>
-            {payAccount && (
-              <div className="rounded-xl border border-line p-4">
-                <p className="font-bold">
-                  Pay ₱{PLAN_PRICES[pending.plan]} by {payAccount.heading}
-                </p>
-                <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 text-sm">
-                  {payAccount.rows.map((row) => (
-                    <div key={row.label} className="contents">
-                      <dt className="text-muted-foreground">{row.label}</dt>
-                      <dd className="font-bold">{row.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  After you pay, send a screenshot of your payment to our team so we can switch your plan on.
-                </p>
-                <ContactLines className="mt-2" />
-              </div>
-            )}
-          </div>
+          <PaymentSteps
+            planName={PLAN_NAMES[pending.plan]}
+            amount={PLAN_PRICES[pending.plan]}
+            methodLabel={payMethodLabel(pending.pay_method)}
+            qrUrl={qrUrl}
+            account={payAccount}
+            reference={pending.payment_reference}
+          />
         ) : (
           <form action={requestPlan} className="flex max-w-xl flex-col gap-4">
             <p className="text-sm text-muted-foreground">
