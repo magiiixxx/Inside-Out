@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { ClockIcon, HouseIcon, PhoneIcon, PinIcon } from "@/components/icons";
+import { ExpandableText } from "@/components/expandable-text";
 import { RatingArea } from "@/components/rating-demo/rating-area";
 import { updatedLabel } from "@/lib/listings";
 import { telHref } from "@/lib/utils";
@@ -67,7 +68,7 @@ export function RoomCard({
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-5">
-        <h3 className="break-words text-[1.0625rem] font-bold leading-snug">{room.description}</h3>
+        <ExpandableText text={room.description} className="text-base font-semibold leading-snug" />
 
         <ul className="flex flex-col gap-1.5 text-sm text-muted-foreground">
           {room.address && (

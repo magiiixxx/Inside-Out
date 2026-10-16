@@ -79,7 +79,7 @@ export default async function HelpPage() {
   const { user } = await getCurrentUser();
 
   return (
-    <main id="main" className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
+    <main id="main" className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-10 px-4 py-8 sm:py-12">
       <header>
         <p className="eyebrow mb-2">Help & Support</p>
         <h1 className="text-3xl font-extrabold tracking-tight">Help center</h1>
@@ -90,14 +90,14 @@ export default async function HelpPage() {
         <h2 id="guides" className="text-xl font-extrabold">
           Guides
         </h2>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-3">
           {GUIDES.map((guide) => (
             <Card key={guide.title}>
               <CardHeader>
-                <CardTitle className="text-base">{guide.title}</CardTitle>
+                <CardTitle className="text-lg">{guide.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <ol className="list-decimal space-y-2 pl-5 text-sm">
+                <ol className="list-decimal space-y-3 pl-5 text-[0.9375rem] leading-relaxed marker:font-extrabold marker:text-amber-text">
                   {guide.steps.map((step) => (
                     <li key={step}>{step}</li>
                   ))}
@@ -108,7 +108,7 @@ export default async function HelpPage() {
         </div>
       </section>
 
-      <section id="faq" aria-labelledby="faq-title" className="flex scroll-mt-20 flex-col gap-3">
+      <section id="faq" aria-labelledby="faq-title" className="mx-auto flex w-full max-w-3xl scroll-mt-20 flex-col gap-3">
         <h2 id="faq-title" className="text-xl font-extrabold">
           Frequently asked questions
         </h2>
@@ -124,7 +124,7 @@ export default async function HelpPage() {
         ))}
       </section>
 
-      <section aria-labelledby="contact" className="card flex flex-col gap-3 p-6">
+      <section aria-labelledby="contact" className="card mx-auto flex w-full max-w-3xl flex-col gap-3 p-6">
         <h2 id="contact" className="text-xl font-extrabold">
           Still need help?
         </h2>

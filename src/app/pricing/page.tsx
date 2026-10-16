@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requestPlan } from "@/app/pricing/actions";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { CheckIcon } from "@/components/icons";
+import { CheckIcon, ClockIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getCurrentUser } from "@/lib/auth";
@@ -139,54 +139,84 @@ export default async function PricingPage({
         </p>
       )}
 
-      <div className="grid gap-4 md:grid-cols-3">
-        {PLANS.map((plan) => (
-          <section
-            key={plan.name}
-            className={`card flex flex-col gap-4 p-5 ${plan.recommended ? "border-2 border-link" : ""}`}
-          >
-            <div className="flex flex-col gap-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-xl font-semibold">{plan.name}</h2>
+      <div className="grid items-stretch gap-5 md:grid-cols-3">
+        {PLANS.map((plan) => {
+          const available = plan.features.filter((feature) => feature.live);
+          const soon = plan.features.filter((feature) => !feature.live);
+          return (
+            <section
+              key={plan.name}
+              aria-labelledby={`plan-${plan.name}`}
+              className={`card flex flex-col gap-5 p-6 ${plan.recommended ? "border-2 border-link shadow-[var(--shadow-lift)]" : ""}`}
+            >
+              {/* The same row in every card, so the names and prices line up across the three. */}
+              <div className="flex min-h-7 items-center">
                 {plan.recommended && <span className="chip chip-navy">Recommended</span>}
                 {plan.comingSoon && <span className="chip chip-amber">Coming soon</span>}
+                {!plan.key && <span className="chip">Included for everyone</span>}
               </div>
-              <p className="text-sm text-muted-foreground">{plan.forWho}</p>
-            </div>
 
-            <p className="text-3xl font-extrabold tracking-tight">
-              {plan.price}
-              <span className="text-base font-medium text-muted-foreground">
-                {plan.price === "₱0" ? "" : " / month"}
-              </span>
-            </p>
+              <div>
+                <h2 id={`plan-${plan.name}`} className="text-xl font-extrabold tracking-tight">
+                  {plan.name}
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">{plan.forWho}</p>
+              </div>
 
-            <ul className="flex flex-col gap-2 text-sm">
-              {plan.features.map((feature) => (
-                <li key={feature.text} className="flex items-start gap-2">
-                  <CheckIcon
-                    className={`mt-0.5 h-4 w-4 shrink-0 ${feature.live ? "text-ok" : "text-muted-foreground"}`}
-                  />
-                  <span>
-                    {feature.text}{" "}
-                    <span className={feature.live ? "chip chip-ok" : "chip"}>
-                      {feature.live ? "Available now" : "Coming soon"}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
+              <p className="text-4xl font-extrabold tracking-tight">
+                {plan.price}
+                <span className="text-base font-medium text-muted-foreground">
+                  {plan.price === "₱0" ? "" : " / month"}
+                </span>
+              </p>
 
-            {plan.key && choices.includes(plan.key) && !pending && (
-              <Link
-                href={`/pricing?plan=${plan.key}#upgrade`}
-                className={buttonVariants({ variant: plan.recommended ? "accent" : "outline" }) + " mt-auto"}
-              >
-                Choose {plan.name}
-              </Link>
-            )}
-          </section>
-        ))}
+              <div className="flex flex-col gap-5 border-t border-line pt-5">
+                {available.length > 0 && (
+                  <div>
+                    <p className="mb-2.5 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] text-ok">Available now</p>
+                    <ul className="flex flex-col gap-2.5 text-sm">
+                      {available.map((feature) => (
+                        <li key={feature.text} className="flex items-start gap-2.5">
+                          <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-ok" />
+                          <span>{feature.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {soon.length > 0 && (
+                  <div>
+                    <p className="mb-2.5 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] text-muted-foreground">
+                      Coming soon
+                    </p>
+                    <ul className="flex flex-col gap-2.5 text-sm text-muted-foreground">
+                      {soon.map((feature) => (
+                        <li key={feature.text} className="flex items-start gap-2.5">
+                          <ClockIcon className="mt-0.5 h-4 w-4 shrink-0" />
+                          <span>{feature.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* The bottom of every card lines up: a button where one applies, a note otherwise. */}
+              <div className="mt-auto pt-1">
+                {plan.key && choices.includes(plan.key) && !pending ? (
+                  <Link
+                    href={`/pricing?plan=${plan.key}#upgrade`}
+                    className={buttonVariants({ variant: plan.recommended ? "accent" : "outline" }) + " w-full"}
+                  >
+                    Choose {plan.name}
+                  </Link>
+                ) : !plan.key ? (
+                  <p className="text-sm font-semibold text-muted-foreground">Every owner starts on this plan.</p>
+                ) : null}
+              </div>
+            </section>
+          );
+        })}
       </div>
 
       <section id="upgrade" className="card flex scroll-mt-20 flex-col gap-4 p-6">
