@@ -2,10 +2,12 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { AccountMenu } from "@/components/account-menu";
 import { Logo } from "@/components/logo";
+import { MessagesLink } from "@/components/messages-link";
 import { getCurrentUser } from "@/lib/auth";
 import { PLAN_NAMES, type Plan } from "@/lib/plans";
 import { parsePrefs, PREFS_COOKIE } from "@/lib/preferences";
 import { buttonVariants } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
 
 // The bar at the top of every page: the logo, which always leads home, a few
 // links, and either Log in / Sign up or the name of whoever is logged in.
@@ -15,6 +17,14 @@ const NAV_LINK = "border-b-[3px] border-transparent py-[1.125rem] hover:border-a
 export async function SiteHeader() {
   const { user, role, fullName, plan } = await getCurrentUser();
   const displayName = fullName || user?.email || "";
+
+  // Chats with a message you have not read (the number on "Messages"). Students and
+  // owners only; if the chat tables are not there yet, this is simply 0.
+  let unread = 0;
+  if (user && (role === "student" || role === "owner")) {
+    const { data } = await (await createClient()).rpc("unread_message_count");
+    if (typeof data === "number") unread = data;
+  }
   const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
 
   // The picture comes from the person's Google sign-in (or an older Facebook one), when they
@@ -44,6 +54,7 @@ export async function SiteHeader() {
               My rooms
             </Link>
           )}
+          {(role === "student" || role === "owner") && <MessagesLink initial={unread} className={NAV_LINK} />}
           <Link href="/pricing" className={NAV_LINK}>
             Owner plans
           </Link>

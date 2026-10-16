@@ -255,6 +255,7 @@ export default async function Home({
               <RoomCard
                 key={room.id}
                 room={room}
+                messageHref={isStudent ? `/messages/new?room=${room.id}` : user ? null : "/login"}
                 footer={
                   isStudent && (
                     <div className="flex flex-col gap-2">

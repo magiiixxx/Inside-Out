@@ -96,6 +96,14 @@ const ERRORS: Record<string, string> = {
   too_many_saved: "You can save up to 50 rooms. Remove one to save another.",
   room_unavailable: "That room is not available to save any more.",
   favorite_failed: "We could not update your saved rooms. Please try again.",
+  // Chat
+  chat_students_only: "Only student accounts can start a chat. Owners can reply to the chats students start.",
+  chat_room_unavailable: "That room is not available to message any more.",
+  chat_bad_message: "Please write a message of up to 1000 characters.",
+  chat_too_fast: "You are sending messages too fast. Please wait a minute.",
+  chat_too_many: "You have started too many chats today. Please try again tomorrow.",
+  chat_not_found: "That chat was not found.",
+  chat_failed: "We could not send your message. Please try again.",
 };
 
 const NOTICES: Record<string, string> = {

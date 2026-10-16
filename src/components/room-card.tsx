@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
-import { ClockIcon, HouseIcon, PhoneIcon, PinIcon } from "@/components/icons";
+import Link from "next/link";
+import { ClockIcon, HouseIcon, MessageIcon, PhoneIcon, PinIcon } from "@/components/icons";
 import { ExpandableText } from "@/components/expandable-text";
 import { RatingArea } from "@/components/rating-demo/rating-area";
 import { updatedLabel } from "@/lib/listings";
@@ -37,10 +38,12 @@ export function RoomCard({
   room,
   children,
   footer,
+  messageHref,
 }: {
   room: RoomCardData;
   children?: ReactNode; // buttons next to Call (like Save)
   footer?: ReactNode; // anything wider, under the buttons (rate, report)
+  messageHref?: string | null; // where "Message owner" leads; no button when left out
 }) {
   const isAvailable = room.availability === "available";
   const tint = room.id.charCodeAt(0) % TINT_COUNT;
@@ -103,6 +106,12 @@ export function RoomCard({
               <PhoneIcon className="h-4 w-4" />
               Call {room.contact_phone}
             </a>
+            {messageHref && (
+              <Link href={messageHref} className={buttonVariants({ size: "sm", variant: "outline" })}>
+                <MessageIcon className="h-4 w-4" />
+                Message owner
+              </Link>
+            )}
             {children}
           </div>
           {footer}

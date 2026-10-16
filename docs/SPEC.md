@@ -88,6 +88,14 @@ roles support the student: the **owner**, who posts rooms, and the
   (the database refuses if the reference changed since the admin saw it).
   The app itself takes no payments.
 
+8b. **Chat** (students and owners): on every room, a student presses "Message owner"
+   (next to Call). If the student is logged out the button leads to Log in. The student writes a first
+   message, which opens a chat between that student and the room's owner about that room (one chat per
+   student per room). Both can then write to each other at /messages (the inbox, with an unread dot) and
+   /messages/<chat>. New messages appear without refreshing. The header shows "Messages" with the
+   number of chats that have an unread message: that is the notification for owners and students.
+   Messages are 1 to 1000 characters, at most 10 a minute, and a student can open at most 10 new
+   chats a day. Only students start chats, only about approved, visible rooms. The team cannot read chats.
 9. **Account menu** (logged in): the person's picture, name and email, then
    Settings & Privacy, Help & Support, Report a Problem, Display &
    Accessibility and Log Out.
@@ -185,6 +193,13 @@ Row Level Security (RLS) is ON for every table.
   to the table directly: owners use `request_plan()` (one waiting request at
   a time), and only admins can call `activate_plan()` and
   `dismiss_plan_request()`.
+
+**conversations** and **messages**
+- A conversation: room, student, owner, last message time, who sent it, and when each side last
+  read it. A message: conversation, sender, text (1 to 1000 characters), time.
+- Only the student and the owner of a conversation may read it (admins cannot). Nobody writes to
+  either table directly: everything goes through database functions (`start_conversation`,
+  `send_message`, `mark_conversation_read`) that check who is asking and apply the limits.
 
 **listing_checks**
 - Columns: listing, permit number (typed in), answers to the validation

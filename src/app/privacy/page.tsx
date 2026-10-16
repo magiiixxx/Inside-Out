@@ -34,12 +34,13 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Students:</strong> the rooms you save, the reports you send,
-            and the star ratings you give.
+            the star ratings you give, and the chat messages you write to owners.
           </li>
           <li>
             <strong>Owners:</strong> the rooms you post, including the address,
             phone number and photo, and the permit number you give our team. The
-            permit number stays private to you and our team.
+            permit number stays private to you and our team. Also the chat
+            messages you write to students.
           </li>
         </ul>
       </section>
@@ -51,7 +52,9 @@ export default function PrivacyPage() {
           photo and star average are shown to every visitor once our team has
           approved the room. Owners agree to this when they post. Your email
           address, your saved rooms and your own ratings are never shown to
-          other users.
+          other users. A chat can be read only by the student and the owner in
+          it. The owner sees the student&apos;s first name, and the student sees
+          the owner&apos;s name. Our team does not read chats.
         </p>
       </section>
 

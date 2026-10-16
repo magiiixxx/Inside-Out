@@ -56,6 +56,7 @@ export async function proxy(request: NextRequest) {
     pathname === "/saved" ||
     pathname === "/report-problem" ||
     pathname.startsWith("/owner") ||
+    pathname.startsWith("/messages") ||
     pathname.startsWith("/settings");
   if (!user && needsLogin) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -83,6 +84,8 @@ export const config = {
     "/admin/:path*",
     "/settings/:path*",
     "/report-problem",
+    "/messages",
+    "/messages/:path*",
     "/help",
   ],
 };
