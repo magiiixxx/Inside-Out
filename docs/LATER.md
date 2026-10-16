@@ -155,3 +155,6 @@ that is really free.
   own screen (today the team approves rooms, not accounts).
 - A "Verified" badge on rooms (today every visible room is approved, so
   the badge would say the same thing on all of them).
+- Chat extras: email or phone alerts for new messages (needs an email or
+  SMS service), reporting or blocking a chat, photos in messages, and
+  "typing…" or "seen" markers.
