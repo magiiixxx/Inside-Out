@@ -8,25 +8,25 @@ records, and presses Activate. BahayFind still takes no money.
 
 **Blocked by:** 17
 
-**Status:** todo
+**Status:** done
 
-- [ ] After requesting, the owner sees two steps: pay (the QR code, or the account
+- [x] After requesting, the owner sees two steps: pay (the QR code, or the account
       details when there is no QR code), then enter the reference number.
-- [ ] The QR code shown matches the plan and the way of paying (a QR code carries one
+- [x] The QR code shown matches the plan and the way of paying (a QR code carries one
       amount, so Premium and Property Manager have their own).
-- [ ] The QR code is not in the code repository and not at any public address. Only an
+- [x] The QR code is not in the code repository and not at any public address. Only an
       owner with a waiting request can see it, through a link that stops working after
       10 minutes. A logged-out visitor, a student, and an owner with no waiting request
       cannot open it.
-- [ ] The owner can send, and later correct, the reference number while the request is
+- [x] The owner can send, and later correct, the reference number while the request is
       waiting. Too short, too long or strange characters give a clear message.
-- [ ] A reference number that was already used for another request is refused.
-- [ ] On the team page the request shows the amount to look for and the reference number
+- [x] A reference number that was already used for another request is refused.
+- [x] On the team page the request shows the amount to look for and the reference number
       (or "Not sent yet"). Activate stays off until a reference number has been sent, and
       the database refuses to activate without one.
-- [ ] Activating still moves the owner up to the plan they asked for, as before.
-- [ ] Nothing is charged by the website.
-- [ ] Works on the live URL
+- [x] Activating still moves the owner up to the plan they asked for, as before.
+- [x] Nothing is charged by the website.
+- [x] Works on the live URL
 
 ## One-time set up by the team (the QR codes)
 
