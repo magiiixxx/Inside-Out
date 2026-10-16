@@ -25,18 +25,6 @@ export function CardTitle({ className, ...props }: DivProps) {
   );
 }
 
-export function CardDescription({ className, ...props }: DivProps) {
-  return (
-    <p className={cn("text-sm text-muted-foreground", className)} {...props} />
-  );
-}
-
 export function CardContent({ className, ...props }: DivProps) {
   return <div className={cn("p-6 pt-0", className)} {...props} />;
-}
-
-export function CardFooter({ className, ...props }: DivProps) {
-  return (
-    <div className={cn("flex items-center p-6 pt-0", className)} {...props} />
-  );
 }

@@ -26,7 +26,7 @@ export const NAV_STORAGE_KEY = "bf_nav";
 // Pages we never "go back" to.
 const NEVER_RETURN_TO = ["/login", "/signup", "/forgot-password", "/reset-password", "/auth/callback", "/admin/verify"];
 
-export function readPreviousPath(currentPath: string): string | null {
+function readPreviousPath(currentPath: string): string | null {
   try {
     const state = JSON.parse(window.sessionStorage.getItem(NAV_STORAGE_KEY) ?? "{}") as { prev?: unknown; current?: unknown };
     const prev = typeof state.prev === "string" ? state.prev : null;

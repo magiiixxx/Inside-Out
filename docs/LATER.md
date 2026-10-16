@@ -110,7 +110,8 @@ If the team reopens this, the answers already given were:
 
 ## Written reviews (previewed in demo mode only)
 
-Rating demo mode (open the home page with `?demo=ratings`) shows a fictional
+Rating demo mode (set `NEXT_PUBLIC_RATING_DEMO` to `on` in Vercel, then open the
+home page with `?demo=ratings`) shows a fictional
 sample review beside each star rating, to show how written reviews could look.
 The real app has star ratings only, from students who saved a room. Real
 written reviews would need: a place to store them, moderation by the team

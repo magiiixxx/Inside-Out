@@ -41,50 +41,56 @@ export default async function ReviewDesk({
   // Check 3: two-step verification, once the team has switched it on.
   await requireAdminSecondStep(supabase);
 
-  // Pending rooms with their private permit check. Only admins can read
-  // listing_checks, so for anyone else this would return nothing.
-  const { data: pending, error: loadError } = await supabase
-    .from("listing_checks")
-    .select(
-      "permit_number, owner_or_caretaker, open_beds, listings!inner(id, owner_id, description, price_per_month, distance_km, contact_phone, address, photo_path, created_at)",
-    )
-    .eq("listings.approval_status", "pending")
-    .order("created_at", { ascending: true });
+  // The five lists below do not depend on each other, so they are asked for at
+  // the same time instead of one after another (the page opens faster).
+  const [pendingResult, othersResult, reportsResult, requestsResult, messagesResult] = await Promise.all([
+    // Pending rooms with their private permit check. Only admins can read
+    // listing_checks, so for anyone else this would return nothing.
+    supabase
+      .from("listing_checks")
+      .select(
+        "permit_number, owner_or_caretaker, open_beds, listings!inner(id, owner_id, description, price_per_month, distance_km, contact_phone, address, photo_path, created_at)",
+      )
+      .eq("listings.approval_status", "pending")
+      .order("created_at", { ascending: true }),
+
+    // The newest 50 rooms that are already decided, so the team can remove
+    // spam, mistakes or leftover test rooms. Admins may read every room.
+    supabase
+      .from("listings")
+      .select("id, owner_id, description, price_per_month, contact_phone, approval_status, rating_count")
+      .neq("approval_status", "pending")
+      .order("created_at", { ascending: false })
+      .limit(50),
+
+    // Open reports from students about rooms they can see, oldest first.
+    supabase
+      .from("room_reports")
+      .select("id, reason, note, created_at, reporter_id, listings!inner(id, description, contact_phone)")
+      .eq("status", "open")
+      .order("created_at", { ascending: true }),
+
+    // Owners who asked for a paid plan and are waiting for the team.
+    supabase
+      .from("plan_requests")
+      .select("id, owner_id, plan, pay_method, contact_phone, created_at")
+      .eq("status", "pending")
+      .order("created_at", { ascending: true }),
+
+    // Messages from users (Report a Problem and Contact support), oldest first.
+    supabase
+      .from("support_messages")
+      .select("id, user_id, kind, message, page, created_at")
+      .eq("status", "open")
+      .order("created_at", { ascending: true }),
+  ]);
+
+  const { data: pending, error: loadError } = pendingResult;
   const rows = (pending ?? []) as unknown as PendingCheck[];
-
-  // The newest 50 rooms that are already decided, so the team can remove
-  // spam, mistakes or leftover test rooms. Admins may read every room.
-  const { data: others } = await supabase
-    .from("listings")
-    .select("id, owner_id, description, price_per_month, contact_phone, approval_status, rating_count")
-    .neq("approval_status", "pending")
-    .order("created_at", { ascending: false })
-    .limit(50);
-  const otherRooms = (others ?? []) as OtherRoom[];
-
-  // Open reports from students about rooms they can see, oldest first.
-  const { data: reportData } = await supabase
-    .from("room_reports")
-    .select("id, reason, note, created_at, reporter_id, listings!inner(id, description, contact_phone)")
-    .eq("status", "open")
-    .order("created_at", { ascending: true });
-  const openReports = (reportData ?? []) as unknown as OpenReport[];
-
-  // Owners who asked for a paid plan and are waiting for the team.
-  const { data: requestData } = await supabase
-    .from("plan_requests")
-    .select("id, owner_id, plan, pay_method, contact_phone, created_at")
-    .eq("status", "pending")
-    .order("created_at", { ascending: true });
-  const planRequests = (requestData ?? []) as PlanRequest[];
-
-  // Messages from users (Report a Problem and Contact support), oldest first.
-  const { data: messageData } = await supabase
-    .from("support_messages")
-    .select("id, user_id, kind, message, page, created_at")
-    .eq("status", "open")
-    .order("created_at", { ascending: true });
-  const supportMessages = (messageData ?? []) as SupportMessage[];
+  const otherRooms = (othersResult.data ?? []) as OtherRoom[];
+  const openReports = (reportsResult.data ?? []) as unknown as OpenReport[];
+  const planRequests = (requestsResult.data ?? []) as PlanRequest[];
+  const supportMessages = (messagesResult.data ?? []) as SupportMessage[];
 
   // Names for everyone mentioned above (admins may read all profiles).
   // Sample rooms have no owner.

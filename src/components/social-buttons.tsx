@@ -11,8 +11,8 @@ import { signInWithProvider } from "@/app/auth/actions";
 // wrapper, see signup/page.tsx; the CSS reads which radio is ticked, so it needs
 // no JavaScript).
 //
-// The list below is built to hold more than one sign-in method, but today there
-// is one. (Facebook was offered for a while and was removed, ticket 30.)
+// Google is the only sign-in method besides email. (Facebook was offered for a
+// while and was removed, ticket 30.)
 
 const BASE =
   "inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-[var(--radius-control)] px-4 font-bold";
@@ -29,19 +29,8 @@ function GoogleMark() {
   );
 }
 
-const PROVIDERS = [
-  {
-    id: "google",
-    name: "Google",
-    enabled: process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true",
-    style: GOOGLE_STYLE,
-    Mark: GoogleMark,
-  },
-];
-
 export function SocialButtons({ mode }: { mode: "login" | "signup" }) {
-  const shown = PROVIDERS.filter((provider) => provider.enabled);
-  if (shown.length === 0) return null;
+  if (process.env.NEXT_PUBLIC_GOOGLE_LOGIN !== "true") return null;
 
   return (
     <div className="mt-6 flex flex-col gap-3">
@@ -52,28 +41,26 @@ export function SocialButtons({ mode }: { mode: "login" | "signup" }) {
       </p>
       <form action={signInWithProvider} className="flex flex-col gap-2.5">
         <input type="hidden" name="from" value={mode} />
-        {shown.map(({ id, name, style, Mark }) =>
-          mode === "login" ? (
-            <button key={id} type="submit" name="choice" value={`${id}:student`} className={style}>
-              <Mark />
-              Continue with {name}
-            </button>
-          ) : (
-            <div key={id} className="flex flex-col">
-              <div className="group-has-[input[value=owner]:checked]/choice:hidden">
-                <button type="submit" name="choice" value={`${id}:student`} className={style}>
-                  <Mark />
-                  Sign up with {name} as a student
-                </button>
-              </div>
-              <div className="hidden group-has-[input[value=owner]:checked]/choice:block">
-                <button type="submit" name="choice" value={`${id}:owner`} className={style}>
-                  <Mark />
-                  Sign up with {name} as an owner
-                </button>
-              </div>
+        {mode === "login" ? (
+          <button type="submit" name="choice" value="google:student" className={GOOGLE_STYLE}>
+            <GoogleMark />
+            Continue with Google
+          </button>
+        ) : (
+          <div className="flex flex-col">
+            <div className="group-has-[input[value=owner]:checked]/choice:hidden">
+              <button type="submit" name="choice" value="google:student" className={GOOGLE_STYLE}>
+                <GoogleMark />
+                Sign up with Google as a student
+              </button>
             </div>
-          ),
+            <div className="hidden group-has-[input[value=owner]:checked]/choice:block">
+              <button type="submit" name="choice" value="google:owner" className={GOOGLE_STYLE}>
+                <GoogleMark />
+                Sign up with Google as an owner
+              </button>
+            </div>
+          </div>
         )}
       </form>
     </div>

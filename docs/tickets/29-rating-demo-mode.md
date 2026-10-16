@@ -3,7 +3,9 @@
 **What to build:** A preview of how star ratings and sample reviews will look,
 for showing the project to others. It is OFF for everyone by default. Opening a
 page with ?demo=ratings in the address switches it on for that browser tab, and
-?demo=off switches it off. While it is on, rooms that have no real ratings show
+?demo=off switches it off. On the live site this only works while the team has set
+NEXT_PUBLIC_RATING_DEMO to "on" in Vercel, so a stray link cannot show fictional
+reviews to real visitors. While it is on, rooms that have no real ratings show
 five clickable stars instead of "No ratings yet". Pressing a star selects that
 rating and opens a sample review. Everything in the preview is fictional, is
 labelled as demo data, and is kept completely apart from real ratings: nothing
