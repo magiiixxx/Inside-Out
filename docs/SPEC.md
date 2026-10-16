@@ -82,9 +82,11 @@ roles support the student: the **owner**, who posts rooms, and the
    with their prices. Each feature is marked "Available now" or "Coming
    soon". Owners choose Premium Owner or Property Manager there (only a step up
   from their current plan), saying how they will pay and giving a phone
-  number. The team page lists the requests, and
-  an admin presses Activate after the payment has arrived. The app itself
-  takes no payments.
+  number. They then see a payment QR code and type the payment reference
+  number. The team page shows each request with that reference number, and
+  an admin presses Activate after finding the payment in their own records
+  (the database refuses if the reference changed since the admin saw it).
+  The app itself takes no payments.
 
 9. **Account menu** (logged in): the person's picture, name and email, then
    Settings & Privacy, Help & Support, Report a Problem, Display &

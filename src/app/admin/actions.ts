@@ -66,10 +66,13 @@ export async function deleteAnyRoom(formData: FormData) {
 // anyone who is not an admin.
 export async function activatePlan(formData: FormData) {
   const requestId = String(formData.get("request_id") ?? "");
+  // The reference number the admin was looking at. The database refuses if the
+  // owner changed it since, so the admin never activates a number they did not check.
+  const reference = String(formData.get("reference") ?? "");
   if (!UUID.test(requestId)) redirect("/admin?error=invalid_request");
 
   const supabase = await createClient();
-  const { error } = await supabase.rpc("activate_plan", { p_request_id: requestId });
+  const { error } = await supabase.rpc("activate_plan", { p_request_id: requestId, p_reference: reference });
 
   if (error) {
     redirect(
@@ -77,7 +80,9 @@ export async function activatePlan(formData: FormData) {
         ? "/admin?error=plan_not_upgrade"
         : error.message.includes("no payment reference")
           ? "/admin?error=no_reference_yet"
-          : "/admin?error=plan_action_failed",
+          : error.message.includes("reference number changed")
+            ? "/admin?error=reference_changed"
+            : "/admin?error=plan_action_failed",
     );
   }
 

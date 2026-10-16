@@ -64,6 +64,7 @@ export function PlanRequestCard({ request, ownerName }: { request: PlanRequest; 
         <div className="flex flex-wrap gap-3">
           <form action={activatePlan}>
             <input type="hidden" name="request_id" value={request.id} />
+            <input type="hidden" name="reference" value={request.payment_reference ?? ""} />
             <Button type="submit" variant="accent" disabled={!hasReference}>
               Payment confirmed: activate plan
             </Button>

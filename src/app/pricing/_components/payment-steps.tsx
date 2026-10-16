@@ -48,7 +48,7 @@ export function PaymentSteps({
             <p className="text-center text-sm text-muted-foreground">
               Scan it with {methodLabel} or any InstaPay-ready app. The amount is already filled in. Check that it
               says {"\u20B1"}
-              {amount}.00 before you pay.
+              {amount}.00 before you pay. If the code does not show, refresh this page.
             </p>
           </div>
         ) : account ? (

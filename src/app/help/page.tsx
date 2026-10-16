@@ -34,8 +34,8 @@ const GUIDES = [
     steps: [
       "Every owner starts Free with one room.",
       "To post more rooms, open Owner plans and ask for Premium Owner.",
-      "You pay our team directly by GCash, Maya or bank transfer. BahayFind does not take payments on the website.",
-      "Once our team has your payment, they switch your plan on.",
+      "After you ask for a plan, you pay by scanning the QR code shown (GCash, Maya or bank). BahayFind does not take payments on the website.",
+      "Type the payment reference number from your receipt. Once our team has confirmed your payment, they switch your plan on.",
     ],
   },
 ];

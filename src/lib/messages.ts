@@ -72,6 +72,7 @@ const ERRORS: Record<string, string> = {
   // Owner home and team review
   invalid_request: "That request was not valid.",
   update_failed: "We could not update that room. Please try again.",
+  reference_changed: "The owner changed the reference number just now. Check the new number, then press Activate again.",
   plan_action_failed: "We could not update that plan request. It may already have been handled.",
   plan_not_upgrade:
     "That owner already has this plan or a higher one. Press Dismiss to clear the request.",

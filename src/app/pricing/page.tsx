@@ -254,9 +254,10 @@ export default async function PricingPage({
           <form action={requestPlan} className="flex max-w-xl flex-col gap-4">
             <p className="text-sm text-muted-foreground">
               Choose a plan and how you will pay, and give us a number to reach
-              you on. Nothing is charged here: our team contacts you with the
-              account details, and the plan is switched on once we have
-              received your payment.
+              you on. Next you will see a QR code to pay with. Nothing is
+              charged on this website: after you pay, you enter the payment
+              reference number, and our team switches your plan on once they
+              have confirmed your payment.
             </p>
             <fieldset className="flex flex-col gap-2">
               <legend className="label mb-1">Which plan?</legend>
