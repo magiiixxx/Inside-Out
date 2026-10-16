@@ -92,6 +92,15 @@ plan features are listed as "Coming soon" in the app and in
 `docs/LATER.md`. Do not say they exist. Property Manager has no extra
 features yet.
 
+## Another question to expect
+
+**"Can students reserve a room?"**
+Honest answer: "Not in the app. A student saves a room, then calls the owner to
+see it and arrange everything in person. We chose that for now because a
+reservation needs deposits and holds, and the app handles no money. The
+available or occupied label is how a student knows a room is still free." Do not
+say students can book or reserve.
+
 ## Before you present
 
 - Evidence is thin: one watched student, and the other two testers have

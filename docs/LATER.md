@@ -74,6 +74,20 @@ inventory).
   printing shops and food places near campus pay to advertise. Needs
   steady traffic first.
 
+## Room reservations (decided against for now)
+
+Students cannot reserve a room. Saving a room is only a personal bookmark, and a
+student calls the owner to see the room and arrange everything in person. The team
+chose to keep it that way (option A). A reservation needs: an owner confirming or
+declining, other students seeing the room as held, a hold that expires, a way to
+cancel, and a decision about deposits (a payment service, which is outside the
+pinned stack). Two smaller ideas were offered and parked:
+- **"I'm interested" request:** a non-binding request the owner sees on their home
+  page with the student's name and phone number. It holds nothing and takes no money.
+- **A timed hold:** the room shows as Reserved to others for about 24 hours until the
+  owner confirms or it lapses, still with no money in the app.
+If either is chosen later, update docs/SPEC.md first: reservations are out of scope.
+
 ## Phone number verification by SMS (decided against for now)
 
 The team looked at adding a Phone number field to Sign up and sending a text
