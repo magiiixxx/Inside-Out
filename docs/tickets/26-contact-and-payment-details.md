@@ -7,17 +7,17 @@ pages show how to reach the team.
 
 **Blocked by:** 17
 
-**Status:** todo
+**Status:** done
 
-- [ ] The Help page and the Privacy page list the contact details the team has
+- [x] The Help page and the Privacy page list the contact details the team has
       set (phone, email, Facebook page). Anything not set is not shown.
-- [ ] An owner whose plan request is waiting sees the amount, the account name
+- [x] An owner whose plan request is waiting sees the amount, the account name
       and number for the way they chose to pay (GCash, Maya or bank), and how to
       send proof of payment.
-- [ ] Nobody else sees the payment account: not logged-out visitors, students,
+- [x] Nobody else sees the payment account: not logged-out visitors, students,
       or owners who have not asked for a plan.
-- [ ] With nothing set, the pages look exactly as before and say the team will
+- [x] With nothing set, the pages look exactly as before and say the team will
       contact the owner.
-- [ ] The details are settings in Vercel, not in the repository.
-- [ ] A wrongly typed setting never shows odd text or a harmful link.
-- [ ] Works on the live URL
+- [x] The details are settings in Vercel, not in the repository.
+- [x] A wrongly typed setting never shows odd text or a harmful link.
+- [x] Works on the live URL
