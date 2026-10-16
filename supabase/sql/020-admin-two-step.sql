@@ -17,6 +17,10 @@
 -- "aal2"). So even someone with a stolen admin password, calling the database
 -- directly and skipping every page, gets nothing without the code.
 --
+-- ALSO RUN 021-storage-delete-needs-two-step.sql after this file. The rule that
+-- lets an admin delete photo files (written in 012) did not use is_admin(), so
+-- without 021 a password-only admin session could still delete photo files.
+--
 -- Nothing changes for students and owners. An admin who is only signed in with a
 -- password can still use the owner pages like any owner; only the admin powers
 -- need the code.

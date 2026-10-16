@@ -41,6 +41,8 @@ admin password from opening the team page.
    asked for a code before the team page opens.
 5. Only when that works for every admin: run the database file
    `supabase/sql/020-admin-two-step.sql`. Its last lines say how to undo it.
+   Then run `supabase/sql/021-storage-delete-needs-two-step.sql` too, so that
+   deleting photo files needs the code as well.
 
 If a phone is lost: in Supabase, Authentication, Users, open that person and
 remove their factor, then they log in with the password and set it up again.
