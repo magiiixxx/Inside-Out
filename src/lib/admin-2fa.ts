@@ -12,13 +12,15 @@ import { notFound, redirect } from "next/navigation";
 //      real lock: without a code, even a stolen admin password cannot read or
 //      change anything admin-only, whatever page or tool is used.
 
-// Is this person a logged-in admin? Anyone else gets the Not found page, so the
-// team pages look like they do not exist.
+// Is this person a logged-in admin? A visitor who is not logged in is sent to the
+// team sign-in page. Anyone who IS logged in but is not an admin (a student or an
+// owner) gets the Not found page, so the team pages look like they do not exist
+// to them.
 export async function requireAdminAccount(supabase: SupabaseClient) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) notFound();
+  if (!user) redirect("/admin/login");
 
   const { data: me } = await supabase
     .from("profiles")
@@ -48,5 +50,5 @@ export async function requireAdminSecondStep(supabase: SupabaseClient) {
 
   const { level, hasFactor } = await adminAssurance(supabase);
   if (level === "aal2") return;
-  redirect(hasFactor ? "/review-desk/verify" : "/review-desk/security");
+  redirect(hasFactor ? "/admin/verify" : "/admin/security");
 }

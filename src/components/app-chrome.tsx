@@ -9,7 +9,7 @@ import { NAV_STORAGE_KEY } from "@/components/return-button";
 // pages have their own full-screen layouts (a navy side panel), so for those
 // the header and footer are left out.
 
-const OWN_LAYOUT = ["/login", "/signup", "/forgot-password", "/reset-password", "/review-desk"];
+const OWN_LAYOUT = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
 export function AppChrome({
   header,
@@ -34,8 +34,8 @@ export function AppChrome({
       // storage can be blocked (private windows); Return then uses its fallback
     }
   }, [pathname]);
-  // The team pages (the review desk and its two-step pages) have their own layout.
-  if (OWN_LAYOUT.includes(pathname) || pathname.startsWith("/review-desk")) return <>{children}</>;
+  // The team area (/admin: sign-in, review page and two-step pages) has its own layout.
+  if (OWN_LAYOUT.includes(pathname) || pathname.startsWith("/admin")) return <>{children}</>;
   return (
     <>
       {header}

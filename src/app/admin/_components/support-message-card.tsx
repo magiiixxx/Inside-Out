@@ -1,4 +1,4 @@
-import { closeSupportMessage } from "@/app/review-desk/actions";
+import { closeSupportMessage } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { OwnerNames, SupportMessage } from "./types";

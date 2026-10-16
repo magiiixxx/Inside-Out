@@ -28,6 +28,15 @@ const nextConfig: NextConfig = {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
 
+  // The team area used to live at /review-desk. It is now /admin, with its own
+  // sign-in page. Old bookmarks and links still arrive in the right place.
+  async redirects() {
+    return [
+      { source: "/review-desk", destination: "/admin", permanent: false },
+      { source: "/review-desk/:path*", destination: "/admin/:path*", permanent: false },
+    ];
+  },
+
   // Room photos (up to 2 MB) are uploaded through a server action, and the
   // default limit for those is 1 MB.
   experimental: {

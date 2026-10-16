@@ -1,4 +1,4 @@
-import { activatePlan, dismissPlanRequest } from "@/app/review-desk/actions";
+import { activatePlan, dismissPlanRequest } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { payMethodLabel } from "@/lib/payment";

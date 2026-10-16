@@ -14,8 +14,8 @@ export default async function AdminVerifyPage() {
   await requireAdminAccount(supabase);
 
   const { level, hasFactor } = await adminAssurance(supabase);
-  if (level === "aal2") redirect("/review-desk");
-  if (!hasFactor) redirect("/review-desk/security");
+  if (level === "aal2") redirect("/admin");
+  if (!hasFactor) redirect("/admin/security");
 
   return (
     <MfaShell title="Enter your code" intro="Open your authenticator app and type the 6-digit code for BahayFind.">

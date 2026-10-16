@@ -50,5 +50,6 @@ export async function requireUser() {
 
 // Where each kind of account lands after logging in.
 export function homeFor(role: Role | null): string {
+  if (role === "admin") return "/admin";
   return role === "student" ? "/saved" : "/owner";
 }

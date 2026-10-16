@@ -1,4 +1,4 @@
-import { resolveReport } from "@/app/review-desk/actions";
+import { resolveReport } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { reportReasonLabel } from "@/lib/reports";

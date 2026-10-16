@@ -1,4 +1,4 @@
-import { deleteAnyRoom, resetRatings } from "@/app/review-desk/actions";
+import { deleteAnyRoom, resetRatings } from "@/app/admin/actions";
 import { DeleteRoomButton } from "@/components/delete-room-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

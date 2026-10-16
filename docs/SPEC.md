@@ -70,7 +70,7 @@ roles support the student: the **owner**, who posts rooms, and the
    questions, and tick boxes "I understand my phone number will be public"
    and "I understand the address will be public". **Edit a room** uses the
    same fields for a room the owner already posted.
-5. **Admin page** (hidden address): pending rooms with the owner's
+5. **Admin area** (/admin, with its own sign-in at /admin/login and no link from the public site): pending rooms with the owner's
    permit number and answers, and approve / reject buttons. A person who
    is not an admin sees the Not found page.
 6. **Not found**.

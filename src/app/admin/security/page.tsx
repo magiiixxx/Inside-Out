@@ -17,7 +17,7 @@ export default async function AdminSecurityPage() {
   return (
     <MfaShell
       title="Two-step verification"
-      returnHref="/review-desk"
+      returnHref="/admin"
       intro="Protect the team page with a 6-digit code from an authenticator app, in addition to your password."
     >
       <MfaSetup currentLevel={level} enforced={enforced} />

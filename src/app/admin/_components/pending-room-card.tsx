@@ -1,4 +1,4 @@
-import { reviewRoom } from "@/app/review-desk/actions";
+import { reviewRoom } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

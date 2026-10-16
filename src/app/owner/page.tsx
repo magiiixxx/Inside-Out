@@ -140,7 +140,7 @@ export default async function OwnerHome({
           review page and the database check the admin role themselves. */}
       {profile?.role === "admin" && (
         <Link
-          href="/review-desk"
+          href="/admin"
           className="rounded-[var(--radius)] border border-border px-3 py-2 text-sm font-medium underline-offset-4 hover:underline"
         >
           Team review: rooms waiting for approval →

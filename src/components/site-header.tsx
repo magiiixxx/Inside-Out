@@ -56,8 +56,8 @@ export async function SiteHeader() {
             avatarUrl={avatarUrl}
             roleLabel={role === "owner" ? "Owner" : role === "admin" ? "Admin" : "Student"}
             planLabel={role === "owner" ? `${PLAN_NAMES[(plan as Plan) ?? "free"] ?? "Free"} plan` : null}
-            homeHref={role === "student" ? "/saved" : "/owner"}
-            homeLabel={role === "student" ? "Go to my saved rooms" : "Go to my rooms"}
+            homeHref={role === "admin" ? "/admin" : role === "student" ? "/saved" : "/owner"}
+            homeLabel={role === "admin" ? "Go to the team page" : role === "student" ? "Go to my saved rooms" : "Go to my rooms"}
             prefs={prefs}
           />
         ) : (

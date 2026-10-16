@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { logout } from "@/app/auth/actions";
+import { adminLogout } from "@/app/admin/actions";
 import {
   ClockIcon,
   CloseIcon,
@@ -253,7 +253,7 @@ export function AdminSidebar({ name, counts }: { name: string; counts: Counts })
             <p className="mb-1.5 px-3 text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-navy-text">Your account</p>
             <ul className="flex flex-col gap-1">
               <li>
-                <Link href="/review-desk/security" onClick={() => setOpen(false)} className={`${ITEM} ${ITEM_IDLE}`}>
+                <Link href="/admin/security" onClick={() => setOpen(false)} className={`${ITEM} ${ITEM_IDLE}`}>
                   <ShieldIcon className="h-5 w-5 shrink-0" />
                   <span className="flex-1">Two-step verification</span>
                 </Link>
@@ -268,7 +268,7 @@ export function AdminSidebar({ name, counts }: { name: string; counts: Counts })
           </span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-bold">{name}</p>
-            <form action={logout}>
+            <form action={adminLogout}>
               <button
                 type="submit"
                 className="rounded text-[0.8125rem] text-navy-text underline-offset-4 hover:text-white hover:underline"

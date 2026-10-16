@@ -41,7 +41,7 @@ export function MfaChallenge() {
     const factor = factors.data?.totp?.[0];
     if (!factor) {
       setBusy(false);
-      router.replace("/review-desk/security");
+      router.replace("/admin/security");
       return;
     }
 
@@ -64,7 +64,7 @@ export function MfaChallenge() {
       return;
     }
 
-    router.replace("/review-desk");
+    router.replace("/admin");
     router.refresh();
   }
 

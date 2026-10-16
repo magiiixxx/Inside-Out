@@ -1,7 +1,7 @@
 -- 020 — Admin two-step verification, enforced by the database (Ticket 27)
 --
 -- *** OPTIONAL, AND ORDER MATTERS. Do NOT run this until: ***
---   1. every admin has set up two-step verification at /review-desk/security,
+--   1. every admin has set up two-step verification at /admin/security,
 --   2. each has logged in again, entered a code, and reached the team page,
 --   3. you have switched ADMIN_2FA to "on" in Vercel and that works too.
 -- If you run it earlier, admins who have no code yet are locked out of every

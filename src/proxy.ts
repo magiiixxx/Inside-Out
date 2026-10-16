@@ -44,6 +44,14 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+
+  // The team area: everything under /admin except its own sign-in page needs a
+  // login. Whether the account is really an admin is checked by each page and by
+  // the database, not here.
+  if (!user && pathname.startsWith("/admin") && pathname !== "/admin/login") {
+    return NextResponse.redirect(new URL("/admin/login", request.url));
+  }
+
   const needsLogin =
     pathname === "/saved" ||
     pathname === "/report-problem" ||
@@ -71,8 +79,8 @@ export const config = {
     "/signup",
     "/forgot-password",
     "/reset-password",
-    "/review-desk",
-    "/review-desk/:path*",
+    "/admin",
+    "/admin/:path*",
     "/settings/:path*",
     "/report-problem",
     "/help",
