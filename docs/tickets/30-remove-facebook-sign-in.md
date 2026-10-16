@@ -7,19 +7,19 @@ password through the email link.
 
 **Blocked by:** 23
 
-**Status:** todo
+**Status:** done
 
-- [ ] The Log in and Sign up pages show no Facebook button.
-- [ ] A request that names Facebook as the sign-in method is refused with the
+- [x] The Log in and Sign up pages show no Facebook button.
+- [x] A request that names Facebook as the sign-in method is refused with the
       normal friendly message.
-- [ ] Google sign-in, email sign-up and email log in all still work, and the
+- [x] Google sign-in, email sign-up and email log in all still work, and the
       Student / Owner choice still picks the right Google button.
-- [ ] The Privacy page and the sign-up note no longer mention Facebook sign-in.
-- [ ] An account made earlier with Facebook sees, in Settings, Security, how to
+- [x] The Privacy page and the sign-up note no longer mention Facebook sign-in.
+- [x] An account made earlier with Facebook sees, in Settings, Security, how to
       create a password by email link, and can then log in with email and password.
-- [ ] The team's own Facebook page contact link is not affected.
-- [ ] No Facebook sign-in switch or secret remains in the project.
-- [ ] Works on the live URL
+- [x] The team's own Facebook page contact link is not affected.
+- [x] No Facebook sign-in switch or secret remains in the project.
+- [x] Works on the live URL
 
 ## What the team must also do (outside the code)
 
