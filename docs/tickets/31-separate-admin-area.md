@@ -7,19 +7,19 @@ let through. The old /review-desk address still works by redirecting.
 
 **Blocked by:** 28
 
-**Status:** todo
+**Status:** done
 
-- [ ] /admin/login is a team sign-in page with no Google button and no sign-up link.
-- [ ] A team account that signs in there lands on the team page.
-- [ ] A student or owner who signs in there is signed out again and sees the same
+- [x] /admin/login is a team sign-in page with no Google button and no sign-up link.
+- [x] A team account that signs in there lands on the team page.
+- [x] A student or owner who signs in there is signed out again and sees the same
       message as a wrong password, so the page does not reveal which accounts exist.
-- [ ] A logged-out visitor opening /admin, /admin/security or /admin/verify is sent
+- [x] A logged-out visitor opening /admin, /admin/security or /admin/verify is sent
       to /admin/login. A logged-in student or owner sees the Not found page.
-- [ ] A team member who is already signed in and opens /admin/login goes to /admin.
-- [ ] Logging out from the team area returns to /admin/login with a short message.
-- [ ] A team account that signs in on the main Log in page also lands on /admin.
-- [ ] The old /review-desk address (and its sub-pages) redirect to /admin.
-- [ ] Search engines are asked not to list any /admin page.
-- [ ] Reviewing rooms, reports, messages, plan requests, deleting, two-step and the
+- [x] A team member who is already signed in and opens /admin/login goes to /admin.
+- [x] Logging out from the team area returns to /admin/login with a short message.
+- [x] A team account that signs in on the main Log in page also lands on /admin.
+- [x] The old /review-desk address (and its sub-pages) redirect to /admin.
+- [x] Search engines are asked not to list any /admin page.
+- [x] Reviewing rooms, reports, messages, plan requests, deleting, two-step and the
       Return button all work as before, and the database is still the real lock.
-- [ ] Works on the live URL
+- [x] Works on the live URL
