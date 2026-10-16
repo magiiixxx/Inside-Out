@@ -7,7 +7,9 @@ import { SettingsShell } from "../_components/settings-shell";
 
 export const dynamic = "force-dynamic";
 
-const PROVIDER_NAMES: Record<string, string> = { email: "Email and password", google: "Google", facebook: "Facebook" };
+// "facebook" is kept so that accounts made while Facebook sign-in existed still
+// show how they were created. Facebook sign-in itself was removed (ticket 30).
+const PROVIDER_NAMES: Record<string, string> = { email: "Email and password", google: "Google", facebook: "Facebook (no longer offered)" };
 
 export default async function SecuritySettings({
   searchParams,
@@ -59,7 +61,7 @@ export default async function SecuritySettings({
           <p className="text-sm text-muted-foreground">
             {hasPassword
               ? "We will email a one-time link to the address on your account, where you can choose a new password."
-              : "You sign in with Google or Facebook, so there is no BahayFind password to change. You can still create one: we will email a one-time link to your address."}
+              : "Your account was made with Google or Facebook, so it has no BahayFind password yet. Create one now: we will email a one-time link to your address. After that you can log in with your email and password, which is the only way back in for an account made with Facebook."}
           </p>
         </CardHeader>
         <CardContent>

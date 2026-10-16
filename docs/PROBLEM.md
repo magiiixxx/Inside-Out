@@ -84,8 +84,8 @@ Before Session 3, three people try the live app:
   LATER, because the MVP never handles money.
 
 ## Out of scope
-- More than one photo per room (one photo is in the app now)
-- Written reviews or comments (star ratings are in the app now)
+- Photos
+- Reviews or ratings
 - Stronger owner verification (ID, permits, house visits)
 - Distance from schools other than PHINMA UI
 - Payments or deposits

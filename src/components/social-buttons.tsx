@@ -1,21 +1,22 @@
 import { signInWithProvider } from "@/app/auth/actions";
 
-// "Continue with Google" and "Continue with Facebook" for the Log in and Sign
-// up pages. Each one is shown only when the team has switched it on
-// (NEXT_PUBLIC_GOOGLE_LOGIN or NEXT_PUBLIC_FACEBOOK_LOGIN set to "true", after
-// setting the provider up in Supabase). Until then nothing is shown, so
-// visitors never meet a button that cannot work.
+// "Continue with Google" for the Log in and Sign up pages. It is shown only when
+// the team has switched it on (NEXT_PUBLIC_GOOGLE_LOGIN set to "true", after
+// setting Google up in Supabase). Until then nothing is shown, so visitors never
+// meet a button that cannot work.
 //
-// The email form's "I am a Student / Owner" choice cannot travel through
-// Google or Facebook, so each button carries its own choice. The Sign up page
-// shows only the buttons that match the choice ticked above them (they sit
-// inside a "group/choice" wrapper, see signup/page.tsx; the CSS reads which
-// radio is ticked, so it needs no JavaScript).
+// The email form's "I am a Student / Owner" choice cannot travel through Google,
+// so each button carries its own choice. The Sign up page shows only the button
+// that matches the choice ticked above it (it sits inside a "group/choice"
+// wrapper, see signup/page.tsx; the CSS reads which radio is ticked, so it needs
+// no JavaScript).
+//
+// The list below is built to hold more than one sign-in method, but today there
+// is one. (Facebook was offered for a while and was removed, ticket 30.)
 
 const BASE =
   "inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-[var(--radius-control)] px-4 font-bold";
 const GOOGLE_STYLE = `${BASE} border border-field-line bg-card text-ink hover:bg-surface`;
-const FACEBOOK_STYLE = `${BASE} bg-[#1877f2] text-white hover:bg-[#166fe0]`;
 
 function GoogleMark() {
   return (
@@ -28,15 +29,6 @@ function GoogleMark() {
   );
 }
 
-function FacebookMark() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.8-4.7 4.55-4.7 1.32 0 2.7.24 2.7.24v2.97h-1.52c-1.5 0-1.97.93-1.97 1.89v2.26h3.35l-.54 3.49h-2.81V24C19.61 23.1 24 18.1 24 12.07Z" />
-    </svg>
-  );
-}
-
-// Google first: more people have a Google account than a Facebook one.
 const PROVIDERS = [
   {
     id: "google",
@@ -44,13 +36,6 @@ const PROVIDERS = [
     enabled: process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true",
     style: GOOGLE_STYLE,
     Mark: GoogleMark,
-  },
-  {
-    id: "facebook",
-    name: "Facebook",
-    enabled: process.env.NEXT_PUBLIC_FACEBOOK_LOGIN === "true",
-    style: FACEBOOK_STYLE,
-    Mark: FacebookMark,
   },
 ];
 

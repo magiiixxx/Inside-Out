@@ -86,15 +86,15 @@ export async function logout() {
   redirect("/login?notice=logged_out");
 }
 
-// Start "Continue with Google" or "Continue with Facebook". Supabase Auth
-// does the real work: it sends the person to the provider, and the provider
-// sends them back to /auth/callback (see src/app/auth/callback/route.ts). Our
-// code never sees a Google or Facebook password or app secret; those secrets
+// Start "Continue with Google". Supabase Auth does the real work: it sends the
+// person to Google, and Google sends them back to /auth/callback (see
+// src/app/auth/callback/route.ts). Our code never sees a Google password or
+// app secret; that secret
 // live only in the Supabase dashboard.
 //
-// Each button only exists when its switch is "true" (NEXT_PUBLIC_GOOGLE_LOGIN
-// or NEXT_PUBLIC_FACEBOOK_LOGIN, see src/components/social-buttons.tsx), and
-// we check again here.
+// The button only exists when its switch is "true" (NEXT_PUBLIC_GOOGLE_LOGIN,
+// see src/components/social-buttons.tsx), and we check again here. Any other
+// provider name, such as the removed Facebook, is refused.
 //
 // The button's value looks like "google:owner": the provider, then the
 // account type chosen on the Sign up page.
@@ -102,14 +102,10 @@ export async function signInWithProvider(formData: FormData) {
   const from = field(formData, "from") === "signup" ? "/signup" : "/login";
   const [providerName, typeName] = field(formData, "choice").split(":");
 
-  let provider: "google" | "facebook";
-  if (providerName === "google" && process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true") {
-    provider = "google";
-  } else if (providerName === "facebook" && process.env.NEXT_PUBLIC_FACEBOOK_LOGIN === "true") {
-    provider = "facebook";
-  } else {
+  if (providerName !== "google" || process.env.NEXT_PUBLIC_GOOGLE_LOGIN !== "true") {
     back(from, "oauth_failed");
   }
+  const provider = "google" as const;
 
   // Same rule as the email form: only "owner" counts; anything else is a student.
   const accountType = typeName === "owner" ? "owner" : "student";

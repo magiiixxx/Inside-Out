@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { initials } from "@/lib/utils";
 
-// The person's picture. It comes from their Google or Facebook account when
+// The person's picture. It comes from their Google account (or an older Facebook one) when
 // they signed in with one. Without a picture, or if it fails to load, we show
 // their initials instead. Only https addresses are used.
 

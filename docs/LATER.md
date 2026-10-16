@@ -85,7 +85,7 @@ on, stays as the only verification.
 
 If the team reopens this, the answers already given were:
 - Apply it to **new sign-ups only**; existing accounts keep logging in as they do.
-- Apply it to **everyone who signs up, including Google and Facebook**, so there is
+- Apply it to **everyone who signs up, including Google**, so there is
   one rule.
 - Use +63 as the default country code, with Verify and Resend options and clear
   messages for wrong or expired codes.
@@ -114,7 +114,7 @@ fictional, live only in code, and are never mixed with real data.
 - Saving display choices to the account so they follow a person to another
   phone. Today they are kept on each device.
 - Uploading your own profile picture. Today the picture comes from Google or
-  Facebook, otherwise initials are shown.
+  Facebook (older accounts), otherwise initials are shown.
 - Deleting your own account with one button. Today a person asks the team.
 - A reply from the team inside the app. Today the team replies outside the app
   and marks the message handled.

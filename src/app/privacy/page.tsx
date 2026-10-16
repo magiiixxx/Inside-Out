@@ -2,9 +2,9 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { ContactLines } from "@/components/contact-lines";
 
-// What BahayFind does with people's information. Facebook requires a page
-// like this before a Facebook login can be used by the public, and it is the
-// honest thing to publish anyway. Keep it true: if the app starts collecting
+// What BahayFind does with people's information. Google (and any sign-in
+// provider) asks for a page like this, and it is the honest thing to publish
+// anyway. Keep it true: if the app starts collecting
 // something new, change this page in the same ticket.
 
 export const metadata = { title: "Privacy — BahayFind" };
@@ -28,9 +28,9 @@ export default function PrivacyPage() {
           <li>
             <strong>Everyone with an account:</strong> your name, your email
             address, and whether you are a student or an owner. If you sign up
-            with Google or Facebook, we receive the name, email address and
-            profile picture link that they share, and their id for your
-            account. We never see your Google or Facebook password.
+            with Google, we receive the name, email address and profile
+            picture link that Google shares, and Google&apos;s id for your
+            account. We never see your Google password.
           </li>
           <li>
             <strong>Students:</strong> the rooms you save, the reports you send,

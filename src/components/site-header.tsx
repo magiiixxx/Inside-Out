@@ -17,7 +17,7 @@ export async function SiteHeader() {
   const displayName = fullName || user?.email || "";
   const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
 
-  // The picture comes from the person's Google or Facebook sign-in, when they
+  // The picture comes from the person's Google sign-in (or an older Facebook one), when they
   // used one. Email sign-ups have none, and show their initials instead.
   const metadata = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const picture = metadata.avatar_url ?? metadata.picture;

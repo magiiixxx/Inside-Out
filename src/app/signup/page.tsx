@@ -104,7 +104,7 @@ export default async function SignupPage({
         </form>
         <SocialButtons mode="signup" />
         <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
-          By continuing with Google or Facebook you agree to our{" "}
+          By continuing with Google you agree to our{" "}
           <Link href="/privacy" className="underline underline-offset-2">
             Privacy page
           </Link>

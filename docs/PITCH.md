@@ -101,7 +101,7 @@ features yet.
 - Before the demo, delete the SAMPLE rooms and the test rooms, and make a
   fresh owner and student account so the demo starts clean. Have the live
   address open on a phone.
-- If you show Facebook login, test it the same day: Facebook apps only
-  work for the public once they are switched to Live.
+- If you show Google sign-in, test it the same day: a Google app only
+  works for the public once its consent screen is published.
 - Practise it aloud once with a timer. If it runs over three minutes,
   cut the "Today" beat first.

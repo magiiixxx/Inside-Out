@@ -1,5 +1,8 @@
 # 21 — Sign up and log in with Facebook
 
+> **Removed in ticket 30.** Facebook sign-in was taken out at the team's request.
+> This ticket is kept as history.
+
 **What to build:** People can create an account or log in with Facebook as
 well as with email. On the Sign up page they choose "as a student" or "as an
 owner" with the button they press. The Facebook button only appears once the

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getUserAndRole, homeFor } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-// Facebook (through Supabase) sends the person back here with a one-time
+// Google (through Supabase) sends the person back here with a one-time
 // "code". We swap the code for a login session, then send them to their home
 // page: students to Saved rooms, owners to the owner home.
 //

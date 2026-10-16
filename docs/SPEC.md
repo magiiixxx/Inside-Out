@@ -198,8 +198,8 @@ Row Level Security (RLS) is ON for every table.
 
 ## Login
 Yes, for everyone who has an account: Supabase Auth, with email and
-password, with Google, or with Facebook (each switched on by the team once
-its app is set up).
+password, or with Google (switched on by the team once Google is set up).
+Facebook sign-in was offered for a while and has been removed.
 A new password needs at least 8 characters with a letter and a number.
 Someone who forgets a password asks for an email link and chooses a new one;
 the reply never says whether an email has an account. Creating an account
